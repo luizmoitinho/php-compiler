@@ -1,0 +1,12 @@
+
+public class Lexer {
+	Buffer buffer =  new Buffer("if");
+	
+	public Token proximoToken() {
+		int estado =0;
+		int ultimoFinal =-1;
+		buffer.marcarInicio(estado);
+		
+	}
+	
+}

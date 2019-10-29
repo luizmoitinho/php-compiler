@@ -1,0 +1,34 @@
+import java.util.Scanner;
+
+public class Buffer {
+	protected String lexema;
+	protected int posAtual, posUltimo, posInicio;
+	
+	public Buffer(String lexema){
+		this.lexema=lexema;
+		this.posAtual=0;
+		this.posUltimo=0;
+		this.posInicio=0;
+	}
+	
+	public char proximo() {
+		return this.lexema.charAt(++this.posAtual);
+	}
+	public int marcarInicio(int posInicio){
+		this.posInicio=posInicio;
+	}
+	public int marcarUltimo(int posUltimo){
+		this.posUltimo = posUltimo;
+	}
+	
+	public void retrair(int pos) {
+		
+	}
+	public void retrairAoUltimo() {
+		
+	}
+	
+	public String lexema() {
+		return "";
+	}
+}

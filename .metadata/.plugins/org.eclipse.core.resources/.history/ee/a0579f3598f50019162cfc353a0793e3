@@ -1,0 +1,15 @@
+import java.util.Scanner;
+
+public class Buffer {
+	String senteca;
+	
+	public String proximo() {
+		return null;
+			
+	}
+	public int marcarInicio() {
+		
+	}
+	
+	
+}

@@ -1,0 +1,21 @@
+
+public class Lexer {
+	Buffer buffer =  new Buffer("if");
+	
+	public Token proximoToken() {
+		int estado =0; // indica o estado atual - AFD - AFND
+		int ultimoFinal =-1;
+		int c;
+		buffer.marcarInicio(estado);
+		//percorre toda a string
+		for(int i=0;i<buffer.lexema.length();i++) {
+			c =  buffer.proximo();
+			switch(estado) {
+				case 0:
+				
+			
+			}
+		}
+	}
+	
+}

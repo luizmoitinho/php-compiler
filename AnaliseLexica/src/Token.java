@@ -1,7 +1,7 @@
 
 public class Token {
-	public final int codigo;
-	public String valor;
+	protected final int codigo;
+	protected String valor;
 	
 	public Token(int c,String v) {
 		this.codigo= c;
@@ -10,6 +10,4 @@ public class Token {
 	public Token(int c) {
 		this(c,null);
 	}
-	
-	
 }
