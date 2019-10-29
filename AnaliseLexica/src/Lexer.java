@@ -30,11 +30,31 @@ public class Lexer {
 					else if(Character.isLetter(c) && c!='i')
 						this.setID(estado,ultimoFinal);
 					
+					else if(c =='<') {
+						estado = 4;
+						ultimoFinal =4;
+						buffer.marcarUltimo();
+					}
+					else if(c =='=') {
+						estado =6;
+						ultimoFinal =6;
+						buffer.marcarUltimo();
+					}
+					else if(c =='>') {
+						estado =8;
+						ultimoFinal =8;
+						buffer.marcarUltimo();
+					}
 					// Verifica se é um digito
 					//Integer.parseInt(String.valueOf(digits.charAt(i)));
 					else if(Character.isDigit(c)){
 						ultimoFinal =  10;
 						estado = 10;
+						buffer.marcarUltimo();
+					}
+					else if(c==';'){
+						ultimoFinal =  29;
+						estado = 29;
 						buffer.marcarUltimo();
 					}
 				break;
@@ -43,15 +63,12 @@ public class Lexer {
 						ultimoFinal = 2;
 						estado  =2;
 						buffer.marcarUltimo();
-						token = new Token(0,"if");
+						token = new Token(2,"if");
 
 					}
 					else if(Character.isLetter(c) && c!='f')
 						this.setID(estado,ultimoFinal);
 					
-					else if(this.validarID(c)) {
-						this.setID(estado,ultimoFinal);
-					}
 					break;
 				case 2:
 					if(this.validarID(c))
@@ -62,9 +79,88 @@ public class Lexer {
 						this.setID(estado,ultimoFinal);
 					break;
 				case 4:
-					if(c =='<') {
-						
+					if(c =='=') {
+						estado =5;
+						ultimoFinal =5;
+						buffer.marcarUltimo();
+						token = new Token(5,"LE");
 					}
+					break;
+				case 5:
+					if(c =='>') {
+						estado =7;
+						ultimoFinal =7;
+						buffer.marcarUltimo();
+						token = new Token(7,"NEQ");
+					}
+					break;
+				case 8:
+					if(c =='=') {
+						estado =9;
+						ultimoFinal =9;
+						buffer.marcarUltimo();
+						token = new Token(9,"GE");
+					}
+					break;
+				case 10:
+					if(c =='.') {
+						estado =11;
+						ultimoFinal =11;
+						buffer.marcarUltimo();
+						token = new Token(9,"DOT");
+					}
+					else if(c =='E') {
+						estado =13;
+						ultimoFinal =13;
+						buffer.marcarUltimo();
+						token = new Token(13,"E");
+					}
+					break;
+				case 11:
+					if(Character.isDigit(c)) {
+						estado =12;
+						ultimoFinal =12;
+						buffer.marcarUltimo();
+						token = new Token(12,"NUMS");
+					}
+					break;
+				case 12:
+					if(Character.isDigit(c)) {
+						estado =12;
+						ultimoFinal =12;
+						buffer.marcarUltimo();
+						token = new Token(12,"NUMS");
+					}
+					else if(c =='E') {
+						estado =13;
+						ultimoFinal =13;
+						buffer.marcarUltimo();
+						token = new Token(13,"E");
+					}
+					break;
+				case 13:
+					if(c=='-' || c=='+') {
+						estado =14;
+						ultimoFinal =14;
+						buffer.marcarUltimo();
+						token = new Token(14,"OP");
+					}
+					else if(Character.isDigit(c)) {
+						estado =15;
+						ultimoFinal =15;
+						buffer.marcarUltimo();
+						token = new Token(15,"NUM_E");
+					}
+					
+					break;
+				case 14:
+					if(Character.isDigit(c)) {
+						estado =15;
+						ultimoFinal =15;
+						buffer.marcarUltimo();
+						token = new Token(15,"NUM_E");
+					}
+	
 					break;
 				case 29:
 					if(!delimitador(c)) {
@@ -96,6 +192,5 @@ public class Lexer {
 	}
 	
 
-	
 
 }

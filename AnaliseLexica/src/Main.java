@@ -4,6 +4,5 @@ public class Main {
 		Lexer lexer =  new Lexer("if(x==10)");
 		System.out.println(lexer.proximoToken().valor);
 		
-
 	}
 }

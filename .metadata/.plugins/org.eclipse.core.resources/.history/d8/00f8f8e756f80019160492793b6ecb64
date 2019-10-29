@@ -1,5 +1,0 @@
-
-public class Lexer {
-	Buffer buffer =  new Buffer("if");
-	
-}
