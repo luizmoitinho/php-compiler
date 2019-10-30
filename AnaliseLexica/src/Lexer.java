@@ -102,6 +102,7 @@ public class Lexer {
 						ultimoEstadoFinal =-1;
 						estado =0;
 						setultimoEstadoFinal(ultimoEstadoFinal);
+						break scan;
 					}
 					break;
 				case 3:
@@ -109,6 +110,11 @@ public class Lexer {
 						ultimoEstadoFinal = 3;
 						estado = 3 ;
 						this.buffer.marcarUltimo();
+					}
+					else if (c=='=') {
+						buffer.retrair(1);
+						setultimoEstadoFinal(ultimoEstadoFinal);
+						break scan;
 					}
 					else if(delimitador(c)) {
 						buffer.retrair(1);
@@ -143,18 +149,23 @@ public class Lexer {
 					}
 					break;
 				case 5:
-					ultimoEstadoFinal = 5;
-					setultimoEstadoFinal(ultimoEstadoFinal);
+					if(c =='=') {
+						ultimoEstadoFinal = 5;
+						setultimoEstadoFinal(ultimoEstadoFinal);
+					}
+					
 
 					break;
 				case 6:
 					if(c =='=') {
 						ultimoEstadoFinal = 6;
 						setultimoEstadoFinal(ultimoEstadoFinal);
+						
 					}
 					else {
 						buffer.retrair(1);
 						setultimoEstadoFinal(ultimoEstadoFinal);
+						break scan;
 					}
 					
 					break;
@@ -258,7 +269,6 @@ public class Lexer {
 		else
 			return false;
 	}
-
 	private boolean delimitador(Character codigo) {
 		return codigo == ' '?  true :  false;
 	}
