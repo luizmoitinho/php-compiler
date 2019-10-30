@@ -12,11 +12,10 @@ public class Lexer {
 	public Token proximoToken() {
 		Character c;
 		int estado =0; 			// indica o estado atual - AFD - AFND
-		int ultimoEstadoFinal =-1,i=buffer.posAtual;  	// nulo, ou seja nao existe
+		int ultimoEstadoFinal =-1;
 		buffer.marcarInicio();
-		// i 
 		//percorre toda a string
-		scan: while(true && i < buffer.lexema.length() ) {
+		scan: while(buffer.getPosAtual() < buffer.lexema.length() ) {
 			c =  buffer.proximo();
 			switch(estado) {
 				case 0:
@@ -35,19 +34,18 @@ public class Lexer {
 						estado = 3 ;
 						this.buffer.marcarUltimo();
 					}
-					
 					else if(c =='<') {
 						estado = 4;
 						ultimoEstadoFinal =4;
 						buffer.marcarUltimo();
 					}
 					else if(c =='=') {
-						estado =6;
+						estado = 6;
 						ultimoEstadoFinal =6;
 						buffer.marcarUltimo();
 					}
 					else if(c =='>') {
-						estado =8;
+						estado = 8;
 						ultimoEstadoFinal =8;
 						buffer.marcarUltimo();
 					}
@@ -79,8 +77,8 @@ public class Lexer {
 						this.buffer.marcarUltimo();
 					}
 					else if(delimitador(c)) {
-						setultimoEstadoFinal(ultimoEstadoFinal);
-						return token;
+						this.buffer.retrair(1);
+						estado = 29;
 					}
 					else {
 						ultimoEstadoFinal =-1;
@@ -97,13 +95,13 @@ public class Lexer {
 					}
 					else if(delimitador(c)) {
 						buffer.marcarUltimo();
-						setultimoEstadoFinal(ultimoEstadoFinal);
-						return token;
+						setUltimoEstadoFinal(ultimoEstadoFinal);
+						break scan;
 					}
 					else {
 						ultimoEstadoFinal =-1;
 						estado =0;
-						setultimoEstadoFinal(ultimoEstadoFinal);
+						setUltimoEstadoFinal(ultimoEstadoFinal);
 					}
 					break;
 				case 3:
@@ -112,15 +110,15 @@ public class Lexer {
 						estado = 3 ;
 						this.buffer.marcarUltimo();
 					}
-					else if(delimitador(c) || c=='=') {
+					else if(delimitador(c)) {
 						buffer.retrair(1);
-						setultimoEstadoFinal(ultimoEstadoFinal);
-						return token;
+						setUltimoEstadoFinal(ultimoEstadoFinal);
+						break scan;
 					}
 					else {
 						ultimoEstadoFinal =-1;
 						estado =0;
-						setultimoEstadoFinal(ultimoEstadoFinal);
+						setUltimoEstadoFinal(ultimoEstadoFinal);
 					}
 					
 					break;
@@ -132,7 +130,7 @@ public class Lexer {
 					}
 					else if(delimitador(c)) {
 						buffer.retrair(1);
-						setultimoEstadoFinal(ultimoEstadoFinal);
+						//setUltimoEstadoFinal(ultimoEstadoFinal);
 						return token;
 					}
 					else if(c =='>') {
@@ -140,21 +138,30 @@ public class Lexer {
 						ultimoEstadoFinal =  7;
 						buffer.marcarUltimo();
 					}else {
+						estado =-1;
 						break scan;
 					}
 					break;
 				case 5:
 					ultimoEstadoFinal = 5;
-					setultimoEstadoFinal(ultimoEstadoFinal);
+					setUltimoEstadoFinal(ultimoEstadoFinal);
 
 					break;
 				case 6:
-					ultimoEstadoFinal = 6;
-					setultimoEstadoFinal(ultimoEstadoFinal);
+					if(c =='=') {
+						ultimoEstadoFinal = 6;
+						setUltimoEstadoFinal(ultimoEstadoFinal);
+					}
+					else {
+						buffer.retrair(1);
+						setUltimoEstadoFinal(ultimoEstadoFinal);
+						break scan;
+					}
+					
 					break;
 				case 7:
 					ultimoEstadoFinal = 7;
-					setultimoEstadoFinal(ultimoEstadoFinal);
+					setUltimoEstadoFinal(ultimoEstadoFinal);
 					break;
 				case 8:
 					if(c =='=') {
@@ -235,13 +242,14 @@ public class Lexer {
 						buffer.marcarInicio();
 						estado=0;
 					}else {
+						
+						estado = -1;
 						break scan;
 					}
 					break;
 			}
-			i++;
 		} //  fim scan:while
-		setultimoEstadoFinal(ultimoEstadoFinal);
+		setUltimoEstadoFinal(ultimoEstadoFinal);
 		return token;
 	}
 	private boolean validarID(Character c) {
@@ -255,10 +263,10 @@ public class Lexer {
 	private boolean delimitador(Character codigo) {
 		return codigo == ' '?  true :  false;
 	}
-	private void setultimoEstadoFinal(int ultimoEstadoFinal) {
+	private void setUltimoEstadoFinal(int ultimoEstadoFinal) {
 		switch(ultimoEstadoFinal) {
 			case -1:
-				System.out.println("Palavra não foi reconhecida!");
+				this.token=  new Token(-1);
 				break;
 			case 1:
 				this.buffer.marcarUltimo();
@@ -294,17 +302,20 @@ public class Lexer {
 				break;
 			case 10:
 				this.buffer.marcarUltimo();
-				this.token = new Token(this.simbolo.NUM);
+				this.token = new Token(this.simbolo.NUM,buffer.lexema());
 				break;
 			case 12:
 				this.buffer.marcarUltimo();
-				this.token = new Token(this.simbolo.NUM);
+				this.token = new Token(this.simbolo.NUM,buffer.lexema());
 				break;
 			case 15:
 				this.buffer.marcarUltimo();
-				this.token = new Token(this.simbolo.NUM);
+				this.token = new Token(this.simbolo.NUM,buffer.lexema());
 				break;
 		}
+				
+	}
+	public void Error() {
 		
 		
 	}
