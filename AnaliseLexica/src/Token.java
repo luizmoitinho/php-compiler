@@ -10,4 +10,11 @@ public class Token {
 	public Token(int c) {
 		this(c,null);
 	}
+
+	public String toString() {
+		return 	"Descricao:\n"
+				+ "Codigo :"+this.codigo
+				+ "\nValor  :"+this.valor;
+
+	}
 }

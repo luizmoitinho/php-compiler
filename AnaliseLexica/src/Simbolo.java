@@ -6,18 +6,8 @@ public class Simbolo {
 	public final static int LT    =8;	// <
 	public final static int GE    =9;	// >=
 	public final static int LE    =5;	// <=
-	public final static int EQ   =6;	// =
+	public final static int EQ    =6;	// =
 	public final static int NEQ   =7;   // !=
 	public final static int NUM   =10;   
-	public final static int NUMS  =12;
-	public final static int E     =13;
-	public final static int DOT   =11;  // .
-	public final static int OP    =14;  // ,
 	public final static int DELIM =20;  // ;  
-	public final static int NUM_E =15;  // ,
-	
-	
-		
-	
-
 }

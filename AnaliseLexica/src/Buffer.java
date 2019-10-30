@@ -15,18 +15,22 @@ public class Buffer {
 		return this.lexema.charAt(this.posAtual++);
 	}
 	public void marcarInicio(){
-		this.posInicio=this.posAtual;
+		this.posInicio= this.posAtual;
 	}
 	public void marcarUltimo(){
 		this.posUltimo = this.posAtual;	
 	}
 	public void retrair(int pos) {
-		this.posAtual =pos; 
+		this.posAtual -=pos; 
 	}
 	public void retrairAoUltimo() {
-		this.posAtual =  this.lexema.charAt(this.lexema.length());
+		this.posAtual--;
 	}
 	public String lexema() {
 		return this.lexema.substring(this.posInicio,this.posUltimo);
+	}
+	
+	public int getPosAtual() {
+		return this.posAtual;
 	}
 }
