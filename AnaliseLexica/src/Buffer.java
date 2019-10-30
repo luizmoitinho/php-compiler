@@ -3,7 +3,6 @@ import java.util.Scanner;
 public class Buffer {
 	protected String lexema;
 	protected int posAtual, posUltimo, posInicio;
-	
 	public Buffer(String lexema){
 		this.lexema=lexema;
 		this.posAtual=0;

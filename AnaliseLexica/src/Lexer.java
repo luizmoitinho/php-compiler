@@ -94,14 +94,14 @@ public class Lexer {
 						buffer.marcarUltimo();
 					}
 					else if(delimitador(c)) {
+						buffer.retrair(1);
 						buffer.marcarUltimo();
-						setUltimoEstadoFinal(ultimoEstadoFinal);
-						break scan;
+						estado = 29;
 					}
 					else {
 						ultimoEstadoFinal =-1;
 						estado =0;
-						setUltimoEstadoFinal(ultimoEstadoFinal);
+						setultimoEstadoFinal(ultimoEstadoFinal);
 					}
 					break;
 				case 3:
@@ -112,13 +112,13 @@ public class Lexer {
 					}
 					else if(delimitador(c)) {
 						buffer.retrair(1);
-						setUltimoEstadoFinal(ultimoEstadoFinal);
+						setultimoEstadoFinal(ultimoEstadoFinal);
 						break scan;
 					}
 					else {
 						ultimoEstadoFinal =-1;
 						estado =0;
-						setUltimoEstadoFinal(ultimoEstadoFinal);
+						setultimoEstadoFinal(ultimoEstadoFinal);
 					}
 					
 					break;
@@ -130,8 +130,8 @@ public class Lexer {
 					}
 					else if(delimitador(c)) {
 						buffer.retrair(1);
-						//setUltimoEstadoFinal(ultimoEstadoFinal);
-						return token;
+						setultimoEstadoFinal(ultimoEstadoFinal);
+						break scan;
 					}
 					else if(c =='>') {
 						estado = 7;
@@ -144,24 +144,23 @@ public class Lexer {
 					break;
 				case 5:
 					ultimoEstadoFinal = 5;
-					setUltimoEstadoFinal(ultimoEstadoFinal);
+					setultimoEstadoFinal(ultimoEstadoFinal);
 
 					break;
 				case 6:
 					if(c =='=') {
 						ultimoEstadoFinal = 6;
-						setUltimoEstadoFinal(ultimoEstadoFinal);
+						setultimoEstadoFinal(ultimoEstadoFinal);
 					}
 					else {
 						buffer.retrair(1);
-						setUltimoEstadoFinal(ultimoEstadoFinal);
-						break scan;
+						setultimoEstadoFinal(ultimoEstadoFinal);
 					}
 					
 					break;
 				case 7:
 					ultimoEstadoFinal = 7;
-					setUltimoEstadoFinal(ultimoEstadoFinal);
+					setultimoEstadoFinal(ultimoEstadoFinal);
 					break;
 				case 8:
 					if(c =='=') {
@@ -249,7 +248,7 @@ public class Lexer {
 					break;
 			}
 		} //  fim scan:while
-		setUltimoEstadoFinal(ultimoEstadoFinal);
+		setultimoEstadoFinal(ultimoEstadoFinal);
 		return token;
 	}
 	private boolean validarID(Character c) {
@@ -263,7 +262,7 @@ public class Lexer {
 	private boolean delimitador(Character codigo) {
 		return codigo == ' '?  true :  false;
 	}
-	private void setUltimoEstadoFinal(int ultimoEstadoFinal) {
+	private void setultimoEstadoFinal(int ultimoEstadoFinal) {
 		switch(ultimoEstadoFinal) {
 			case -1:
 				this.token=  new Token(-1);
@@ -279,6 +278,10 @@ public class Lexer {
 			case 3:
 				this.buffer.marcarUltimo();
 				this.token=  new Token(this.simbolo.ID,buffer.lexema());
+				break;
+			case 4:
+				this.buffer.marcarUltimo();
+				this.token=  new Token(this.simbolo.LT);
 				break;
 			case 5:
 				this.buffer.marcarUltimo();

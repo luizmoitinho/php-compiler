@@ -12,8 +12,7 @@ public class Token {
 	}
 
 	public String toString() {
-		return 	"Token:\n"
-				+ "<"+this.codigo+","+this.valor+">";
+		return 	"Token:\n" + "<"+this.codigo+","+this.valor+">";
 
 	}
 }
