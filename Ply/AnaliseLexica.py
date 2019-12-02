@@ -4,7 +4,7 @@
 
 #OBJETIVO: TOKENIZAR UMA SIMPLES EXPRESSAO
 
-import ply.lex as lex;
+import ply.lex as lex
 
 reserved = {
     'include':'INCLUDE',
@@ -13,6 +13,8 @@ reserved = {
     'function':'FUNCTION',
     'use':'USE',
     'as':'AS',
+    'and':'AND',
+    'or':'OR',
     'if' : 'IF',
     'else' : 'ELSE',
     'endif':'ENDIF',
@@ -31,18 +33,21 @@ reserved = {
 }
 
 tokens =[
+    'STRING',
     'BEGIN_PROGRAM',
     'END_PROGRAM',
     'NUMBER_INTEGER',
     'ID',
     'NUMBER_REAL',
     'ASSIGN',
+    'CONCATENATE',
     'INCREMENT',
     'DECREMENT',
-    'POS_INCREMENT',
-    'PRE_INCREMENT',
-    'POS_DECREMENT',
-    'PRE_DECREMENT',
+    'ADD_ASSIGN',
+    'SUB_ASSIGN',
+    'MOD_ASSIGN',
+    'PLUS_ASSIGN',
+    'DIVIDE_ASSIGN',
     'PLUS',
     'MINUS',
     'TIMES',
@@ -61,23 +66,30 @@ tokens =[
     'EQUAL',
     'NOT_EQUAL',
     'SEMICOLON',
-    'TAB'] + list(reserved.values())
+    'LEFT_LOGICAL',
+    'RIGHT_LOGICAL',
+    'TAB'
+] + list(reserved.values())
 
 #EXPRESSOES REGULARES: No ply é indenficado usando o sufixo t_[nome do token] 
        
-
 t_TAB = r'\t'
+
 t_COMMENT_LINE = r'\//.* | \#.*'
 t_COMMENT_LINE2 = r'\/\*(.|\n)*\*\/'
-
+t_CONCATENATE =  r'\.\='
         #operadores aritméticos
 t_ASSIGN =  r'\='
+t_ADD_ASSIGN = r'\+\='
+t_SUB_ASSIGN = r'\-\='
+t_MOD_ASSIGN = r'\%\='
+t_PLUS_ASSIGN = r'\*\='
+t_DIVIDE_ASSIGN =  r'\/\='
+t_LEFT_LOGICAL = r'\<\<'
+t_RIGHT_LOGICAL = r'\>\>'
 t_INCREMENT =  r'\+\+'
 t_DECREMENT =  r'\-\-'
-t_POS_INCREMENT = r'\+\+'
-t_PRE_INCREMENT = r'\+\='
-t_POS_DECREMENT = r'\=\-'
-t_PRE_DECREMENT = r'\-\='
+
 
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -107,6 +119,22 @@ t_ignore = ' '
 
 
 #EXPRESSOES REGULARES COM FUNÇÕES
+
+#definição de uma string
+'''
+    - No php a quebra de linha na string insere espaços em branco em vez de quebra de linha
+'''
+def t_STRING(t):
+    r'\".*\"'
+    return t
+
+
+
+'''
+    - Validar palavras sem acento
+    - definição de um identificador
+    [\wÀ-ú]
+'''
 def t_ID(t):
     r'\$[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value,'ID')
@@ -129,12 +157,11 @@ def t_newline(t):
 #Regra de tratamento de erros
 def t_error(t):
     print("Um caracter ilegal foi encontrado: '%s'" % t.value[0])
-    t.lexer.skip(1);
-
+    t.lexer.skip(1)
 
 
 #Execução do lexico
-arquivo = "-="
+arquivo = '$joão .= "gay"'
 lexer = lex.lex()
 
 #inputa o arquivo no classe lexer para gerar os tokens
