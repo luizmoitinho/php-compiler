@@ -68,12 +68,37 @@ tokens =[
     'SEMICOLON',
     'LEFT_LOGICAL',
     'RIGHT_LOGICAL',
-    'TAB'
+    'TAB',
+    'IDENTATION'
 ] + list(reserved.values())
 
 #EXPRESSOES REGULARES: No ply é indenficado usando o sufixo t_[nome do token] 
-       
-t_TAB = r'\t'
+t_TRUE = r'true'
+t_FALSE = r'false'
+t_CASE = r'case'
+t_SWITCH = r'switch'
+t_BREAK = r'break'
+t_CONTINUE = r'continue'
+
+t_IF = r'if'
+t_ELSE = r'else'
+t_WHILE = r'while'
+t_FOR = r'for'
+t_DO = r'do'
+
+t_ECHO = r'echo'
+t_VAR_DUMP = r'var_dump'
+
+t_INCLUDE = r'include'
+t_REQUIRE = r'require'
+t_REQUIRE_ONCE = r'require_once'
+
+t_AND = r'and'
+t_OR = r'or'
+t_USE = r'use'
+t_FUNCTION = r'function'
+
+#t_TAB = r'\t'
 
 t_COMMENT_LINE = r'\//.* | \#.*'
 t_COMMENT_LINE2 = r'\/\*(.|\n)*\*\/'
@@ -117,8 +142,43 @@ t_ignore = ' '
 
 
 
+stackIdentation =[]
 
 #EXPRESSOES REGULARES COM FUNÇÕES
+stackIndent=[]
+def identifyLinesCode(lines):
+    lineFinal=[]
+    auxLine=""
+    for index in range(len(lines)): 
+        auxLine+=lines[index]
+        if (lines[index] == '\n' or index==len(lines)-1): 
+            lineFinal.append(auxLine)
+            auxLine=""
+    return lineFinal
+
+def searchIdent(arrayLines):
+    space=0
+    for i in range(len(arrayLines)):
+        for j in range(len(arrayLines[i])):
+           if(arrayLines[i][j]==" " or arrayLines[i][j]=="\t"):
+               space+=1
+           else:
+               break
+        stackIdentation.append(space)
+        space=0;
+
+    print(stackIdentation)
+
+'''
+    - Validar palavras sem acento
+    - definição de um identificador
+    [\wÀ-ú]
+'''
+def t_ID(t):
+    r'\$[_a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value,'ID')
+    return t
+
 
 #definição de uma string
 '''
@@ -128,17 +188,6 @@ def t_STRING(t):
     r'\".*\"'
     return t
 
-
-
-'''
-    - Validar palavras sem acento
-    - definição de um identificador
-    [\wÀ-ú]
-'''
-def t_ID(t):
-    r'\$[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID')
-    return t
     
 def t_NUMBER_REAL(t):
     r'\d*\.\d+'
@@ -161,15 +210,26 @@ def t_error(t):
 
 
 #Execução do lexico
-arquivo = '$joão .= "gay"'
-lexer = lex.lex()
+arquivo ='''
+for x in array:
+    x++
+    print(x)
+print('fim')'''
 
+
+
+arrayLines = identifyLinesCode(arquivo)
+searchIdent(arrayLines)
+#identation(linesCodeFormated)
+
+'''
+lexer = lex.lex()
 #inputa o arquivo no classe lexer para gerar os tokens
 lexer.input(arquivo)
-
 while True:
     token = lexer.token()
     if not token:
         break # Quando nao haver mais tokens a serem buscados -  fim do arquivo
     print(token)
 
+'''
