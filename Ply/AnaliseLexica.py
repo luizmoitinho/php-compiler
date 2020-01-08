@@ -1,18 +1,7 @@
-# LFT -  compilador para linguagem PHP
-# Fase atual: Análise Léxica
-# Luiz Moitinho
-
-#OBJETIVO: TOKENIZAR UMA SIMPLES EXPRESSAO
-
 import ply.lex as lex
 
 reserved = {
-    'include':'INCLUDE',
-    'require':'REQUIRE',
-    'require_once':'REQUIRE_ONCE',
     'function':'FUNCTION',
-    'use':'USE',
-    'as':'AS',
     'and':'AND',
     'or':'OR',
     'if' : 'IF',
@@ -23,22 +12,23 @@ reserved = {
     'break':'BREAK',
     'continue':'CONTINUE',
     'echo':'ECHO',
-    'var_dump':'VAR_DUMP',
     'true':'TRUE',
     'false':'FALSE',
-    'for' : 'FOR',
     'while' : 'WHILE',
-    'do':'DO'
-
+    'for' : 'FOR',
+    'do':'DO',
 }
 
 tokens =[
-    'STRING',
+    'COMMENT_SINGLE',
+    'COMMENT_MULTI',
     'BEGIN_PROGRAM',
     'END_PROGRAM',
-    'NUMBER_INTEGER',
-    'ID',
-    'NUMBER_REAL',
+    'PLUS',
+    'MINUS',
+    'TIMES',
+    'DIVIDE',
+    'PERCENT',
     'ASSIGN',
     'CONCATENATE',
     'INCREMENT',
@@ -48,17 +38,10 @@ tokens =[
     'MOD_ASSIGN',
     'PLUS_ASSIGN',
     'DIVIDE_ASSIGN',
-    'PLUS',
-    'MINUS',
-    'TIMES',
-    'DIVIDE',
-    'PERCENT',
     'LPAREN',
     'RPAREN',
     'LKEY',
     'RKEY',
-    'COMMENT_LINE',
-    'COMMENT_LINE2',
     'LESS_THAN',
     'LESS_EQUAL',
     'GREAT_THAN',
@@ -68,127 +51,94 @@ tokens =[
     'SEMICOLON',
     'LEFT_LOGICAL',
     'RIGHT_LOGICAL',
-    'TAB',
-    'IDENTATION'
+    'IDENTATION',
+    'STRING',
+    'NUMBER_REAL',
+    'NUMBER_INTEGER',
+    'ID',
 ] + list(reserved.values())
 
-#EXPRESSOES REGULARES: No ply é indenficado usando o sufixo t_[nome do token] 
-t_TRUE = r'true'
-t_FALSE = r'false'
-t_CASE = r'case'
-t_SWITCH = r'switch'
-t_BREAK = r'break'
-t_CONTINUE = r'continue'
-
+t_ignore = ' \t'
+t_FUNCTION = r'function'
+t_AND = r'and'
+t_OR = r'or'
 t_IF = r'if'
 t_ELSE = r'else'
+t_ENDIF = r'endif'
+t_SWITCH = r'switch'
+t_CASE = r'case'
+t_BREAK = r'break'
+t_CONTINUE = r'continue'
+t_ECHO = r'echo'
+t_TRUE = r'true'
+t_FALSE = r'false'
 t_WHILE = r'while'
 t_FOR = r'for'
 t_DO = r'do'
-
-t_ECHO = r'echo'
-t_VAR_DUMP = r'var_dump'
-
-t_INCLUDE = r'include'
-t_REQUIRE = r'require'
-t_REQUIRE_ONCE = r'require_once'
-
-t_AND = r'and'
-t_OR = r'or'
-t_USE = r'use'
-t_FUNCTION = r'function'
-
-#t_TAB = r'\t'
-
-t_COMMENT_LINE = r'\//.* | \#.*'
-t_COMMENT_LINE2 = r'\/\*(.|\n)*\*\/'
-t_CONCATENATE =  r'\.\='
-        #operadores aritméticos
-t_ASSIGN =  r'\='
-t_ADD_ASSIGN = r'\+\='
-t_SUB_ASSIGN = r'\-\='
-t_MOD_ASSIGN = r'\%\='
-t_PLUS_ASSIGN = r'\*\='
-t_DIVIDE_ASSIGN =  r'\/\='
-t_LEFT_LOGICAL = r'\<\<'
-t_RIGHT_LOGICAL = r'\>\>'
-t_INCREMENT =  r'\+\+'
-t_DECREMENT =  r'\-\-'
-
-
+t_COMMENT_SINGLE = r'\//.* | \#.*'
+t_COMMENT_MULTI = r'\/\*(.|\n)*\*\/'
+t_BEGIN_PROGRAM =  r'\<\?php | \<\?\= | \<\?'
+t_END_PROGRAM   =  r'\?\>'
 t_PLUS = r'\+'
 t_MINUS = r'-'
 t_TIMES = r'\*'
 t_DIVIDE = r'/'
 t_PERCENT = r'\%'
-
-        #operadores relacionais
-t_LESS_THAN = r'\<'
-t_GREAT_THAN =  r'\>'
-t_LESS_EQUAL = r'\<\='
-t_GREAT_EQUAL = r'\>\='
-t_EQUAL = r'\=\='
-t_NOT_EQUAL = r'\!\='
-
-
-t_BEGIN_PROGRAM =  r'\<\?php | \<\?\= | \<\?'
-t_END_PROGRAM   =  r'\?\>'
+t_ASSIGN =  r'\='
+t_CONCATENATE =  r'\.\='
+t_INCREMENT =  r'\+\+'
+t_DECREMENT =  r'\-\-'
+t_ADD_ASSIGN = r'\+\='
+t_SUB_ASSIGN = r'\-\='
+t_MOD_ASSIGN = r'\%\='
+t_PLUS_ASSIGN = r'\*\='
+t_DIVIDE_ASSIGN =  r'\/\='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_LKEY = r'\{'
 t_RKEY = r'\}'
+t_LESS_THAN = r'\<'
+t_LESS_EQUAL = r'\<\='
+t_GREAT_THAN =  r'\>'
+t_GREAT_EQUAL = r'\>\='
+t_EQUAL = r'\=\='
+t_NOT_EQUAL = r'\!\='
 t_SEMICOLON = r'\;'
-t_ignore = ' '
+t_LEFT_LOGICAL = r'\<\<'
+t_RIGHT_LOGICAL = r'\>\>'
 
+ArrayTabulacao = [0]
+IndicePosicao = 0
+ConstTabulacao = 8
 
+def t_IDENTATION(t):
+    r'\n[ \t]*'
+    global IndicePosicao
+    global ConstTabulacao
+    Tamanho = 0
+    
+    for i in t.value:
+        if(i == ' '):
+            Tamanho += 1
+        else:
+            if(i != '\n'):
+                Auxiliar = Tamanho // ConstTabulacao
+                Tamanho = (Auxiliar + 1) * ConstTabulacao
 
-stackIdentation =[]
+    if(ArrayTabulacao[IndicePosicao] < Tamanho):
+        ArrayTabulacao.append(Tamanho)
+        IndicePosicao += 1
+    if(ArrayTabulacao[IndicePosicao] > Tamanho):
+        if(Tamanho in ArrayTabulacao):
+            del ArrayTabulacao[ArrayTabulacao.index(Tamanho)+1:len(ArrayTabulacao)]
+            IndicePosicao = ArrayTabulacao.index(Tamanho)
+        else:
+            print("Identação ilegal foi encontrada")
 
-#EXPRESSOES REGULARES COM FUNÇÕES
-stackIndent=[]
-def identifyLinesCode(lines):
-    lineFinal=[]
-    auxLine=""
-    for index in range(len(lines)): 
-        auxLine+=lines[index]
-        if (lines[index] == '\n' or index==len(lines)-1): 
-            lineFinal.append(auxLine)
-            auxLine=""
-    return lineFinal
-
-def searchIdent(arrayLines):
-    space=0
-    for i in range(len(arrayLines)):
-        for j in range(len(arrayLines[i])):
-           if(arrayLines[i][j]==" " or arrayLines[i][j]=="\t"):
-               space+=1
-           else:
-               break
-        stackIdentation.append(space)
-        space=0;
-
-    print(stackIdentation)
-
-'''
-    - Validar palavras sem acento
-    - definição de um identificador
-    [\wÀ-ú]
-'''
-def t_ID(t):
-    r'\$[_a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID')
-    return t
-
-
-#definição de uma string
-'''
-    - No php a quebra de linha na string insere espaços em branco em vez de quebra de linha
-'''
 def t_STRING(t):
     r'\".*\"'
     return t
-
-    
+  
 def t_NUMBER_REAL(t):
     r'\d*\.\d+'
     t.value = float(t.value)
@@ -196,40 +146,41 @@ def t_NUMBER_REAL(t):
     
 def t_NUMBER_INTEGER(t):
     r'\d+'
-    t.value = int(t.value) # Faz o cast do atributo value para inteiro.
+    t.value = int(t.value) 
+    return t
+
+def t_ID(t):
+    r'\$[_a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value,'ID')
     return t
 
 def t_newline(t):
     r'\n+'
     pass
 
-#Regra de tratamento de erros
 def t_error(t):
     print("Um caracter ilegal foi encontrado: '%s'" % t.value[0])
     t.lexer.skip(1)
+    
 
+ 
+arquivo ='''<?php
+$valor1 = 40;
+$valor2 = 20;
 
-#Execução do lexico
-arquivo ='''
-for x in array:
-    x++
-    print(x)
-print('fim')'''
+if (  $valor1 > $valor2  )
+  echo "A variável $valor1 é maior que a variável $valor2";
+else if (  $valor2 > $valor1 )
+  echo "A variável $valor2 é maior que a variável $valor1";
+ else
+   echo "A variável $valor1 é igual à variável $valor2";
+?>'''
 
-
-
-arrayLines = identifyLinesCode(arquivo)
-searchIdent(arrayLines)
-#identation(linesCodeFormated)
-
-'''
 lexer = lex.lex()
-#inputa o arquivo no classe lexer para gerar os tokens
 lexer.input(arquivo)
+
 while True:
     token = lexer.token()
     if not token:
-        break # Quando nao haver mais tokens a serem buscados -  fim do arquivo
+        break
     print(token)
-
-'''
