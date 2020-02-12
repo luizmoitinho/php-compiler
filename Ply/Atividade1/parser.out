@@ -1,0 +1,378 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> exp
+Rule 1     exp -> exp SOMA exp1
+Rule 2     exp -> exp1
+Rule 3     exp1 -> exp1 VEZES exp2
+Rule 4     exp1 -> exp2
+Rule 5     exp2 -> exp2 POT exp3
+Rule 6     exp2 -> exp3
+Rule 7     exp3 -> assign
+Rule 8     exp3 -> NUMBER
+Rule 9     exp3 -> ID
+Rule 10    exp3 -> call
+Rule 11    call -> ID LPAREN params RPAREN
+Rule 12    call -> ID LPAREN RPAREN
+Rule 13    params -> ID COMMA params
+Rule 14    params -> ID
+Rule 15    assign -> ID IGUAL exp
+
+Terminals, with rules where they appear
+
+COMMA                : 13
+ID                   : 9 11 12 13 14 15
+IGUAL                : 15
+LPAREN               : 11 12
+NUMBER               : 8
+POT                  : 5
+RPAREN               : 11 12
+SOMA                 : 1
+VEZES                : 3
+error                : 
+
+Nonterminals, with rules where they appear
+
+assign               : 7
+call                 : 10
+exp                  : 1 15 0
+exp1                 : 1 2 3
+exp2                 : 3 4 5
+exp3                 : 5 6
+params               : 11 13
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . exp
+    (1) exp -> . exp SOMA exp1
+    (2) exp -> . exp1
+    (3) exp1 -> . exp1 VEZES exp2
+    (4) exp1 -> . exp2
+    (5) exp2 -> . exp2 POT exp3
+    (6) exp2 -> . exp3
+    (7) exp3 -> . assign
+    (8) exp3 -> . NUMBER
+    (9) exp3 -> . ID
+    (10) exp3 -> . call
+    (15) assign -> . ID IGUAL exp
+    (11) call -> . ID LPAREN params RPAREN
+    (12) call -> . ID LPAREN RPAREN
+
+    NUMBER          shift and go to state 3
+    ID              shift and go to state 8
+
+    exp3                           shift and go to state 5
+    exp2                           shift and go to state 1
+    exp1                           shift and go to state 2
+    call                           shift and go to state 6
+    exp                            shift and go to state 7
+    assign                         shift and go to state 4
+
+state 1
+
+    (4) exp1 -> exp2 .
+    (5) exp2 -> exp2 . POT exp3
+
+  ! shift/reduce conflict for POT resolved as shift
+    VEZES           reduce using rule 4 (exp1 -> exp2 .)
+    SOMA            reduce using rule 4 (exp1 -> exp2 .)
+    $end            reduce using rule 4 (exp1 -> exp2 .)
+    POT             shift and go to state 9
+
+  ! POT             [ reduce using rule 4 (exp1 -> exp2 .) ]
+
+
+state 2
+
+    (2) exp -> exp1 .
+    (3) exp1 -> exp1 . VEZES exp2
+
+  ! shift/reduce conflict for VEZES resolved as shift
+    POT             reduce using rule 2 (exp -> exp1 .)
+    SOMA            reduce using rule 2 (exp -> exp1 .)
+    $end            reduce using rule 2 (exp -> exp1 .)
+    VEZES           shift and go to state 10
+
+  ! VEZES           [ reduce using rule 2 (exp -> exp1 .) ]
+
+
+state 3
+
+    (8) exp3 -> NUMBER .
+
+    POT             reduce using rule 8 (exp3 -> NUMBER .)
+    VEZES           reduce using rule 8 (exp3 -> NUMBER .)
+    SOMA            reduce using rule 8 (exp3 -> NUMBER .)
+    $end            reduce using rule 8 (exp3 -> NUMBER .)
+
+
+state 4
+
+    (7) exp3 -> assign .
+
+    POT             reduce using rule 7 (exp3 -> assign .)
+    VEZES           reduce using rule 7 (exp3 -> assign .)
+    SOMA            reduce using rule 7 (exp3 -> assign .)
+    $end            reduce using rule 7 (exp3 -> assign .)
+
+
+state 5
+
+    (6) exp2 -> exp3 .
+
+    POT             reduce using rule 6 (exp2 -> exp3 .)
+    VEZES           reduce using rule 6 (exp2 -> exp3 .)
+    SOMA            reduce using rule 6 (exp2 -> exp3 .)
+    $end            reduce using rule 6 (exp2 -> exp3 .)
+
+
+state 6
+
+    (10) exp3 -> call .
+
+    POT             reduce using rule 10 (exp3 -> call .)
+    VEZES           reduce using rule 10 (exp3 -> call .)
+    SOMA            reduce using rule 10 (exp3 -> call .)
+    $end            reduce using rule 10 (exp3 -> call .)
+
+
+state 7
+
+    (0) S' -> exp .
+    (1) exp -> exp . SOMA exp1
+
+    SOMA            shift and go to state 11
+
+
+state 8
+
+    (9) exp3 -> ID .
+    (15) assign -> ID . IGUAL exp
+    (11) call -> ID . LPAREN params RPAREN
+    (12) call -> ID . LPAREN RPAREN
+
+    POT             reduce using rule 9 (exp3 -> ID .)
+    VEZES           reduce using rule 9 (exp3 -> ID .)
+    SOMA            reduce using rule 9 (exp3 -> ID .)
+    $end            reduce using rule 9 (exp3 -> ID .)
+    IGUAL           shift and go to state 12
+    LPAREN          shift and go to state 13
+
+
+state 9
+
+    (5) exp2 -> exp2 POT . exp3
+    (7) exp3 -> . assign
+    (8) exp3 -> . NUMBER
+    (9) exp3 -> . ID
+    (10) exp3 -> . call
+    (15) assign -> . ID IGUAL exp
+    (11) call -> . ID LPAREN params RPAREN
+    (12) call -> . ID LPAREN RPAREN
+
+    NUMBER          shift and go to state 3
+    ID              shift and go to state 8
+
+    exp3                           shift and go to state 14
+    call                           shift and go to state 6
+    assign                         shift and go to state 4
+
+state 10
+
+    (3) exp1 -> exp1 VEZES . exp2
+    (5) exp2 -> . exp2 POT exp3
+    (6) exp2 -> . exp3
+    (7) exp3 -> . assign
+    (8) exp3 -> . NUMBER
+    (9) exp3 -> . ID
+    (10) exp3 -> . call
+    (15) assign -> . ID IGUAL exp
+    (11) call -> . ID LPAREN params RPAREN
+    (12) call -> . ID LPAREN RPAREN
+
+    NUMBER          shift and go to state 3
+    ID              shift and go to state 8
+
+    exp3                           shift and go to state 5
+    exp2                           shift and go to state 15
+    call                           shift and go to state 6
+    assign                         shift and go to state 4
+
+state 11
+
+    (1) exp -> exp SOMA . exp1
+    (3) exp1 -> . exp1 VEZES exp2
+    (4) exp1 -> . exp2
+    (5) exp2 -> . exp2 POT exp3
+    (6) exp2 -> . exp3
+    (7) exp3 -> . assign
+    (8) exp3 -> . NUMBER
+    (9) exp3 -> . ID
+    (10) exp3 -> . call
+    (15) assign -> . ID IGUAL exp
+    (11) call -> . ID LPAREN params RPAREN
+    (12) call -> . ID LPAREN RPAREN
+
+    NUMBER          shift and go to state 3
+    ID              shift and go to state 8
+
+    exp3                           shift and go to state 5
+    exp2                           shift and go to state 1
+    exp1                           shift and go to state 16
+    call                           shift and go to state 6
+    assign                         shift and go to state 4
+
+state 12
+
+    (15) assign -> ID IGUAL . exp
+    (1) exp -> . exp SOMA exp1
+    (2) exp -> . exp1
+    (3) exp1 -> . exp1 VEZES exp2
+    (4) exp1 -> . exp2
+    (5) exp2 -> . exp2 POT exp3
+    (6) exp2 -> . exp3
+    (7) exp3 -> . assign
+    (8) exp3 -> . NUMBER
+    (9) exp3 -> . ID
+    (10) exp3 -> . call
+    (15) assign -> . ID IGUAL exp
+    (11) call -> . ID LPAREN params RPAREN
+    (12) call -> . ID LPAREN RPAREN
+
+    NUMBER          shift and go to state 3
+    ID              shift and go to state 8
+
+    exp3                           shift and go to state 5
+    exp2                           shift and go to state 1
+    exp1                           shift and go to state 2
+    call                           shift and go to state 6
+    exp                            shift and go to state 17
+    assign                         shift and go to state 4
+
+state 13
+
+    (11) call -> ID LPAREN . params RPAREN
+    (12) call -> ID LPAREN . RPAREN
+    (13) params -> . ID COMMA params
+    (14) params -> . ID
+
+    RPAREN          shift and go to state 18
+    ID              shift and go to state 20
+
+    params                         shift and go to state 19
+
+state 14
+
+    (5) exp2 -> exp2 POT exp3 .
+
+    POT             reduce using rule 5 (exp2 -> exp2 POT exp3 .)
+    VEZES           reduce using rule 5 (exp2 -> exp2 POT exp3 .)
+    SOMA            reduce using rule 5 (exp2 -> exp2 POT exp3 .)
+    $end            reduce using rule 5 (exp2 -> exp2 POT exp3 .)
+
+
+state 15
+
+    (3) exp1 -> exp1 VEZES exp2 .
+    (5) exp2 -> exp2 . POT exp3
+
+  ! shift/reduce conflict for POT resolved as shift
+    VEZES           reduce using rule 3 (exp1 -> exp1 VEZES exp2 .)
+    SOMA            reduce using rule 3 (exp1 -> exp1 VEZES exp2 .)
+    $end            reduce using rule 3 (exp1 -> exp1 VEZES exp2 .)
+    POT             shift and go to state 9
+
+  ! POT             [ reduce using rule 3 (exp1 -> exp1 VEZES exp2 .) ]
+
+
+state 16
+
+    (1) exp -> exp SOMA exp1 .
+    (3) exp1 -> exp1 . VEZES exp2
+
+  ! shift/reduce conflict for VEZES resolved as shift
+    POT             reduce using rule 1 (exp -> exp SOMA exp1 .)
+    SOMA            reduce using rule 1 (exp -> exp SOMA exp1 .)
+    $end            reduce using rule 1 (exp -> exp SOMA exp1 .)
+    VEZES           shift and go to state 10
+
+  ! VEZES           [ reduce using rule 1 (exp -> exp SOMA exp1 .) ]
+
+
+state 17
+
+    (15) assign -> ID IGUAL exp .
+    (1) exp -> exp . SOMA exp1
+
+  ! shift/reduce conflict for SOMA resolved as shift
+    POT             reduce using rule 15 (assign -> ID IGUAL exp .)
+    VEZES           reduce using rule 15 (assign -> ID IGUAL exp .)
+    $end            reduce using rule 15 (assign -> ID IGUAL exp .)
+    SOMA            shift and go to state 11
+
+  ! SOMA            [ reduce using rule 15 (assign -> ID IGUAL exp .) ]
+
+
+state 18
+
+    (12) call -> ID LPAREN RPAREN .
+
+    POT             reduce using rule 12 (call -> ID LPAREN RPAREN .)
+    VEZES           reduce using rule 12 (call -> ID LPAREN RPAREN .)
+    SOMA            reduce using rule 12 (call -> ID LPAREN RPAREN .)
+    $end            reduce using rule 12 (call -> ID LPAREN RPAREN .)
+
+
+state 19
+
+    (11) call -> ID LPAREN params . RPAREN
+
+    RPAREN          shift and go to state 21
+
+
+state 20
+
+    (13) params -> ID . COMMA params
+    (14) params -> ID .
+
+    COMMA           shift and go to state 22
+    RPAREN          reduce using rule 14 (params -> ID .)
+
+
+state 21
+
+    (11) call -> ID LPAREN params RPAREN .
+
+    POT             reduce using rule 11 (call -> ID LPAREN params RPAREN .)
+    VEZES           reduce using rule 11 (call -> ID LPAREN params RPAREN .)
+    SOMA            reduce using rule 11 (call -> ID LPAREN params RPAREN .)
+    $end            reduce using rule 11 (call -> ID LPAREN params RPAREN .)
+
+
+state 22
+
+    (13) params -> ID COMMA . params
+    (13) params -> . ID COMMA params
+    (14) params -> . ID
+
+    ID              shift and go to state 20
+
+    params                         shift and go to state 23
+
+state 23
+
+    (13) params -> ID COMMA params .
+
+    RPAREN          reduce using rule 13 (params -> ID COMMA params .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for POT in state 1 resolved as shift
+WARNING: shift/reduce conflict for VEZES in state 2 resolved as shift
+WARNING: shift/reduce conflict for POT in state 15 resolved as shift
+WARNING: shift/reduce conflict for VEZES in state 16 resolved as shift
+WARNING: shift/reduce conflict for SOMA in state 17 resolved as shift
