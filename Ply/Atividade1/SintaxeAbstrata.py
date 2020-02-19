@@ -6,6 +6,22 @@ class Exp(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
 
+class Call(metaclass=ABCMeta):
+  @abstractclassmethod
+  def accept(self, Visitor):
+    pass
+
+class Assign(metaclass=ABCMeta):
+  @abstractclassmethod
+  def accept(self, Visitor):
+    pass
+
+class Params(metaclass=ABCMeta):
+  @abstractclassmethod
+  def accept(self, Visitor):
+    pass
+
+
 class SomaExp(Exp):
   def __init__(self, exp1, exp2):
     self.exp1 = exp1
@@ -30,28 +46,28 @@ class PotExp(Exp):
   def accept(self, Visitor):
     Visitor.visitPotExp(self)
     
-class CallExp(Call):
+class CallExp(Exp):
   def __init__(self, call):
     self.call = call
 
   def accept(self, Visitor):
     Visitor.visitCallExp(self)
     
-class AssignExp(Assign):
+class AssignExp(Exp):
   def __init__(self, assign):
     self.assign = assign
 
   def accept(self, Visitor):
     Visitor.visitAssignExp(self)
     
-class NumExp(num):
+class NumExp(Exp):
   def __init__(self, num):
     self.num = num
   
   def accept(self, Visitor):
     Visitor.visitNumExp(self)
     
-class IDExp(id):
+class IDExp(Exp):
   def __init__(self, id):
     self.id = id
   
@@ -60,15 +76,10 @@ class IDExp(id):
     
 #-------------------------------------------------------------
 
-class Call(metaclass=ABCMeta):
-  @abstractclassmethod
-  def accept(self, Visitor):
-    pass
-
 class ParamsCall(Call):
-  def __init__(self, id, Params):
+  def __init__(self, id, call):
     self.id = id
-    self.Params = Params
+    self.call = call
     
   def accept(self, Visitor):
     Visitor.visitParamsCall(self)
@@ -81,17 +92,10 @@ class SimpleCall(Call):
     Visitor.visitSimpleCall(self)
   
 #-------------------------------------------------------------
-
-class Params(metaclass=ABCMeta):
-  @abstractclassmethod
-  def accept(self, Visitor):
-    pass
-  
 class CompoundParams(Params):
   def __init__(self, id, Params):
     self.id = id
     self.Params = Params
-  
   def accept(self, Visitor):
     Visitor.visitCompoundParams(self)
 
@@ -101,13 +105,7 @@ class SingleParam(Params):
     
   def accept(self, Visitor):
     Visitor.visitSingleParam(self)
-
 #-------------------------------------------------------------  
-  
-class Assign(metaclass=ABCMeta):
-  @abstractclassmethod
-  def accept(self, Visitor):
-    pass
   
 class AssignExp(Assign):
   def __init__(self, id, Exp):

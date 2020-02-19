@@ -32,6 +32,6 @@ lexer = lex.lex()
 
 # # Test it out
 data = '''
-3 + 4 ^ 10 + 20 *2
+fat ( wedson )
 '''
 lexer.input(data)
