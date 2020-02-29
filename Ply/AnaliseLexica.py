@@ -1,22 +1,32 @@
 import ply.lex as lex
 
 reserved = {
-    'function':'FUNCTION',
-    'and':'AND',
-    'or':'OR',
+    'var' : 'VAR',
+    'array' : 'ARRAY',
+    'const' : 'CONST',
     'if' : 'IF',
     'else' : 'ELSE',
-    'endif':'ENDIF',
-    'switch':'SWITCH',
-    'case':'CASE',
-    'break':'BREAK',
-    'continue':'CONTINUE',
-    'echo':'ECHO',
-    'true':'TRUE',
-    'false':'FALSE',
-    'while' : 'WHILE',
+    'elseif' : 'ELSEIF',
     'for' : 'FOR',
-    'do':'DO',
+    'while' : 'WHILE',
+    'do' : 'DO',
+    'foreach' : 'FOREACH',
+    'switch' : 'SWITCH',
+    'case' : 'CASE',
+    'break' : 'BREAK',
+    'continue' : 'CONTINUE',
+    'return' : 'RETURN',
+    'true' : 'TRUE',
+    'false' : 'FALSE',
+    'null' : 'NULL',
+    'and' : 'AND',
+    'or' : 'OR',
+    'xor' : 'XOR',
+    'new' : 'NEW',
+    'instanceof' : 'INSTANCEOF',
+    'function' : 'FUNCTION',
+    'class' : 'CLASS',
+    'default' : 'DEFAULT',
 }
 
 tokens =[
@@ -24,30 +34,30 @@ tokens =[
     'COMMENT_MULTI',
     'BEGIN_PROGRAM',
     'END_PROGRAM',
-    'PLUS',
-    'MINUS',
-    'TIMES',
-    'DIVIDE',
-    'PERCENT',
-    'ASSIGN',
-    'CONCATENATE',
-    'INCREMENT',
-    'DECREMENT',
-    'ADD_ASSIGN',
-    'SUB_ASSIGN',
-    'MOD_ASSIGN',
-    'PLUS_ASSIGN',
-    'DIVIDE_ASSIGN',
-    'LPAREN',
-    'RPAREN',
-    'LKEY',
-    'RKEY',
-    'LESS_THAN',
-    'LESS_EQUAL',
-    'GREAT_THAN',
-    'GREAT_EQUAL',
     'EQUAL',
     'NOT_EQUAL',
+    'GREAT_THAN',
+    'LESS_THAN',
+    'LESS_EQUAL',
+    'GREAT_EQUAL',
+    'LPAREN',
+    'RPAREN',
+    'LBRACKT',
+    'RBRACKT',
+    'LKEY',
+    'RKEY',
+    'PLUS',
+    'MINUS',
+    'DIVIDE',
+    'TIMES',
+    'PERCENT',
+    'ANDLCC',
+    'ORLCC',
+    'ANDL',
+    'ORL',
+    'INCREMENT',
+    'DECREMENT',
+    'ASSIGN',
     'SEMICOLON',
     'LEFT_LOGICAL',
     'RIGHT_LOGICAL',
@@ -59,50 +69,61 @@ tokens =[
 ] + list(reserved.values())
 
 t_ignore = ' \t'
-t_FUNCTION = r'function'
-t_AND = r'and'
-t_OR = r'or'
+t_VAR = r'var'
+t_ARRAY = r'array'
+t_CONST = r'const'
 t_IF = r'if'
 t_ELSE = r'else'
-t_ENDIF = r'endif'
+t_ELSEIF = r'elseif'
+t_FOR = r'for'
+t_WHILE = r'while'
+t_DO = r'do'
+t_FOREACH = r'foreach'
 t_SWITCH = r'switch'
 t_CASE = r'case'
 t_BREAK = r'break'
 t_CONTINUE = r'continue'
-t_ECHO = r'echo'
+t_RETURN = r'return'
 t_TRUE = r'true'
 t_FALSE = r'false'
-t_WHILE = r'while'
-t_FOR = r'for'
-t_DO = r'do'
+t_NULL = r'null'
+t_AND = r'and'
+t_OR = r'or'
+t_XOR = r'xor'
+t_NEW = r'new'
+t_INSTANCEOF = r'instanceof'
+t_FUNCTION = r'function'
+t_CLASS = r'class'
+t_DEFAULT = r'default' 
+
 t_COMMENT_SINGLE = r'\//.* | \#.*'
 t_COMMENT_MULTI = r'\/\*(.|\n)*\*\/'
 t_BEGIN_PROGRAM =  r'\<\?php | \<\?\= | \<\?'
 t_END_PROGRAM   =  r'\?\>'
-t_PLUS = r'\+'
-t_MINUS = r'-'
-t_TIMES = r'\*'
-t_DIVIDE = r'/'
-t_PERCENT = r'\%'
-t_ASSIGN =  r'\='
-t_CONCATENATE =  r'\.\='
-t_INCREMENT =  r'\+\+'
-t_DECREMENT =  r'\-\-'
-t_ADD_ASSIGN = r'\+\='
-t_SUB_ASSIGN = r'\-\='
-t_MOD_ASSIGN = r'\%\='
-t_PLUS_ASSIGN = r'\*\='
-t_DIVIDE_ASSIGN =  r'\/\='
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
-t_LKEY = r'\{'
-t_RKEY = r'\}'
-t_LESS_THAN = r'\<'
-t_LESS_EQUAL = r'\<\='
-t_GREAT_THAN =  r'\>'
-t_GREAT_EQUAL = r'\>\='
 t_EQUAL = r'\=\='
 t_NOT_EQUAL = r'\!\='
+t_GREAT_THAN =  r'\>'
+t_LESS_THAN = r'\<'
+t_LESS_EQUAL = r'\<\='
+t_GREAT_EQUAL = r'\>\='
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_LBRACKT = r'\['
+t_RBRACKT = r'\]'
+t_LKEY = r'{'
+t_RKEY = r'}'
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_DIVIDE = r'/'
+t_TIMES = r'\*'
+t_PERCENT = r'\%'
+t_ANDLCC = r'\&&'
+t_ORLCC = r'\|\|'
+t_ANDL = r'\&'
+t_ORL = r'\|'
+t_INCREMENT = r'\++'
+t_DECREMENT = r'\--'
+t_ASSIGN =  r'\='
 t_SEMICOLON = r'\;'
 t_LEFT_LOGICAL = r'\<\<'
 t_RIGHT_LOGICAL = r'\>\>'
@@ -167,13 +188,6 @@ def t_error(t):
 arquivo ='''<?php
 $valor1 = 40;
 $valor2 = 20;
-
-if (  $valor1 > $valor2  )
-  echo "A variável $valor1 é maior que a variável $valor2";
-else if (  $valor2 > $valor1 )
-  echo "A variável $valor2 é maior que a variável $valor1";
- else
-   echo "A variável $valor1 é igual à variável $valor2";
 ?>'''
 
 lexer = lex.lex()
