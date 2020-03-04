@@ -32,6 +32,6 @@ lexer = lex.lex()
 
 # # Test it out
 data = '''
-fat ( wedson )
+8*8+9
 '''
 lexer.input(data)

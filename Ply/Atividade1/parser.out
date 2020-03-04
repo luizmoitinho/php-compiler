@@ -7,7 +7,7 @@ Rule 1     exp -> exp SOMA exp1
 Rule 2     exp -> exp1
 Rule 3     exp1 -> exp1 VEZES exp2
 Rule 4     exp1 -> exp2
-Rule 5     exp2 -> exp2 POT exp3
+Rule 5     exp2 -> exp3 POT exp
 Rule 6     exp2 -> exp3
 Rule 7     exp3 -> assign
 Rule 8     exp3 -> NUMBER
@@ -36,9 +36,9 @@ Nonterminals, with rules where they appear
 
 assign               : 7
 call                 : 10
-exp                  : 1 15 0
+exp                  : 1 5 15 0
 exp1                 : 1 2 3
-exp2                 : 3 4 5
+exp2                 : 3 4
 exp3                 : 5 6
 params               : 11 13
 
@@ -51,7 +51,7 @@ state 0
     (2) exp -> . exp1
     (3) exp1 -> . exp1 VEZES exp2
     (4) exp1 -> . exp2
-    (5) exp2 -> . exp2 POT exp3
+    (5) exp2 -> . exp3 POT exp
     (6) exp2 -> . exp3
     (7) exp3 -> . assign
     (8) exp3 -> . NUMBER
@@ -96,25 +96,25 @@ state 2
 state 3
 
     (4) exp1 -> exp2 .
-    (5) exp2 -> exp2 . POT exp3
 
-  ! shift/reduce conflict for POT resolved as shift
     VEZES           reduce using rule 4 (exp1 -> exp2 .)
     SOMA            reduce using rule 4 (exp1 -> exp2 .)
     $end            reduce using rule 4 (exp1 -> exp2 .)
-    POT             shift and go to state 11
-
-  ! POT             [ reduce using rule 4 (exp1 -> exp2 .) ]
+    POT             reduce using rule 4 (exp1 -> exp2 .)
 
 
 state 4
 
+    (5) exp2 -> exp3 . POT exp
     (6) exp2 -> exp3 .
 
-    POT             reduce using rule 6 (exp2 -> exp3 .)
+  ! shift/reduce conflict for POT resolved as shift
+    POT             shift and go to state 11
     VEZES           reduce using rule 6 (exp2 -> exp3 .)
     SOMA            reduce using rule 6 (exp2 -> exp3 .)
     $end            reduce using rule 6 (exp2 -> exp3 .)
+
+  ! POT             [ reduce using rule 6 (exp2 -> exp3 .) ]
 
 
 state 5
@@ -167,7 +167,7 @@ state 9
     (1) exp -> exp SOMA . exp1
     (3) exp1 -> . exp1 VEZES exp2
     (4) exp1 -> . exp2
-    (5) exp2 -> . exp2 POT exp3
+    (5) exp2 -> . exp3 POT exp
     (6) exp2 -> . exp3
     (7) exp3 -> . assign
     (8) exp3 -> . NUMBER
@@ -189,7 +189,7 @@ state 9
 state 10
 
     (3) exp1 -> exp1 VEZES . exp2
-    (5) exp2 -> . exp2 POT exp3
+    (5) exp2 -> . exp3 POT exp
     (6) exp2 -> . exp3
     (7) exp3 -> . assign
     (8) exp3 -> . NUMBER
@@ -209,7 +209,13 @@ state 10
 
 state 11
 
-    (5) exp2 -> exp2 POT . exp3
+    (5) exp2 -> exp3 POT . exp
+    (1) exp -> . exp SOMA exp1
+    (2) exp -> . exp1
+    (3) exp1 -> . exp1 VEZES exp2
+    (4) exp1 -> . exp2
+    (5) exp2 -> . exp3 POT exp
+    (6) exp2 -> . exp3
     (7) exp3 -> . assign
     (8) exp3 -> . NUMBER
     (9) exp3 -> . ID
@@ -221,7 +227,10 @@ state 11
     NUMBER          shift and go to state 6
     ID              shift and go to state 7
 
-    exp3                           shift and go to state 16
+    exp3                           shift and go to state 4
+    exp                            shift and go to state 16
+    exp1                           shift and go to state 2
+    exp2                           shift and go to state 3
     assign                         shift and go to state 5
     call                           shift and go to state 8
 
@@ -232,7 +241,7 @@ state 12
     (2) exp -> . exp1
     (3) exp1 -> . exp1 VEZES exp2
     (4) exp1 -> . exp2
-    (5) exp2 -> . exp2 POT exp3
+    (5) exp2 -> . exp3 POT exp
     (6) exp2 -> . exp3
     (7) exp3 -> . assign
     (8) exp3 -> . NUMBER
@@ -281,25 +290,25 @@ state 14
 state 15
 
     (3) exp1 -> exp1 VEZES exp2 .
-    (5) exp2 -> exp2 . POT exp3
 
-  ! shift/reduce conflict for POT resolved as shift
     VEZES           reduce using rule 3 (exp1 -> exp1 VEZES exp2 .)
     SOMA            reduce using rule 3 (exp1 -> exp1 VEZES exp2 .)
     $end            reduce using rule 3 (exp1 -> exp1 VEZES exp2 .)
-    POT             shift and go to state 11
-
-  ! POT             [ reduce using rule 3 (exp1 -> exp1 VEZES exp2 .) ]
+    POT             reduce using rule 3 (exp1 -> exp1 VEZES exp2 .)
 
 
 state 16
 
-    (5) exp2 -> exp2 POT exp3 .
+    (5) exp2 -> exp3 POT exp .
+    (1) exp -> exp . SOMA exp1
 
-    POT             reduce using rule 5 (exp2 -> exp2 POT exp3 .)
-    VEZES           reduce using rule 5 (exp2 -> exp2 POT exp3 .)
-    SOMA            reduce using rule 5 (exp2 -> exp2 POT exp3 .)
-    $end            reduce using rule 5 (exp2 -> exp2 POT exp3 .)
+  ! shift/reduce conflict for SOMA resolved as shift
+    VEZES           reduce using rule 5 (exp2 -> exp3 POT exp .)
+    $end            reduce using rule 5 (exp2 -> exp3 POT exp .)
+    POT             reduce using rule 5 (exp2 -> exp3 POT exp .)
+    SOMA            shift and go to state 9
+
+  ! SOMA            [ reduce using rule 5 (exp2 -> exp3 POT exp .) ]
 
 
 state 17
@@ -372,7 +381,7 @@ WARNING:
 WARNING: Conflicts:
 WARNING: 
 WARNING: shift/reduce conflict for VEZES in state 2 resolved as shift
-WARNING: shift/reduce conflict for POT in state 3 resolved as shift
+WARNING: shift/reduce conflict for POT in state 4 resolved as shift
 WARNING: shift/reduce conflict for VEZES in state 14 resolved as shift
-WARNING: shift/reduce conflict for POT in state 15 resolved as shift
+WARNING: shift/reduce conflict for SOMA in state 16 resolved as shift
 WARNING: shift/reduce conflict for SOMA in state 17 resolved as shift
