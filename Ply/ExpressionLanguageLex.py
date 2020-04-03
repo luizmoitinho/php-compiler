@@ -1,49 +1,49 @@
 import ply.lex as lex
 
 reserved = {
-    'as':'AS',
-    'function':'FUNCTION',
-    'and':'AND',
-    'or':'OR',
-    'if' : 'IF',
-    'else' : 'ELSE',
-    'elseif':'ELSEIF',
-    'endif':'ENDIF',
-    'switch':'SWITCH',
-    'case':'CASE',
-    'break':'BREAK',
-    'continue':'CONTINUE',
-    'true':'TRUE',
-    'false':'FALSE',
-    'while' : 'WHILE',
-    'endwhile':'ENDWHILE',
-    'for' : 'FOR',
-    'endfor': 'ENDFOR',
-    'foreach': 'FOREACH',
+    'as'        :'AS',
+    'function'  :'FUNCTION',
+    'and'       :'AND',
+    'or'        :'OR',
+    'if'        : 'IF',
+    'else'      : 'ELSE',
+    'elseif'    :'ELSEIF',
+    'endif'     :'ENDIF',
+    'switch'    :'SWITCH',
+    'case'      :'CASE',
+    'break'     :'BREAK',
+    'continue'  :'CONTINUE',
+    'true'      :'TRUE',
+    'false'     :'FALSE',
+    'while'     : 'WHILE',
+    'endwhile'  :'ENDWHILE',
+    'for'       : 'FOR',
+    'endfor'    : 'ENDFOR',
+    'foreach'   : 'FOREACH',
     'endforeach': 'ENDFOREACH',
-    'declare': 'DECLARE',
+    'declare'   : 'DECLARE',
     'enddeclare': 'ENDDECLARE',
-    'do':'DO',
-    'int': 'INT_TYPE',
-    'double': 'DOUBLE_TYPE',
-    'float': 'FLOAT_TYPE',
-    'real': 'REAL_TYPE',
-    'string': 'STRING_TYPE',
-    'array': 'ARRAY_TYPE',
-    'object': 'OBJECT_TYPE',
-    'bool': 'BOOL_TYPE',
-    'boolean': 'BOOLEAN_TYPE',
-    'unset': 'UNSET',
-    'exit': 'EXIT',
-    'die': 'DIE',
-    'list': 'LIST',
-    'clone': 'CLONE',
-    'return':'RETURN',
-    'global':'GLOBAL',
-    'var': 'VAR', #Remover se não existir
+    'do'        : 'DO',
+    'int'       : 'INT_TYPE',
+    'double'    : 'DOUBLE_TYPE',
+    'float'     : 'FLOAT_TYPE',
+    'real'      : 'REAL_TYPE',
+    'string'    : 'STRING_TYPE',
+    'array'     : 'ARRAY_TYPE',
+    'bool'      : 'BOOL_TYPE',
+    'boolean'   : 'BOOLEAN_TYPE',
+    'unset'     : 'UNSET',
+    'exit'      : 'EXIT',
+    'die'       : 'DIE',
+    'list'      : 'LIST',
+    'clone'     : 'CLONE',
+    'return'    :'RETURN',
+    'global'    :'GLOBAL',
+    'var'       : 'VAR' #Remover se não existir
 }
 
 tokens = [
+    'ID',
     'ASPAS',
     'APOSTROFE',
     'ARROBA',
@@ -91,50 +91,15 @@ tokens = [
     'STRING',
     'NUMBER_REAL',
     'NUMBER_INTEGER',
-    'VARIABLE'
+    'VARIABLE',
+    'CONSTANT_ENCAPSED_STRING'
 ] + list(reserved.values())
 
-
 t_ignore = ' \t'
-t_AS = r'as'
-t_FUNCTION = r'function'
-t_AND = r'and'
-t_OR = r'or'
-t_IF = r'if'
-t_ELSE = r'else'
-t_ELSEIF= r'elseif'
-t_ENDIF = r'endif'
-t_SWITCH = r'switch'
-t_CASE = r'case'
-t_BREAK = r'break'
-t_CONTINUE = r'continue'
-t_TRUE = r'true'
-t_FALSE = r'false'
-t_WHILE = r'while'
-t_ENDWHILE = r'endwhile'
-t_FOR = r'for'
-t_ENDFOR = r'endfor' 
-t_DO = r'do'
-t_INT_TYPE = r'int'
-t_DOUBLE_TYPE = r'double'
-t_REAL_TYPE = r'real'
-t_ARRAY_TYPE = r'array'
-t_OBJECT_TYPE = r'object'
-t_BOOL_TYPE = r'bool'
-t_BOOLEAN_TYPE = r'boolean'
-t_UNSET = r'unset'
-t_EXIT = r'exit'
-t_DIE = r'die'
-t_LIST = r'list'
-t_CLONE = r'clone'
-t_RETURN = r'return'
-t_GLOBAL = r'global'
-t_VAR = r'var' #Remover se não existir
-
 t_COMMENT_SINGLE = r'\//.* | \#.*'
 t_COMMENT_MULTI = r'\/\*(.|\n)*\*\/'
-t_BEGIN_PROGRAM =  r'\<\?php'
-t_END_PROGRAM   =  r'\?\>'
+t_BEGIN_PROGRAM = r'\<\?php'
+t_END_PROGRAM =  r'\?\>'
 t_DOLAR =  r'\$'
 t_PLUS = r'\+'
 t_MINUS = r'\-'
@@ -174,6 +139,9 @@ t_ASPAS =  r'\"'
 t_DDOT = r'\:'
 t_INTE_DOT = r'\?'
 t_ARROBA = r'\@'
+t_CONSTANT_ENCAPSED_STRING = r'\'[^\']*\'|\"[^\"]*\"'
+t_STRING = r'[a-zA-Z_][a-zA-Z_0-9]*'
+
 
 ArrayTabulacao = [0]
 IndicePosicao  =  0
@@ -203,8 +171,9 @@ def t_IDENTATION(t):
         else:
             print("Identação ilegal foi encontrada")
 
-def t_STRING(t):
-    r'\".*\"'
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value,'ID')
     return t
 
 def t_NUMBER_REAL(t):
@@ -229,24 +198,3 @@ def t_newline(t):
 def t_error(t):
     print("Um caracter ilegal foi encontrado: '%s'" % t.value[0])
     t.lexer.skip(1)
- 
-arquivo ='''<?php
-$valor1 = 40;
-$valor2 = 20;
-
-if ($valor1 > $valor2)
-  "A variavel $valor1 e maior que a variavel $valor2";
-else if ($valor2 > $valor1)
-  "A variavel $valor2 e maior que a variavel $valor1";
-else
-   "A variavel $valor1 e igual a variavel $valor2";
-?>'''
-
-lexer = lex.lex()
-lexer.input(arquivo)
-
-while True:
-    token = lexer.token()
-    if not token:
-        break
-    print(token)

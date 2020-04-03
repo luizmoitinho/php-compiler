@@ -4,400 +4,707 @@ Unused terminals:
 
     ADD_ASSIGN
     AND
+    APOSTROFE
+    ARROBA
+    AS
+    ASPAS
+    BREAK
     CASE
+    CLONE
     COMMENT_MULTI
     COMMENT_SINGLE
     CONCATENATE
+    CONTINUE
+    CRASE
+    DDOT
     DECLARE
+    DECREMENT
+    DIE
     DIVIDE
     DIVIDE_ASSIGN
+    DO
+    DOLAR
+    ELSE
+    ELSEIF
+    ENDDECLARE
+    ENDFOR
+    ENDFOREACH
+    ENDIF
+    ENDWHILE
     EQUAL
+    EXIT
     FALSE
+    FOR
+    FOREACH
+    GLOBAL
     GREAT_EQUAL
     GREAT_THAN
     IDENTATION
+    IF
+    INCREMENT
+    INTE_DOT
+    LBRACKET
     LEFT_LOGICAL
     LESS_EQUAL
     LESS_THAN
+    LIST
     MOD_ASSIGN
     NOT_EQUAL
     OR
     PERCENT
     PLUS_ASSIGN
+    RBRACKET
+    RETURN
     RIGHT_LOGICAL
+    SEMICOLON
+    STRING
     SUB_ASSIGN
     SWITCH
     TIMES
     TRUE
+    UNSET
+    VAR
+    WHILE
 
 Grammar
 
 Rule 0     S' -> main
-Rule 1     main -> BEGIN_PROGRAM inner_statement END_PROGRAM
-Rule 2     inner_statement -> statement
-Rule 3     inner_statement -> function_declaration_statement
-Rule 4     statement -> LKEY INNER_STATEMENT_MUL RKEY
-Rule 5     statement -> IF LPAREN expr RPAREN statement statement_ELSEIF statement_ELSE_SINGLE statement_NEW_ELSE_SINGLE ENDIF SEMICOLON
-Rule 6     statement -> WHILE LPAREN expr RPAREN while_statement
-Rule 7     statement -> DO statement WHILE LPAREN expr RPAREN SEMICOLON
-Rule 8     statement -> FOR LPAREN for_expr SEMICOLON for_expr SEMICOLON for_expr RPAREN for_statement
-Rule 9     statement -> BREAK EXPR_OPT SEMICOLON
-Rule 10    statement -> CONTINUE EXPR_OPT SEMICOLON
-Rule 11    statement -> RETURN expr_without_variable SEMICOLON
-Rule 12    statement -> RETURN VARIABLE_OPT SEMICOLON
-Rule 13    statement -> GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
-Rule 14    statement -> expr SEMICOLON
-Rule 15    statement -> FOREACH LPAREN variable AS foreach_variable statement_ATTR_FOREACH RPAREN foreach_statement
-Rule 16    statement -> FOREACH LPAREN expr_without_variable AS foreach_variable statement_ATTR_FOREACH RPAREN foreach_statement foreach_statement
-Rule 17    statement -> SEMICOLON
-Rule 18    statement_ATTR_FOREACH -> ATTR_ASSOC foreach_variable
-Rule 19    statement_ATTR_FOREACH -> <empty>
-Rule 20    statement_COLON_GLOBAL -> COLON global_var statement_COLON_GLOBAL
-Rule 21    statement_COLON_GLOBAL -> <empty>
-Rule 22    statement_ELSEIF -> elseif_branch
-Rule 23    statement_ELSEIF -> <empty>
-Rule 24    statement_ELSE_SINGLE -> else_single
-Rule 25    statement_ELSE_SINGLE -> <empty>
-Rule 26    statement_NEW_ELSE_SINGLE -> new_else_single
-Rule 27    statement_NEW_ELSE_SINGLE -> <empty>
-Rule 28    VARIABLE_OPT -> variable
-Rule 29    VARIABLE_OPT -> <empty>
-Rule 30    EXPR_OPT -> expr
-Rule 31    EXPR_OPT -> <empty>
-Rule 32    INNER_STATEMENT_OPT -> inner_statement
-Rule 33    INNER_STATEMENT_OPT -> <empty>
-Rule 34    INNER_STATEMENT_MUL -> inner_statement INNER_STATEMENT_MUL
-Rule 35    INNER_STATEMENT_MUL -> <empty>
-Rule 36    function_declaration_statement -> FUNCTION AMPERSAND_OPT STRING LPAREN parameter_list RPAREN LKEY INNER_STATEMENT_OPT RKEY
-Rule 37    foreach_variable -> AMPERSAND_OPT variable
-Rule 38    for_statement -> statement
-Rule 39    for_statement -> DDOT INNER_STATEMENT_MUL ENDFOR SEMICOLON
-Rule 40    foreach_statement -> statement
-Rule 41    foreach_statement -> DDOT inner_statement ENDFOREACH SEMICOLON
-Rule 42    declare_statement -> statement
-Rule 43    declare_statement -> DDOT inner_statement ENDDECLARE SEMICOLON
-Rule 44    declare_list -> STRING ASSIGN static_scalar declare_list_COLON_STRING_ASSIGN_STATIC
-Rule 45    declare_list_COLON_STRING_ASSIGN_STATIC -> COLON STRING ASSIGN static_scalar declare_list_COLON_STRING_ASSIGN_STATIC
-Rule 46    declare_list_COLON_STRING_ASSIGN_STATIC -> <empty>
-Rule 47    while_statement -> statement
-Rule 48    while_statement -> DDOT INNER_STATEMENT_MUL ENDWHILE SEMICOLON
-Rule 49    elseif_branch -> ELSEIF LPAREN expr RPAREN statement
-Rule 50    new_elseif_branch -> ELSEIF LPAREN expr RPAREN DDOT INNER_STATEMENT_MUL
-Rule 51    else_single -> ELSE statement
-Rule 52    new_else_single -> ELSE DDOT INNER_STATEMENT_MUL
-Rule 53    parameter_list -> parameter parameter_list_COLON_PARAMETER
-Rule 54    parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER
-Rule 55    parameter_list_COLON_PARAMETER -> <empty>
-Rule 56    parameter -> STRING AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC
-Rule 57    parameter -> ARRAY_TYPE AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC
-Rule 58    parameter_ASSIGN_STATIC -> ASSIGN static_scalar
-Rule 59    parameter_ASSIGN_STATIC -> <empty>
-Rule 60    AMPERSAND_OPT -> AMPERSAND
-Rule 61    AMPERSAND_OPT -> <empty>
-Rule 62    function_call_parameter_list -> function_call_parameter function_call_list_COLON_FUNCTION
-Rule 63    function_call_list_COLON_FUNCTION -> COLON function_call_parameter function_call_list_COLON_FUNCTION
-Rule 64    function_call_list_COLON_FUNCTION -> <empty>
-Rule 65    function_call_parameter -> expr_without_variable
-Rule 66    function_call_parameter -> variable
-Rule 67    function_call_parameter -> AMPERSAND VARIABLE
-Rule 68    global_var -> VARIABLE
-Rule 69    global_var -> DOLAR VARIABLE
-Rule 70    global_var -> DOLAR LKEY expr RKEY
-Rule 71    variable_modifiers -> VAR
-Rule 72    variable_modifiers -> modifier variable_modifiers_MODIFIER
-Rule 73    variable_modifiers_MODIFIER -> modifier variable_modifiers_MODIFIER
-Rule 74    variable_modifiers_MODIFIER -> <empty>
-Rule 75    for_expr -> expr for_expr_COLON_EXPR
-Rule 76    for_expr -> COLON expr for_expr_COLON_EXPR
-Rule 77    for_expr -> <empty>
-Rule 78    expr_without_variable -> LIST LPAREN assignment_list_element expr_without_variable_COLON_ASSIGNMENT RPAREN ASSIGN expr
-Rule 79    expr_without_variable -> variable ASSIGN expr
-Rule 80    expr_without_variable -> variable ASSIGN AMPERSAND variable
-Rule 81    expr_without_variable -> CLONE expr
-Rule 82    expr_without_variable -> VARIABLE INCREMENT
-Rule 83    expr_without_variable -> INCREMENT VARIABLE
-Rule 84    expr_without_variable -> VARIABLE DECREMENT
-Rule 85    expr_without_variable -> DECREMENT VARIABLE
-Rule 86    expr_without_variable -> LPAREN expr RPAREN
-Rule 87    expr_without_variable -> expr INTE_DOT expr DDOT expr
-Rule 88    expr_without_variable -> internal_functions
-Rule 89    expr_without_variable -> LPAREN INT_TYPE RPAREN expr
-Rule 90    expr_without_variable -> LPAREN DOUBLE_TYPE RPAREN expr
-Rule 91    expr_without_variable -> LPAREN FLOAT_TYPE RPAREN expr
-Rule 92    expr_without_variable -> LPAREN REAL_TYPE RPAREN expr
-Rule 93    expr_without_variable -> LPAREN STRING_TYPE RPAREN expr
-Rule 94    expr_without_variable -> LPAREN ARRAY_TYPE RPAREN expr
-Rule 95    expr_without_variable -> LPAREN OBJECT_TYPE RPAREN expr
-Rule 96    expr_without_variable -> LPAREN BOOL_TYPE RPAREN expr
-Rule 97    expr_without_variable -> LPAREN BOOLEAN_TYPE RPAREN expr
-Rule 98    expr_without_variable -> LPAREN UNSET RPAREN expr
-Rule 99    expr_without_variable -> EXIT expr_without_variable_EXIT
-Rule 100   expr_without_variable -> DIE expr_without_variable_EXIT
-Rule 101   expr_without_variable -> ARROBA expr
-Rule 102   expr_without_variable -> scalar
-Rule 103   expr_without_variable -> ARRAY LPAREN expr_without_variable_ARRAY RPAREN
-Rule 104   expr_without_variable -> CRASE expr_without_variable_ENCAPS CRASE
-Rule 105   expr_without_variable_COLON_ASSIGNMENT -> COLON assignment_list_element expr_without_variable_COLON_ASSIGNMENT
-Rule 106   expr_without_variable_COLON_ASSIGNMENT -> <empty>
-Rule 107   expr_without_variable_EXIT -> exit_expr
-Rule 108   expr_without_variable_EXIT -> <empty>
-Rule 109   expr_without_variable_ARRAY -> array_pair_list
-Rule 110   expr_without_variable_ARRAY -> <empty>
-Rule 111   expr_without_variable_ENCAPS -> encaps expr_without_variable_ENCAPS
-Rule 112   expr_without_variable_ENCAPS -> <empty>
-Rule 113   function_call -> STRING LPAREN function_call_parameter_list RPAREN
-Rule 114   function_call -> variable_without_objects LPAREN function_call_parameter_list RPAREN
-Rule 115   exit_expr -> LPAREN exit_expr_EXPR RPAREN
-Rule 116   exit_expr_EXPR -> expr
-Rule 117   exit_expr_EXPR -> <empty>
-Rule 118   static_scalar -> common_scalar
-Rule 119   static_scalar -> STRING
-Rule 120   static_scalar -> PLUS static_scalar
-Rule 121   static_scalar -> MINUS static_scalar
-Rule 122   static_scalar -> ARRAY LPAREN static_scalar_STATIC RPAREN
-Rule 123   static_scalar_STATIC -> static_array_pair_list
-Rule 124   static_scalar_STATIC -> <empty>
-Rule 125   common_scalar -> NUMBER_REAL
-Rule 126   common_scalar -> NUMBER_INTEGER
-Rule 127   common_scalar -> <empty>
-Rule 128   scalar -> STRING
-Rule 129   scalar -> STRING_VARNAME
-Rule 130   scalar -> common_scalar
-Rule 131   scalar -> ASPAS scalar_ENCAPS ASPAS
-Rule 132   scalar -> APOSTROFE scalar_ENCAPS APOSTROFE
-Rule 133   scalar_ENCAPS -> encaps scalar_ENCAPS
-Rule 134   scalar_ENCAPS -> <empty>
-Rule 135   assignment_list_element -> variable
-Rule 136   assignment_list_element -> LIST LPAREN assignment_list_element assignment_list_element_COLLON_ASSIGNMENT RPAREN
-Rule 137   assignment_list_element_COLON_ASSIGNMENT -> COLON assignment_list_element assignment_list_element_COLON_ASSIGNMENT
-Rule 138   assignment_list_element_COLON_ASSIGNMENT -> <empty>
-Rule 139   static_array_pair_list -> static_array_pair static_array_pair_list_COLON_STATIC static_array_pair_list_COLON
-Rule 140   static_array_pair_list_COLON_STATIC -> COLON static_array_pair static_array_pair_list_COLON_STATIC
-Rule 141   static_array_pair_list_COLON_STATIC -> <empty>
-Rule 142   static_array_pair -> static_scalar static_array_pair_ATTR_STATIC
-Rule 143   static_array_pair_ATTR_STATIC -> ATTR_ASSOC static_scalar
-Rule 144   static_array_pair_ATTR_STATIC -> <empty>
-Rule 145   expr -> VARIABLE
-Rule 146   expr -> expr_without_variable
-Rule 147   variable -> base_variable_with_function_calls
-Rule 148   method_parameters -> LPAREN function_call_parameter_list RPAREN
-Rule 149   base_variable_with_function_calls -> base_variable
-Rule 150   base_variable_with_function_calls -> function_call
-Rule 151   base_variable -> reference_variable
-Rule 152   base_variable -> simple_indirect_reference reference_variable
-Rule 153   reference_variable -> compound_variable reference_variable_SELECTOR
-Rule 154   reference_variable_SELECTOR -> selector reference_variable_SELECTOR
-Rule 155   reference_variable_SELECTOR -> <empty>
-Rule 156   compound_variable -> VARIABLE
-Rule 157   compound_variable -> DOLAR LKEY expr RKEY
-Rule 158   selector -> LBRACKET selector_EXPR RBRACKET
-Rule 159   selector_EXPR -> expr
-Rule 160   selector_EXPR -> <empty>
-Rule 161   variable_name -> VARIABLE
-Rule 162   simple_indirect_reference -> simple_indirect_reference_DOLAR
-Rule 163   simple_indirect_reference -> DOLAR simple_indirect_reference_DOLAR
-Rule 164   simple_indirect_reference -> <empty>
-Rule 165   array_pair_list -> array_pair array_pair_list_ARR_PAIR array_pair_list_COLON
-Rule 166   array_pair_list_ARR_PAIR -> COLON array_pair array_pair_list_ARR_PAIR
-Rule 167   array_pair_list_ARR_PAIR -> <empty>
-Rule 168   p_array_pair_list_COLON -> COLON
-Rule 169   p_array_pair_list_COLON -> <empty>
-Rule 170   array_pair -> AMPERSAND VARIABLE
-Rule 171   array_pair -> expr ATTR_ASSOC AMPERSAND VARIABLE
-Rule 172   array_pair -> expr ATTR_ASSOC expr
-Rule 173   encaps -> encaps_var
-Rule 174   encaps -> STRING
-Rule 175   encaps -> LPAREN
-Rule 176   encaps -> RPAREN
-Rule 177   encaps -> LKEY
-Rule 178   encaps -> RKEY
-Rule 179   encaps_var -> VARIABLE encaps_var_1
-Rule 180   encaps_var -> DOLAR LBRACKET expr RBRACKET
-Rule 181   encaps_var -> DOLAR LKEY STRING_VARNAME LBRACKET expr RBRACKET RKEY
-Rule 182   encaps_var -> CURLY_OPEN variable
-Rule 183   encaps_var_1 -> LBRACKET encaps_var_offset RBRACKET
-Rule 184   encaps_var_1 -> <empty>
-Rule 185   encaps_var_offset -> STRING
-Rule 186   encaps_var_offset -> VARIABLE
+Rule 1     main -> BEGIN_PROGRAM main_INNER END_PROGRAM
+Rule 2     main_INNER -> inner_statement main_INNER
+Rule 3     main_INNER -> <empty>
+Rule 4     inner_statement -> function_declaration_statement
+Rule 5     inner_statement -> <empty>
+Rule 6     AMPERSAND_OPT -> AMPERSAND
+Rule 7     AMPERSAND_OPT -> <empty>
+Rule 8     function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY
+Rule 9     INNER_STATEMENT_OPT -> inner_statement
+Rule 10    INNER_STATEMENT_OPT -> <empty>
+Rule 11    parameter_list -> parameter parameter_list_COLON_PARAMETER
+Rule 12    parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER
+Rule 13    parameter_list_COLON_PARAMETER -> <empty>
+Rule 14    parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+Rule 15    parameter_type -> INT_TYPE
+Rule 16    parameter_type -> BOOLEAN_TYPE
+Rule 17    parameter_type -> STRING_TYPE
+Rule 18    parameter_type -> FLOAT_TYPE
+Rule 19    parameter_type -> ARRAY_TYPE
+Rule 20    parameter_type -> BOOL_TYPE
+Rule 21    parameter_type -> REAL_TYPE
+Rule 22    parameter_type -> DOUBLE_TYPE
+Rule 23    parameter_type -> <empty>
+Rule 24    parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar
+Rule 25    parameter_ASSIGN_STATIC_OPT -> <empty>
+Rule 26    static_scalar -> common_scalar
+Rule 27    static_scalar -> PLUS static_scalar
+Rule 28    static_scalar -> MINUS static_scalar
+Rule 29    common_scalar -> NUMBER_REAL
+Rule 30    common_scalar -> NUMBER_INTEGER
+Rule 31    common_scalar -> CONSTANT_ENCAPSED_STRING
+Rule 32    static_scalar_OPT -> static_array_pair_list
+Rule 33    static_scalar_OPT -> <empty>
+Rule 34    static_array_pair_list -> static_array_pair static_array_pair_list_COLON_STATIC static_array_pair_list_COLON
+Rule 35    static_array_pair_list_COLON_STATIC -> COLON static_array_pair static_array_pair_list_COLON_STATIC
+Rule 36    static_array_pair_list_COLON_STATIC -> <empty>
+Rule 37    static_array_pair_list_COLON -> COLON
+Rule 38    static_array_pair_list_COLON -> <empty>
+Rule 39    static_array_pair -> static_scalar static_array_pair_ATTR_STATIC
+Rule 40    static_array_pair_ATTR_STATIC -> ATTR_ASSOC static_scalar
+Rule 41    static_array_pair_ATTR_STATIC -> <empty>
 
 Terminals, with rules where they appear
 
 ADD_ASSIGN           : 
-AMPERSAND            : 60 67 80 170 171
+AMPERSAND            : 6
 AND                  : 
-APOSTROFE            : 132 132
-ARRAY_TYPE           : 57 94
-ARROBA               : 101
-AS                   : 15 16
-ASPAS                : 131 131
-ASSIGN               : 44 45 58 78 79 80
-ATTR_ASSOC           : 18 143 171 172
+APOSTROFE            : 
+ARRAY_TYPE           : 19
+ARROBA               : 
+AS                   : 
+ASPAS                : 
+ASSIGN               : 24
+ATTR_ASSOC           : 40
 BEGIN_PROGRAM        : 1
-BOOLEAN_TYPE         : 97
-BOOL_TYPE            : 96
-BREAK                : 9
+BOOLEAN_TYPE         : 16
+BOOL_TYPE            : 20
+BREAK                : 
 CASE                 : 
-CLONE                : 81
-COLON                : 20 45 54 63 76 105 137 140 166 168
+CLONE                : 
+COLON                : 12 35 37
 COMMENT_MULTI        : 
 COMMENT_SINGLE       : 
 CONCATENATE          : 
-CONTINUE             : 10
-CRASE                : 104 104
-DDOT                 : 39 41 43 48 50 52 87
+CONSTANT_ENCAPSED_STRING : 31
+CONTINUE             : 
+CRASE                : 
+DDOT                 : 
 DECLARE              : 
-DECREMENT            : 84 85
-DIE                  : 100
+DECREMENT            : 
+DIE                  : 
 DIVIDE               : 
 DIVIDE_ASSIGN        : 
-DO                   : 7
-DOLAR                : 69 70 157 163 180 181
-DOUBLE_TYPE          : 90
-ELSE                 : 51 52
-ELSEIF               : 49 50
-ENDDECLARE           : 43
-ENDFOR               : 39
-ENDFOREACH           : 41
-ENDIF                : 5
-ENDWHILE             : 48
+DO                   : 
+DOLAR                : 
+DOUBLE_TYPE          : 22
+ELSE                 : 
+ELSEIF               : 
+ENDDECLARE           : 
+ENDFOR               : 
+ENDFOREACH           : 
+ENDIF                : 
+ENDWHILE             : 
 END_PROGRAM          : 1
 EQUAL                : 
-EXIT                 : 99
+EXIT                 : 
 FALSE                : 
-FLOAT_TYPE           : 91
-FOR                  : 8
-FOREACH              : 15 16
-FUNCTION             : 36
-GLOBAL               : 13
+FLOAT_TYPE           : 18
+FOR                  : 
+FOREACH              : 
+FUNCTION             : 8
+GLOBAL               : 
 GREAT_EQUAL          : 
 GREAT_THAN           : 
+ID                   : 8
 IDENTATION           : 
-IF                   : 5
-INCREMENT            : 82 83
-INTE_DOT             : 87
-INT_TYPE             : 89
-LBRACKET             : 158 180 181 183
+IF                   : 
+INCREMENT            : 
+INTE_DOT             : 
+INT_TYPE             : 15
+LBRACKET             : 
 LEFT_LOGICAL         : 
 LESS_EQUAL           : 
 LESS_THAN            : 
-LIST                 : 78 136
-LKEY                 : 4 36 70 157 177 181
-LPAREN               : 5 6 7 8 15 16 36 49 50 78 86 89 90 91 92 93 94 95 96 97 98 103 113 114 115 122 136 148 175
-MINUS                : 121
+LIST                 : 
+LKEY                 : 8
+LPAREN               : 8
+MINUS                : 28
 MOD_ASSIGN           : 
 NOT_EQUAL            : 
-NUMBER_INTEGER       : 126
-NUMBER_REAL          : 125
-OBJECT_TYPE          : 95
+NUMBER_INTEGER       : 30
+NUMBER_REAL          : 29
 OR                   : 
 PERCENT              : 
-PLUS                 : 120
+PLUS                 : 27
 PLUS_ASSIGN          : 
-RBRACKET             : 158 180 181 183
-REAL_TYPE            : 92
-RETURN               : 11 12
+RBRACKET             : 
+REAL_TYPE            : 21
+RETURN               : 
 RIGHT_LOGICAL        : 
-RKEY                 : 4 36 70 157 178 181
-RPAREN               : 5 6 7 8 15 16 36 49 50 78 86 89 90 91 92 93 94 95 96 97 98 103 113 114 115 122 136 148 176
-SEMICOLON            : 5 7 8 8 9 10 11 12 13 14 17 39 41 43 48
-STRING               : 36 44 45 56 113 119 128 174 185
-STRING_TYPE          : 93
+RKEY                 : 8
+RPAREN               : 8
+SEMICOLON            : 
+STRING               : 
+STRING_TYPE          : 17
 SUB_ASSIGN           : 
 SWITCH               : 
 TIMES                : 
 TRUE                 : 
-UNSET                : 98
-VAR                  : 71
-VARIABLE             : 56 57 67 68 69 82 83 84 85 145 156 161 170 171 179 186
-WHILE                : 6 7
+UNSET                : 
+VAR                  : 
+VARIABLE             : 14
+WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-AMPERSAND_OPT        : 36 37 56 57
-ARRAY                : 103 122
-CURLY_OPEN           : 182
-EXPR_OPT             : 9 10
-INNER_STATEMENT_MUL  : 4 34 39 48 50 52
-INNER_STATEMENT_OPT  : 36
-STRING_VARNAME       : 129 181
-VARIABLE_OPT         : 12
-array_pair           : 165 166
-array_pair_list      : 109
-array_pair_list_ARR_PAIR : 165 166
-array_pair_list_COLON : 165
-assignment_list_element : 78 105 136 137
-assignment_list_element_COLLON_ASSIGNMENT : 136
-assignment_list_element_COLON_ASSIGNMENT : 137
-base_variable        : 149
-base_variable_with_function_calls : 147
-common_scalar        : 118 130
-compound_variable    : 153
-declare_list         : 
-declare_list_COLON_STRING_ASSIGN_STATIC : 44 45
-declare_statement    : 
-else_single          : 24
-elseif_branch        : 22
-encaps               : 111 133
-encaps_var           : 173
-encaps_var_1         : 179
-encaps_var_offset    : 183
-exit_expr            : 107
-exit_expr_EXPR       : 115
-expr                 : 5 6 7 14 30 49 50 70 75 76 78 79 81 86 87 87 87 89 90 91 92 93 94 95 96 97 98 101 116 157 159 171 172 172 180 181
-expr_without_variable : 11 16 65 146
-expr_without_variable_ARRAY : 103
-expr_without_variable_COLON_ASSIGNMENT : 78 105
-expr_without_variable_ENCAPS : 104 111
-expr_without_variable_EXIT : 99 100
-for_expr             : 8 8 8
-for_expr_COLON_EXPR  : 75 76
-for_statement        : 8
-foreach_statement    : 15 16 16
-foreach_variable     : 15 16 18
-function_call        : 150
-function_call_list_COLON_FUNCTION : 62 63
-function_call_parameter : 62 63
-function_call_parameter_list : 113 114 148
-function_declaration_statement : 3
-global_var           : 13 20
-inner_statement      : 1 32 34 41 43
-internal_functions   : 88
+AMPERSAND_OPT        : 8 14
+INNER_STATEMENT_OPT  : 
+common_scalar        : 26
+function_declaration_statement : 4
+inner_statement      : 2 8 9
 main                 : 0
-method_parameters    : 
-modifier             : 72 73
-new_else_single      : 26
-new_elseif_branch    : 
-p_array_pair_list_COLON : 
-parameter            : 53 54
-parameter_ASSIGN_STATIC : 56 57
-parameter_list       : 36
-parameter_list_COLON_PARAMETER : 53 54
-reference_variable   : 151 152
-reference_variable_SELECTOR : 153 154
-scalar               : 102
-scalar_ENCAPS        : 131 132 133
-selector             : 154
-selector_EXPR        : 158
-simple_indirect_reference : 152
-simple_indirect_reference_DOLAR : 162 163
-statement            : 2 5 7 38 40 42 47 49 51
-statement_ATTR_FOREACH : 15 16
-statement_COLON_GLOBAL : 13 20
-statement_ELSEIF     : 5
-statement_ELSE_SINGLE : 5
-statement_NEW_ELSE_SINGLE : 5
-static_array_pair    : 139 140
-static_array_pair_ATTR_STATIC : 142
-static_array_pair_list : 123
-static_array_pair_list_COLON : 139
-static_array_pair_list_COLON_STATIC : 139 140
-static_scalar        : 44 45 58 120 121 142 143
-static_scalar_STATIC : 122
-variable             : 15 28 37 66 79 80 80 135 182
-variable_modifiers   : 
-variable_modifiers_MODIFIER : 72 73
-variable_name        : 
-variable_without_objects : 114
-while_statement      : 6
+main_INNER           : 1 2
+parameter            : 11 12
+parameter_ASSIGN_STATIC_OPT : 14
+parameter_list       : 8
+parameter_list_COLON_PARAMETER : 11 12
+parameter_type       : 14
+static_array_pair    : 34 35
+static_array_pair_ATTR_STATIC : 39
+static_array_pair_list : 32
+static_array_pair_list_COLON : 34
+static_array_pair_list_COLON_STATIC : 34 35
+static_scalar        : 24 27 28 39 40
+static_scalar_OPT    : 
 
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . main
+    (1) main -> . BEGIN_PROGRAM main_INNER END_PROGRAM
+
+    BEGIN_PROGRAM   shift and go to state 2
+
+    main                           shift and go to state 1
+
+state 1
+
+    (0) S' -> main .
+
+
+
+state 2
+
+    (1) main -> BEGIN_PROGRAM . main_INNER END_PROGRAM
+    (2) main_INNER -> . inner_statement main_INNER
+    (3) main_INNER -> .
+    (4) inner_statement -> . function_declaration_statement
+    (5) inner_statement -> .
+    (8) function_declaration_statement -> . FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY
+
+  ! reduce/reduce conflict for END_PROGRAM resolved using rule 3 (main_INNER -> .)
+  ! shift/reduce conflict for FUNCTION resolved as shift
+    END_PROGRAM     reduce using rule 3 (main_INNER -> .)
+    FUNCTION        shift and go to state 6
+
+  ! FUNCTION        [ reduce using rule 5 (inner_statement -> .) ]
+  ! END_PROGRAM     [ reduce using rule 5 (inner_statement -> .) ]
+
+    main_INNER                     shift and go to state 3
+    inner_statement                shift and go to state 4
+    function_declaration_statement shift and go to state 5
+
+state 3
+
+    (1) main -> BEGIN_PROGRAM main_INNER . END_PROGRAM
+
+    END_PROGRAM     shift and go to state 7
+
+
+state 4
+
+    (2) main_INNER -> inner_statement . main_INNER
+    (2) main_INNER -> . inner_statement main_INNER
+    (3) main_INNER -> .
+    (4) inner_statement -> . function_declaration_statement
+    (5) inner_statement -> .
+    (8) function_declaration_statement -> . FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY
+
+  ! reduce/reduce conflict for END_PROGRAM resolved using rule 3 (main_INNER -> .)
+  ! shift/reduce conflict for FUNCTION resolved as shift
+    END_PROGRAM     reduce using rule 3 (main_INNER -> .)
+    FUNCTION        shift and go to state 6
+
+  ! FUNCTION        [ reduce using rule 5 (inner_statement -> .) ]
+  ! END_PROGRAM     [ reduce using rule 5 (inner_statement -> .) ]
+
+    inner_statement                shift and go to state 4
+    main_INNER                     shift and go to state 8
+    function_declaration_statement shift and go to state 5
+
+state 5
+
+    (4) inner_statement -> function_declaration_statement .
+
+    FUNCTION        reduce using rule 4 (inner_statement -> function_declaration_statement .)
+    END_PROGRAM     reduce using rule 4 (inner_statement -> function_declaration_statement .)
+    RKEY            reduce using rule 4 (inner_statement -> function_declaration_statement .)
+
+
+state 6
+
+    (8) function_declaration_statement -> FUNCTION . AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY
+    (6) AMPERSAND_OPT -> . AMPERSAND
+    (7) AMPERSAND_OPT -> .
+
+    AMPERSAND       shift and go to state 10
+    ID              reduce using rule 7 (AMPERSAND_OPT -> .)
+
+    AMPERSAND_OPT                  shift and go to state 9
+
+state 7
+
+    (1) main -> BEGIN_PROGRAM main_INNER END_PROGRAM .
+
+    $end            reduce using rule 1 (main -> BEGIN_PROGRAM main_INNER END_PROGRAM .)
+
+
+state 8
+
+    (2) main_INNER -> inner_statement main_INNER .
+
+    END_PROGRAM     reduce using rule 2 (main_INNER -> inner_statement main_INNER .)
+
+
+state 9
+
+    (8) function_declaration_statement -> FUNCTION AMPERSAND_OPT . ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY
+
+    ID              shift and go to state 11
+
+
+state 10
+
+    (6) AMPERSAND_OPT -> AMPERSAND .
+
+    ID              reduce using rule 6 (AMPERSAND_OPT -> AMPERSAND .)
+    VARIABLE        reduce using rule 6 (AMPERSAND_OPT -> AMPERSAND .)
+
+
+state 11
+
+    (8) function_declaration_statement -> FUNCTION AMPERSAND_OPT ID . LPAREN parameter_list RPAREN LKEY inner_statement RKEY
+
+    LPAREN          shift and go to state 12
+
+
+state 12
+
+    (8) function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN . parameter_list RPAREN LKEY inner_statement RKEY
+    (11) parameter_list -> . parameter parameter_list_COLON_PARAMETER
+    (14) parameter -> . parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+    (15) parameter_type -> . INT_TYPE
+    (16) parameter_type -> . BOOLEAN_TYPE
+    (17) parameter_type -> . STRING_TYPE
+    (18) parameter_type -> . FLOAT_TYPE
+    (19) parameter_type -> . ARRAY_TYPE
+    (20) parameter_type -> . BOOL_TYPE
+    (21) parameter_type -> . REAL_TYPE
+    (22) parameter_type -> . DOUBLE_TYPE
+    (23) parameter_type -> .
+
+    INT_TYPE        shift and go to state 16
+    BOOLEAN_TYPE    shift and go to state 17
+    STRING_TYPE     shift and go to state 18
+    FLOAT_TYPE      shift and go to state 19
+    ARRAY_TYPE      shift and go to state 20
+    BOOL_TYPE       shift and go to state 21
+    REAL_TYPE       shift and go to state 22
+    DOUBLE_TYPE     shift and go to state 23
+    AMPERSAND       reduce using rule 23 (parameter_type -> .)
+    VARIABLE        reduce using rule 23 (parameter_type -> .)
+
+    parameter_list                 shift and go to state 13
+    parameter                      shift and go to state 14
+    parameter_type                 shift and go to state 15
+
+state 13
+
+    (8) function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list . RPAREN LKEY inner_statement RKEY
+
+    RPAREN          shift and go to state 24
+
+
+state 14
+
+    (11) parameter_list -> parameter . parameter_list_COLON_PARAMETER
+    (12) parameter_list_COLON_PARAMETER -> . COLON parameter parameter_list_COLON_PARAMETER
+    (13) parameter_list_COLON_PARAMETER -> .
+
+    COLON           shift and go to state 26
+    RPAREN          reduce using rule 13 (parameter_list_COLON_PARAMETER -> .)
+
+    parameter_list_COLON_PARAMETER shift and go to state 25
+
+state 15
+
+    (14) parameter -> parameter_type . AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+    (6) AMPERSAND_OPT -> . AMPERSAND
+    (7) AMPERSAND_OPT -> .
+
+    AMPERSAND       shift and go to state 10
+    VARIABLE        reduce using rule 7 (AMPERSAND_OPT -> .)
+
+    AMPERSAND_OPT                  shift and go to state 27
+
+state 16
+
+    (15) parameter_type -> INT_TYPE .
+
+    AMPERSAND       reduce using rule 15 (parameter_type -> INT_TYPE .)
+    VARIABLE        reduce using rule 15 (parameter_type -> INT_TYPE .)
+
+
+state 17
+
+    (16) parameter_type -> BOOLEAN_TYPE .
+
+    AMPERSAND       reduce using rule 16 (parameter_type -> BOOLEAN_TYPE .)
+    VARIABLE        reduce using rule 16 (parameter_type -> BOOLEAN_TYPE .)
+
+
+state 18
+
+    (17) parameter_type -> STRING_TYPE .
+
+    AMPERSAND       reduce using rule 17 (parameter_type -> STRING_TYPE .)
+    VARIABLE        reduce using rule 17 (parameter_type -> STRING_TYPE .)
+
+
+state 19
+
+    (18) parameter_type -> FLOAT_TYPE .
+
+    AMPERSAND       reduce using rule 18 (parameter_type -> FLOAT_TYPE .)
+    VARIABLE        reduce using rule 18 (parameter_type -> FLOAT_TYPE .)
+
+
+state 20
+
+    (19) parameter_type -> ARRAY_TYPE .
+
+    AMPERSAND       reduce using rule 19 (parameter_type -> ARRAY_TYPE .)
+    VARIABLE        reduce using rule 19 (parameter_type -> ARRAY_TYPE .)
+
+
+state 21
+
+    (20) parameter_type -> BOOL_TYPE .
+
+    AMPERSAND       reduce using rule 20 (parameter_type -> BOOL_TYPE .)
+    VARIABLE        reduce using rule 20 (parameter_type -> BOOL_TYPE .)
+
+
+state 22
+
+    (21) parameter_type -> REAL_TYPE .
+
+    AMPERSAND       reduce using rule 21 (parameter_type -> REAL_TYPE .)
+    VARIABLE        reduce using rule 21 (parameter_type -> REAL_TYPE .)
+
+
+state 23
+
+    (22) parameter_type -> DOUBLE_TYPE .
+
+    AMPERSAND       reduce using rule 22 (parameter_type -> DOUBLE_TYPE .)
+    VARIABLE        reduce using rule 22 (parameter_type -> DOUBLE_TYPE .)
+
+
+state 24
+
+    (8) function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN . LKEY inner_statement RKEY
+
+    LKEY            shift and go to state 28
+
+
+state 25
+
+    (11) parameter_list -> parameter parameter_list_COLON_PARAMETER .
+
+    RPAREN          reduce using rule 11 (parameter_list -> parameter parameter_list_COLON_PARAMETER .)
+
+
+state 26
+
+    (12) parameter_list_COLON_PARAMETER -> COLON . parameter parameter_list_COLON_PARAMETER
+    (14) parameter -> . parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+    (15) parameter_type -> . INT_TYPE
+    (16) parameter_type -> . BOOLEAN_TYPE
+    (17) parameter_type -> . STRING_TYPE
+    (18) parameter_type -> . FLOAT_TYPE
+    (19) parameter_type -> . ARRAY_TYPE
+    (20) parameter_type -> . BOOL_TYPE
+    (21) parameter_type -> . REAL_TYPE
+    (22) parameter_type -> . DOUBLE_TYPE
+    (23) parameter_type -> .
+
+    INT_TYPE        shift and go to state 16
+    BOOLEAN_TYPE    shift and go to state 17
+    STRING_TYPE     shift and go to state 18
+    FLOAT_TYPE      shift and go to state 19
+    ARRAY_TYPE      shift and go to state 20
+    BOOL_TYPE       shift and go to state 21
+    REAL_TYPE       shift and go to state 22
+    DOUBLE_TYPE     shift and go to state 23
+    AMPERSAND       reduce using rule 23 (parameter_type -> .)
+    VARIABLE        reduce using rule 23 (parameter_type -> .)
+
+    parameter                      shift and go to state 29
+    parameter_type                 shift and go to state 15
+
+state 27
+
+    (14) parameter -> parameter_type AMPERSAND_OPT . VARIABLE parameter_ASSIGN_STATIC_OPT
+
+    VARIABLE        shift and go to state 30
+
+
+state 28
+
+    (8) function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY . inner_statement RKEY
+    (4) inner_statement -> . function_declaration_statement
+    (5) inner_statement -> .
+    (8) function_declaration_statement -> . FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY
+
+    RKEY            reduce using rule 5 (inner_statement -> .)
+    FUNCTION        shift and go to state 6
+
+    inner_statement                shift and go to state 31
+    function_declaration_statement shift and go to state 5
+
+state 29
+
+    (12) parameter_list_COLON_PARAMETER -> COLON parameter . parameter_list_COLON_PARAMETER
+    (12) parameter_list_COLON_PARAMETER -> . COLON parameter parameter_list_COLON_PARAMETER
+    (13) parameter_list_COLON_PARAMETER -> .
+
+    COLON           shift and go to state 26
+    RPAREN          reduce using rule 13 (parameter_list_COLON_PARAMETER -> .)
+
+    parameter_list_COLON_PARAMETER shift and go to state 32
+
+state 30
+
+    (14) parameter -> parameter_type AMPERSAND_OPT VARIABLE . parameter_ASSIGN_STATIC_OPT
+    (24) parameter_ASSIGN_STATIC_OPT -> . ASSIGN static_scalar
+    (25) parameter_ASSIGN_STATIC_OPT -> .
+
+    ASSIGN          shift and go to state 34
+    COLON           reduce using rule 25 (parameter_ASSIGN_STATIC_OPT -> .)
+    RPAREN          reduce using rule 25 (parameter_ASSIGN_STATIC_OPT -> .)
+
+    parameter_ASSIGN_STATIC_OPT    shift and go to state 33
+
+state 31
+
+    (8) function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement . RKEY
+
+    RKEY            shift and go to state 35
+
+
+state 32
+
+    (12) parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER .
+
+    RPAREN          reduce using rule 12 (parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER .)
+
+
+state 33
+
+    (14) parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .
+
+    COLON           reduce using rule 14 (parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .)
+    RPAREN          reduce using rule 14 (parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .)
+
+
+state 34
+
+    (24) parameter_ASSIGN_STATIC_OPT -> ASSIGN . static_scalar
+    (26) static_scalar -> . common_scalar
+    (27) static_scalar -> . PLUS static_scalar
+    (28) static_scalar -> . MINUS static_scalar
+    (29) common_scalar -> . NUMBER_REAL
+    (30) common_scalar -> . NUMBER_INTEGER
+    (31) common_scalar -> . CONSTANT_ENCAPSED_STRING
+
+    PLUS            shift and go to state 38
+    MINUS           shift and go to state 39
+    NUMBER_REAL     shift and go to state 40
+    NUMBER_INTEGER  shift and go to state 41
+    CONSTANT_ENCAPSED_STRING shift and go to state 42
+
+    static_scalar                  shift and go to state 36
+    common_scalar                  shift and go to state 37
+
+state 35
+
+    (8) function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY .
+
+    FUNCTION        reduce using rule 8 (function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY .)
+    END_PROGRAM     reduce using rule 8 (function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY .)
+    RKEY            reduce using rule 8 (function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement RKEY .)
+
+
+state 36
+
+    (24) parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .
+
+    COLON           reduce using rule 24 (parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .)
+    RPAREN          reduce using rule 24 (parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .)
+
+
+state 37
+
+    (26) static_scalar -> common_scalar .
+
+    COLON           reduce using rule 26 (static_scalar -> common_scalar .)
+    RPAREN          reduce using rule 26 (static_scalar -> common_scalar .)
+
+
+state 38
+
+    (27) static_scalar -> PLUS . static_scalar
+    (26) static_scalar -> . common_scalar
+    (27) static_scalar -> . PLUS static_scalar
+    (28) static_scalar -> . MINUS static_scalar
+    (29) common_scalar -> . NUMBER_REAL
+    (30) common_scalar -> . NUMBER_INTEGER
+    (31) common_scalar -> . CONSTANT_ENCAPSED_STRING
+
+    PLUS            shift and go to state 38
+    MINUS           shift and go to state 39
+    NUMBER_REAL     shift and go to state 40
+    NUMBER_INTEGER  shift and go to state 41
+    CONSTANT_ENCAPSED_STRING shift and go to state 42
+
+    static_scalar                  shift and go to state 43
+    common_scalar                  shift and go to state 37
+
+state 39
+
+    (28) static_scalar -> MINUS . static_scalar
+    (26) static_scalar -> . common_scalar
+    (27) static_scalar -> . PLUS static_scalar
+    (28) static_scalar -> . MINUS static_scalar
+    (29) common_scalar -> . NUMBER_REAL
+    (30) common_scalar -> . NUMBER_INTEGER
+    (31) common_scalar -> . CONSTANT_ENCAPSED_STRING
+
+    PLUS            shift and go to state 38
+    MINUS           shift and go to state 39
+    NUMBER_REAL     shift and go to state 40
+    NUMBER_INTEGER  shift and go to state 41
+    CONSTANT_ENCAPSED_STRING shift and go to state 42
+
+    static_scalar                  shift and go to state 44
+    common_scalar                  shift and go to state 37
+
+state 40
+
+    (29) common_scalar -> NUMBER_REAL .
+
+    COLON           reduce using rule 29 (common_scalar -> NUMBER_REAL .)
+    RPAREN          reduce using rule 29 (common_scalar -> NUMBER_REAL .)
+
+
+state 41
+
+    (30) common_scalar -> NUMBER_INTEGER .
+
+    COLON           reduce using rule 30 (common_scalar -> NUMBER_INTEGER .)
+    RPAREN          reduce using rule 30 (common_scalar -> NUMBER_INTEGER .)
+
+
+state 42
+
+    (31) common_scalar -> CONSTANT_ENCAPSED_STRING .
+
+    COLON           reduce using rule 31 (common_scalar -> CONSTANT_ENCAPSED_STRING .)
+    RPAREN          reduce using rule 31 (common_scalar -> CONSTANT_ENCAPSED_STRING .)
+
+
+state 43
+
+    (27) static_scalar -> PLUS static_scalar .
+
+    COLON           reduce using rule 27 (static_scalar -> PLUS static_scalar .)
+    RPAREN          reduce using rule 27 (static_scalar -> PLUS static_scalar .)
+
+
+state 44
+
+    (28) static_scalar -> MINUS static_scalar .
+
+    COLON           reduce using rule 28 (static_scalar -> MINUS static_scalar .)
+    RPAREN          reduce using rule 28 (static_scalar -> MINUS static_scalar .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for FUNCTION in state 2 resolved as shift
+WARNING: shift/reduce conflict for FUNCTION in state 4 resolved as shift
+WARNING: reduce/reduce conflict in state 2 resolved using rule (main_INNER -> <empty>)
+WARNING: rejected rule (inner_statement -> <empty>) in state 2
+WARNING: reduce/reduce conflict in state 4 resolved using rule (main_INNER -> <empty>)
+WARNING: rejected rule (inner_statement -> <empty>) in state 4
