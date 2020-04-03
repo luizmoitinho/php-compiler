@@ -24,22 +24,23 @@ reserved = {
     'declare': 'DECLARE',
     'enddeclare': 'ENDDECLARE',
     'do':'DO',
-    'int': 'INT',
-    'double': 'DOUBLE',
-    'float': 'FLOAT',
-    'real': 'REAL',
-    'string': 'STRING',
-    'array': 'ARRAY',
-    'object': 'OBJECT',
-    'bool': 'BOOL',
-    'boolean': 'BOOLEAN',
+    'int': 'INT_TYPE',
+    'double': 'DOUBLE_TYPE',
+    'float': 'FLOAT_TYPE',
+    'real': 'REAL_TYPE',
+    'string': 'STRING_TYPE',
+    'array': 'ARRAY_TYPE',
+    'object': 'OBJECT_TYPE',
+    'bool': 'BOOL_TYPE',
+    'boolean': 'BOOLEAN_TYPE',
     'unset': 'UNSET',
     'exit': 'EXIT',
     'die': 'DIE',
     'list': 'LIST',
     'clone': 'CLONE',
     'return':'RETURN',
-    'global':'GLOBAL'
+    'global':'GLOBAL',
+    'var': 'VAR', #Remover se não existir
 }
 
 tokens = [
@@ -114,13 +115,13 @@ t_ENDWHILE = r'endwhile'
 t_FOR = r'for'
 t_ENDFOR = r'endfor' 
 t_DO = r'do'
-t_INT = r'int'
-t_DOUBLE = r'double'
-t_REAL = r'real'
-t_ARRAY = r'array'
-t_OBJECT = r'object'
-t_BOOL = r'bool'
-t_BOOLEAN = r'boolean'
+t_INT_TYPE = r'int'
+t_DOUBLE_TYPE = r'double'
+t_REAL_TYPE = r'real'
+t_ARRAY_TYPE = r'array'
+t_OBJECT_TYPE = r'object'
+t_BOOL_TYPE = r'bool'
+t_BOOLEAN_TYPE = r'boolean'
 t_UNSET = r'unset'
 t_EXIT = r'exit'
 t_DIE = r'die'
@@ -128,6 +129,7 @@ t_LIST = r'list'
 t_CLONE = r'clone'
 t_RETURN = r'return'
 t_GLOBAL = r'global'
+t_VAR = r'var' #Remover se não existir
 
 t_COMMENT_SINGLE = r'\//.* | \#.*'
 t_COMMENT_MULTI = r'\/\*(.|\n)*\*\/'
