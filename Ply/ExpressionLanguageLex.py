@@ -11,7 +11,6 @@ reserved = {
     'case':'CASE',
     'break':'BREAK',
     'continue':'CONTINUE',
-    'echo':'ECHO',
     'true':'TRUE',
     'false':'FALSE',
     'while' : 'WHILE',
@@ -95,7 +94,23 @@ t_SWITCH = r'switch'
 t_CASE = r'case'
 t_BREAK = r'break'
 t_CONTINUE = r'continue'
-
+t_TRUE = r'true'
+t_FALSE = r'false'
+t_WHILE = r'while'
+t_FOR = r'for'
+t_DO = r'do'
+t_INT = r'int'
+t_DOUBLE = r'double'
+t_REAL = r'real'
+t_ARRAY = r'array'
+t_OBJECT = r'object'
+t_BOOL = r'bool'
+t_BOOLEAN = r'boolean'
+t_UNSET = r'unset'
+t_EXIT = r'exit'
+t_DIE = r'die'
+t_LIST = r'list'
+t_CLONE = r'clone'
 
 t_COMMENT_SINGLE = r'\//.* | \#.*'
 t_COMMENT_MULTI = r'\/\*(.|\n)*\*\/'
