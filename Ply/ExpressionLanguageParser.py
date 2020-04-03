@@ -16,7 +16,8 @@ def p_main_INNER(p):
 def p_inner_statement(p):
   '''
   inner_statement : function_declaration_statement 
-    | 
+    | function_call  
+    |
   '''
 
 def p_AMPERSAND_OPT(p):
@@ -25,7 +26,30 @@ def p_AMPERSAND_OPT(p):
     | 
   '''
 
+#  | variable_without_objects LPAREN function_call_parameter_list RPAREN 
+def p_function_call(p):
+  '''
+  function_call : ID LPAREN function_call_parameter_list RPAREN 
+  '''
 
+#
+def p_function_call_parameter_list(p):
+  '''
+  function_call_parameter_list : function_call_parameter function_call_list_COLON_FUNCTION
+  | 
+  '''
+
+def p_function_call_list_COLON_FUNCTION(p):
+  '''
+  function_call_list_COLON_FUNCTION : COLON function_call_parameter function_call_list_COLON_FUNCTION
+    | 
+  '''
+#expr_without_variable
+def p_function_call_parameter(p):
+  '''
+  function_call_parameter : VARIABLE
+      | AMPERSAND VARIABLE
+  '''
 
 def p_function_declaration_statement(p):
   '''
@@ -128,9 +152,7 @@ def p_error(p):
     print("Syntax error in input!")
   
 lex.lex()
-arquivo = '''<?php function ola1(&$param1 = "Luiz") {
-
-} ?>'''
+arquivo = '''<?php autenticarUsuario($login,$senha) ?>'''
 lex.input(arquivo)
 
 parser = yacc.yacc()
