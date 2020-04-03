@@ -1,11 +1,13 @@
 import ply.lex as lex
 
 reserved = {
+    'as':'AS',
     'function':'FUNCTION',
     'and':'AND',
     'or':'OR',
     'if' : 'IF',
     'else' : 'ELSE',
+    'elseif':'ELSEIF',
     'endif':'ENDIF',
     'switch':'SWITCH',
     'case':'CASE',
@@ -14,7 +16,13 @@ reserved = {
     'true':'TRUE',
     'false':'FALSE',
     'while' : 'WHILE',
+    'endwhile':'ENDWHILE',
     'for' : 'FOR',
+    'endfor': 'ENDFOR',
+    'foreach': 'FOREACH',
+    'endforeach': 'ENDFOREACH',
+    'declare': 'DECLARE',
+    'enddeclare': 'ENDDECLARE',
     'do':'DO',
     'int': 'INT',
     'double': 'DOUBLE',
@@ -30,6 +38,8 @@ reserved = {
     'die': 'DIE',
     'list': 'LIST',
     'clone': 'CLONE',
+    'return':'RETURN',
+    'global':'GLOBAL'
 }
 
 tokens = [
@@ -83,12 +93,15 @@ tokens = [
     'VARIABLE'
 ] + list(reserved.values())
 
+
 t_ignore = ' \t'
+t_AS = r'as'
 t_FUNCTION = r'function'
 t_AND = r'and'
 t_OR = r'or'
 t_IF = r'if'
 t_ELSE = r'else'
+t_ELSEIF= r'elseif'
 t_ENDIF = r'endif'
 t_SWITCH = r'switch'
 t_CASE = r'case'
@@ -97,7 +110,9 @@ t_CONTINUE = r'continue'
 t_TRUE = r'true'
 t_FALSE = r'false'
 t_WHILE = r'while'
+t_ENDWHILE = r'endwhile'
 t_FOR = r'for'
+t_ENDFOR = r'endfor' 
 t_DO = r'do'
 t_INT = r'int'
 t_DOUBLE = r'double'
@@ -111,6 +126,8 @@ t_EXIT = r'exit'
 t_DIE = r'die'
 t_LIST = r'list'
 t_CLONE = r'clone'
+t_RETURN = r'return'
+t_GLOBAL = r'global'
 
 t_COMMENT_SINGLE = r'\//.* | \#.*'
 t_COMMENT_MULTI = r'\/\*(.|\n)*\*\/'
@@ -215,9 +232,9 @@ arquivo ='''<?php
 $valor1 = 40;
 $valor2 = 20;
 
-if (  $valor1 > $valor2  )
+if ($valor1 > $valor2)
   "A variavel $valor1 e maior que a variavel $valor2";
-else if (  $valor2 > $valor1 )
+else if ($valor2 > $valor1)
   "A variavel $valor2 e maior que a variavel $valor1";
 else
    "A variavel $valor1 e igual a variavel $valor2";
