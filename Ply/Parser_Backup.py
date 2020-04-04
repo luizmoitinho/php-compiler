@@ -234,7 +234,6 @@ def p_expr_without_variable(p):
     | DECREMENT VARIABLE
     | LPAREN expr RPAREN
     | expr INTE_DOT expr DDOT expr
-    | internal_functions
     | LPAREN INT_TYPE RPAREN expr
     | LPAREN DOUBLE_TYPE RPAREN expr
     | LPAREN FLOAT_TYPE RPAREN expr
@@ -438,8 +437,7 @@ def p_simple_indirect_reference(p):
   '''
   simple_indirect_reference : simple_indirect_reference_DOLAR
   '''
-  
-#Tentando resolver o problemas das ERs
+
 def p_simple_indirect_reference_DOLAR(p):
   '''
   simple_indirect_reference : DOLAR simple_indirect_reference_DOLAR

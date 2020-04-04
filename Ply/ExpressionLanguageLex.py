@@ -9,7 +9,6 @@ reserved = {
     'else'      : 'ELSE',
     'elseif'    :'ELSEIF',
     'endif'     :'ENDIF',
-    'switch'    :'SWITCH',
     'case'      :'CASE',
     'break'     :'BREAK',
     'continue'  :'CONTINUE',
@@ -81,7 +80,7 @@ tokens = [
     'LESS_EQUAL',
     'GREAT_THAN',
     'GREAT_EQUAL',
-    'EQUAL',
+    'EQUALS',
     'NOT_EQUAL',
     'COLON',
     'SEMICOLON',
@@ -125,7 +124,7 @@ t_LESS_THAN = r'\<'
 t_LESS_EQUAL = r'\<\='
 t_GREAT_THAN =  r'\>'
 t_GREAT_EQUAL = r'\>\='
-t_EQUAL = r'\=\='
+t_EQUALS = r'\=\='
 t_NOT_EQUAL = r'\!\='
 t_COLON = r'\,'
 t_SEMICOLON = r'\;'
@@ -140,8 +139,6 @@ t_DDOT = r'\:'
 t_INTE_DOT = r'\?'
 t_ARROBA = r'\@'
 t_CONSTANT_ENCAPSED_STRING = r'\'[^\']*\'|\"[^\"]*\"'
-t_STRING = r'[a-zA-Z_][a-zA-Z_0-9]*'
-
 
 ArrayTabulacao = [0]
 IndicePosicao  =  0
