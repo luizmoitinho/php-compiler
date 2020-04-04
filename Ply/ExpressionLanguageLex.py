@@ -1,25 +1,21 @@
 import ply.lex as lex
 
 reserved = {
-    'as'        :'AS',
-    'function'  :'FUNCTION',
-    'and'       :'AND',
-    'or'        :'OR',
+    'as'        : 'AS',
+    'function'  : 'FUNCTION',
+    'and'       : 'AND',
+    'or'        : 'OR',
     'if'        : 'IF',
     'else'      : 'ELSE',
-    'elseif'    :'ELSEIF',
-    'endif'     :'ENDIF',
-    'case'      :'CASE',
-    'break'     :'BREAK',
-    'continue'  :'CONTINUE',
-    'true'      :'TRUE',
-    'false'     :'FALSE',
+    'elseif'    : 'ELSEIF',
+    'case'      : 'CASE',
+    'break'     : 'BREAK',
+    'continue'  : 'CONTINUE',
+    'true'      : 'TRUE',
+    'false'     : 'FALSE',
     'while'     : 'WHILE',
-    'endwhile'  :'ENDWHILE',
     'for'       : 'FOR',
-    'endfor'    : 'ENDFOR',
     'foreach'   : 'FOREACH',
-    'endforeach': 'ENDFOREACH',
     'declare'   : 'DECLARE',
     'enddeclare': 'ENDDECLARE',
     'do'        : 'DO',
@@ -36,8 +32,8 @@ reserved = {
     'die'       : 'DIE',
     'list'      : 'LIST',
     'clone'     : 'CLONE',
-    'return'    :'RETURN',
-    'global'    :'GLOBAL',
+    'return'    : 'RETURN',
+    'global'    : 'GLOBAL',
     'var'       : 'VAR' #Remover se não existir
 }
 
@@ -82,7 +78,7 @@ tokens = [
     'GREAT_EQUAL',
     'EQUALS',
     'NOT_EQUAL',
-    'COLON',
+    'COLON',    
     'SEMICOLON',
     'LEFT_LOGICAL',
     'RIGHT_LOGICAL',
@@ -91,7 +87,8 @@ tokens = [
     'NUMBER_REAL',
     'NUMBER_INTEGER',
     'VARIABLE',
-    'CONSTANT_ENCAPSED_STRING'
+    'CONSTANT_ENCAPSED_STRING',
+    'EXC_DOT',
 ] + list(reserved.values())
 
 t_ignore = ' \t'
@@ -137,6 +134,7 @@ t_APOSTROFE  = r'\''
 t_ASPAS =  r'\"'
 t_DDOT = r'\:'
 t_INTE_DOT = r'\?'
+t_EXC_DOT = r'\!'
 t_ARROBA = r'\@'
 t_CONSTANT_ENCAPSED_STRING = r'\'[^\']*\'|\"[^\"]*\"'
 
