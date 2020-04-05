@@ -310,6 +310,7 @@ def p_function_declaration_statement(p):
 def p_parameter_list(p):  
   '''
   parameter_list : parameter parameter_list_COLON_PARAMETER 
+    |
   '''  
 
 def p_parameter_list_COLON_PARAMETER(p):
@@ -427,17 +428,11 @@ def p_error(p):
 
 lex.lex()
 arquivo = '''<?php
-    if($x==10){
-      $valor1++;
-      $valor2++;
+    function add($valor){
+      
     }
-    elseif($x==11){
-        $valor2++;
-    }elseif($x==11){
-        $valor2++;
-    }
-    else{ 
-      $x--;
+    function add($valor){
+      
     }
 ?>'''
 lex.input(arquivo)

@@ -158,69 +158,70 @@ Rule 125   inner_statement_MUL -> inner_statement inner_statement_MUL
 Rule 126   inner_statement_MUL -> <empty>
 Rule 127   function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement_MUL RKEY
 Rule 128   parameter_list -> parameter parameter_list_COLON_PARAMETER
-Rule 129   parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER
-Rule 130   parameter_list_COLON_PARAMETER -> <empty>
-Rule 131   parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
-Rule 132   parameter_type -> INT_TYPE
-Rule 133   parameter_type -> BOOLEAN_TYPE
-Rule 134   parameter_type -> STRING_TYPE
-Rule 135   parameter_type -> FLOAT_TYPE
-Rule 136   parameter_type -> ARRAY_TYPE
-Rule 137   parameter_type -> BOOL_TYPE
-Rule 138   parameter_type -> REAL_TYPE
-Rule 139   parameter_type -> DOUBLE_TYPE
-Rule 140   parameter_type -> <empty>
-Rule 141   parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar
-Rule 142   parameter_ASSIGN_STATIC_OPT -> <empty>
-Rule 143   static_scalar -> common_scalar
-Rule 144   static_scalar -> PLUS static_scalar
-Rule 145   static_scalar -> MINUS static_scalar
-Rule 146   common_scalar -> NUMBER_REAL
-Rule 147   common_scalar -> NUMBER_INTEGER
-Rule 148   common_scalar -> CONSTANT_ENCAPSED_STRING
-Rule 149   static_scalar_OPT -> static_array_pair_list
-Rule 150   static_scalar_OPT -> <empty>
-Rule 151   static_array_pair_list -> static_array_pair static_array_pair_list_COLON_STATIC static_array_pair_list_COLON
-Rule 152   static_array_pair_list_COLON_STATIC -> COLON static_array_pair static_array_pair_list_COLON_STATIC
-Rule 153   static_array_pair_list_COLON_STATIC -> <empty>
-Rule 154   static_array_pair_list_COLON -> COLON
-Rule 155   static_array_pair_list_COLON -> <empty>
-Rule 156   static_array_pair -> static_scalar static_array_pair_ATTR_STATIC
-Rule 157   static_array_pair_ATTR_STATIC -> ATTR_ASSOC static_scalar
-Rule 158   static_array_pair_ATTR_STATIC -> <empty>
-Rule 159   array_pair_list -> array_pair array_pair_list_ARR_PAIR
-Rule 160   array_pair_list_ARR_PAIR -> COLON array_pair array_pair_list_ARR_PAIR
-Rule 161   array_pair_list_ARR_PAIR -> <empty>
-Rule 162   array_pair -> expr array_pair_ATTR_EXPR_OPT
-Rule 163   array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND variable
-Rule 164   array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC expr
-Rule 165   array_pair_ATTR_EXPR_OPT -> <empty>
-Rule 166   array_pair_EXPR_ATTR_OPT -> expr ATTR_ASSOC
-Rule 167   array_pair_EXPR_ATTR_OPT -> <empty>
+Rule 129   parameter_list -> <empty>
+Rule 130   parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER
+Rule 131   parameter_list_COLON_PARAMETER -> <empty>
+Rule 132   parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+Rule 133   parameter_type -> INT_TYPE
+Rule 134   parameter_type -> BOOLEAN_TYPE
+Rule 135   parameter_type -> STRING_TYPE
+Rule 136   parameter_type -> FLOAT_TYPE
+Rule 137   parameter_type -> ARRAY_TYPE
+Rule 138   parameter_type -> BOOL_TYPE
+Rule 139   parameter_type -> REAL_TYPE
+Rule 140   parameter_type -> DOUBLE_TYPE
+Rule 141   parameter_type -> <empty>
+Rule 142   parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar
+Rule 143   parameter_ASSIGN_STATIC_OPT -> <empty>
+Rule 144   static_scalar -> common_scalar
+Rule 145   static_scalar -> PLUS static_scalar
+Rule 146   static_scalar -> MINUS static_scalar
+Rule 147   common_scalar -> NUMBER_REAL
+Rule 148   common_scalar -> NUMBER_INTEGER
+Rule 149   common_scalar -> CONSTANT_ENCAPSED_STRING
+Rule 150   static_scalar_OPT -> static_array_pair_list
+Rule 151   static_scalar_OPT -> <empty>
+Rule 152   static_array_pair_list -> static_array_pair static_array_pair_list_COLON_STATIC static_array_pair_list_COLON
+Rule 153   static_array_pair_list_COLON_STATIC -> COLON static_array_pair static_array_pair_list_COLON_STATIC
+Rule 154   static_array_pair_list_COLON_STATIC -> <empty>
+Rule 155   static_array_pair_list_COLON -> COLON
+Rule 156   static_array_pair_list_COLON -> <empty>
+Rule 157   static_array_pair -> static_scalar static_array_pair_ATTR_STATIC
+Rule 158   static_array_pair_ATTR_STATIC -> ATTR_ASSOC static_scalar
+Rule 159   static_array_pair_ATTR_STATIC -> <empty>
+Rule 160   array_pair_list -> array_pair array_pair_list_ARR_PAIR
+Rule 161   array_pair_list_ARR_PAIR -> COLON array_pair array_pair_list_ARR_PAIR
+Rule 162   array_pair_list_ARR_PAIR -> <empty>
+Rule 163   array_pair -> expr array_pair_ATTR_EXPR_OPT
+Rule 164   array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND variable
+Rule 165   array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC expr
+Rule 166   array_pair_ATTR_EXPR_OPT -> <empty>
+Rule 167   array_pair_EXPR_ATTR_OPT -> expr ATTR_ASSOC
+Rule 168   array_pair_EXPR_ATTR_OPT -> <empty>
 
 Terminals, with rules where they appear
 
 ADD_ASSIGN           : 52
-AMPERSAND            : 19 30 76 163
+AMPERSAND            : 19 30 76 164
 AND                  : 
 APOSTROFE            : 
-ARRAY_TYPE           : 43 81 136
+ARRAY_TYPE           : 43 81 137
 ARROBA               : 
 AS                   : 
 ASPAS                : 
-ASSIGN               : 57 141
-ATTR_ASSOC           : 157 164 166
+ASSIGN               : 57 142
+ATTR_ASSOC           : 158 165 167
 BEGIN_PROGRAM        : 1
-BOOLEAN_TYPE         : 44 133
-BOOL_TYPE            : 45 137
+BOOLEAN_TYPE         : 44 134
+BOOL_TYPE            : 45 138
 BREAK                : 
 CASE                 : 
 CLONE                : 
-COLON                : 25 27 33 129 152 154 160
+COLON                : 25 27 33 130 153 155 161
 COMMENT_MULTI        : 
 COMMENT_SINGLE       : 
 CONCATENATE          : 
-CONSTANT_ENCAPSED_STRING : 86 148
+CONSTANT_ENCAPSED_STRING : 86 149
 CONTINUE             : 
 CRASE                : 
 DDOT                 : 73
@@ -231,7 +232,7 @@ DIVIDE               : 48
 DIVIDE_ASSIGN        : 56
 DO                   : 
 DOLAR                : 98 99 118 119
-DOUBLE_TYPE          : 39 139
+DOUBLE_TYPE          : 39 140
 ELSE                 : 15
 ELSEIF               : 11
 ENDDECLARE           : 
@@ -240,7 +241,7 @@ EQUALS               : 58
 EXC_DOT              : 35
 EXIT                 : 79
 FALSE                : 88
-FLOAT_TYPE           : 40 135
+FLOAT_TYPE           : 40 136
 FOR                  : 
 FOREACH              : 
 FUNCTION             : 127
@@ -252,7 +253,7 @@ IDENTATION           :
 IF                   : 7
 INCREMENT            : 66 67
 INTE_DOT             : 73
-INT_TYPE             : 38 132
+INT_TYPE             : 38 133
 LBRACKET             : 70 98 99 101 121
 LEFT_LOGICAL         : 64
 LESS_EQUAL           : 61
@@ -260,47 +261,47 @@ LESS_THAN            : 60
 LIST                 : 32
 LKEY                 : 7 14 18 95 99 100 118 127
 LPAREN               : 7 11 21 32 71 78 81 93 107 127
-MINUS                : 37 51 145
+MINUS                : 37 51 146
 MOD_ASSIGN           : 54
 NOT_EQUAL            : 63
-NUMBER_INTEGER       : 85 147
-NUMBER_REAL          : 84 146
+NUMBER_INTEGER       : 85 148
+NUMBER_REAL          : 84 147
 OR                   : 
 PERCENT              : 49
-PLUS                 : 36 47 144
+PLUS                 : 36 47 145
 PLUS_ASSIGN          : 55
 RBRACKET             : 70 98 99 101 121
-REAL_TYPE            : 41 138
+REAL_TYPE            : 41 139
 RETURN               : 
 RIGHT_LOGICAL        : 65
 RKEY                 : 7 14 18 96 99 100 118 127
 RPAREN               : 7 11 21 32 71 78 81 94 107 127
 SEMICOLON            : 6 8
 STRING               : 103
-STRING_TYPE          : 42 134
+STRING_TYPE          : 42 135
 SUB_ASSIGN           : 53
 TIMES                : 50
 TRUE                 : 87
 UNSET                : 46
 VAR                  : 
-VARIABLE             : 30 92 97 104 117 124 131
+VARIABLE             : 30 92 97 104 117 124 132
 WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-AMPERSAND_OPT        : 127 131
+AMPERSAND_OPT        : 127 132
 arithmetic_operator  : 77
-array_pair           : 159 160
-array_pair_ATTR_EXPR_OPT : 162
-array_pair_EXPR_ATTR_OPT : 163
+array_pair           : 160 161
+array_pair_ATTR_EXPR_OPT : 163
+array_pair_EXPR_ATTR_OPT : 164
 array_pair_list      : 81
-array_pair_list_ARR_PAIR : 159 160
+array_pair_list_ARR_PAIR : 160 161
 assign_operator      : 75 76
 assignment_list_element : 27 32 33
 assignment_list_element_COLON_ASSIGNMENT : 32 33
 base_variable        : 22 110
-common_scalar        : 143
+common_scalar        : 144
 comparission_operator : 74
 compound_variable    : 114
 else_OPT             : 15
@@ -310,7 +311,7 @@ encaps_var_1         : 97
 encaps_var_offset    : 101
 exit_expr            : 105
 exit_expr_EXPR       : 107
-expr                 : 6 7 11 70 71 72 73 73 73 74 74 75 76 77 77 78 98 99 108 118 122 162 164 166
+expr                 : 6 7 11 70 71 72 73 73 73 74 74 75 76 77 77 78 98 99 108 118 122 163 165 167
 expr_without_variable_COLON_ASSIGNMENT : 27
 expr_without_variable_ENCAPS : 89
 expr_without_variable_EXIT : 79 80
@@ -323,11 +324,11 @@ inner_statement      : 2 125
 inner_statement_MUL  : 125 127
 main                 : 0
 main_INNER           : 1 2
-parameter            : 128 129
-parameter_ASSIGN_STATIC_OPT : 131
+parameter            : 128 130
+parameter_ASSIGN_STATIC_OPT : 132
 parameter_list       : 127
-parameter_list_COLON_PARAMETER : 128 129
-parameter_type       : 131
+parameter_list_COLON_PARAMETER : 128 130
+parameter_type       : 132
 reference_variable   : 112 113
 reference_variable_SELECTOR : 114 115
 selector             : 115
@@ -338,16 +339,16 @@ statement_MUL        : 7 9 14 18
 statement_else       : 7
 statement_elseif     : 7
 statement_elseif_OPT : 11
-static_array_pair    : 151 152
-static_array_pair_ATTR_STATIC : 156
-static_array_pair_list : 149
-static_array_pair_list_COLON : 151
-static_array_pair_list_COLON_STATIC : 151 152
-static_scalar        : 141 144 145 156 157
+static_array_pair    : 152 153
+static_array_pair_ATTR_STATIC : 157
+static_array_pair_list : 150
+static_array_pair_list_COLON : 152
+static_array_pair_list_COLON_STATIC : 152 153
+static_scalar        : 142 145 146 157 158
 static_scalar_OPT    : 
 type_cast_operator   : 78
 unary_operator       : 72
-variable             : 29 31 66 67 68 69 70 75 76 83 100 163
+variable             : 29 31 66 67 68 69 70 75 76 83 100 164
 variable_name        : 
 
 Parsing method: LALR
@@ -3037,9 +3038,9 @@ state 86
 state 87
 
     (81) expr -> ARRAY_TYPE LPAREN . array_pair_list RPAREN
-    (159) array_pair_list -> . array_pair array_pair_list_ARR_PAIR
-    (162) array_pair -> . expr array_pair_ATTR_EXPR_OPT
-    (163) array_pair -> . array_pair_EXPR_ATTR_OPT AMPERSAND variable
+    (160) array_pair_list -> . array_pair array_pair_list_ARR_PAIR
+    (163) array_pair -> . expr array_pair_ATTR_EXPR_OPT
+    (164) array_pair -> . array_pair_EXPR_ATTR_OPT AMPERSAND variable
     (66) expr -> . INCREMENT variable
     (67) expr -> . variable INCREMENT
     (68) expr -> . DECREMENT variable
@@ -3063,8 +3064,8 @@ state 87
     (86) expr -> . CONSTANT_ENCAPSED_STRING
     (87) expr -> . TRUE
     (88) expr -> . FALSE
-    (166) array_pair_EXPR_ATTR_OPT -> . expr ATTR_ASSOC
-    (167) array_pair_EXPR_ATTR_OPT -> .
+    (167) array_pair_EXPR_ATTR_OPT -> . expr ATTR_ASSOC
+    (168) array_pair_EXPR_ATTR_OPT -> .
     (110) variable -> . base_variable
     (111) variable -> . function_call
     (35) unary_operator -> . EXC_DOT
@@ -3093,7 +3094,7 @@ state 87
     CONSTANT_ENCAPSED_STRING shift and go to state 23
     TRUE            shift and go to state 24
     FALSE           shift and go to state 25
-    AMPERSAND       reduce using rule 167 (array_pair_EXPR_ATTR_OPT -> .)
+    AMPERSAND       reduce using rule 168 (array_pair_EXPR_ATTR_OPT -> .)
     EXC_DOT         shift and go to state 27
     PLUS            shift and go to state 28
     MINUS           shift and go to state 29
@@ -4018,24 +4019,24 @@ state 112
 
 state 113
 
-    (159) array_pair_list -> array_pair . array_pair_list_ARR_PAIR
-    (160) array_pair_list_ARR_PAIR -> . COLON array_pair array_pair_list_ARR_PAIR
-    (161) array_pair_list_ARR_PAIR -> .
+    (160) array_pair_list -> array_pair . array_pair_list_ARR_PAIR
+    (161) array_pair_list_ARR_PAIR -> . COLON array_pair array_pair_list_ARR_PAIR
+    (162) array_pair_list_ARR_PAIR -> .
 
     COLON           shift and go to state 133
-    RPAREN          reduce using rule 161 (array_pair_list_ARR_PAIR -> .)
+    RPAREN          reduce using rule 162 (array_pair_list_ARR_PAIR -> .)
 
     array_pair_list_ARR_PAIR       shift and go to state 132
 
 state 114
 
-    (162) array_pair -> expr . array_pair_ATTR_EXPR_OPT
+    (163) array_pair -> expr . array_pair_ATTR_EXPR_OPT
     (73) expr -> expr . INTE_DOT expr DDOT expr
     (74) expr -> expr . comparission_operator expr
     (77) expr -> expr . arithmetic_operator expr
-    (166) array_pair_EXPR_ATTR_OPT -> expr . ATTR_ASSOC
-    (164) array_pair_ATTR_EXPR_OPT -> . ATTR_ASSOC expr
-    (165) array_pair_ATTR_EXPR_OPT -> .
+    (167) array_pair_EXPR_ATTR_OPT -> expr . ATTR_ASSOC
+    (165) array_pair_ATTR_EXPR_OPT -> . ATTR_ASSOC expr
+    (166) array_pair_ATTR_EXPR_OPT -> .
     (58) comparission_operator -> . EQUALS
     (59) comparission_operator -> . GREAT_THAN
     (60) comparission_operator -> . LESS_THAN
@@ -4052,8 +4053,8 @@ state 114
 
     INTE_DOT        shift and go to state 52
     ATTR_ASSOC      shift and go to state 135
-    COLON           reduce using rule 165 (array_pair_ATTR_EXPR_OPT -> .)
-    RPAREN          reduce using rule 165 (array_pair_ATTR_EXPR_OPT -> .)
+    COLON           reduce using rule 166 (array_pair_ATTR_EXPR_OPT -> .)
+    RPAREN          reduce using rule 166 (array_pair_ATTR_EXPR_OPT -> .)
     EQUALS          shift and go to state 55
     GREAT_THAN      shift and go to state 56
     LESS_THAN       shift and go to state 57
@@ -4074,7 +4075,7 @@ state 114
 
 state 115
 
-    (163) array_pair -> array_pair_EXPR_ATTR_OPT . AMPERSAND variable
+    (164) array_pair -> array_pair_EXPR_ATTR_OPT . AMPERSAND variable
 
     AMPERSAND       shift and go to state 136
 
@@ -4204,17 +4205,19 @@ state 120
 
     (127) function_declaration_statement -> FUNCTION AMPERSAND_OPT ID LPAREN . parameter_list RPAREN LKEY inner_statement_MUL RKEY
     (128) parameter_list -> . parameter parameter_list_COLON_PARAMETER
-    (131) parameter -> . parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
-    (132) parameter_type -> . INT_TYPE
-    (133) parameter_type -> . BOOLEAN_TYPE
-    (134) parameter_type -> . STRING_TYPE
-    (135) parameter_type -> . FLOAT_TYPE
-    (136) parameter_type -> . ARRAY_TYPE
-    (137) parameter_type -> . BOOL_TYPE
-    (138) parameter_type -> . REAL_TYPE
-    (139) parameter_type -> . DOUBLE_TYPE
-    (140) parameter_type -> .
+    (129) parameter_list -> .
+    (132) parameter -> . parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+    (133) parameter_type -> . INT_TYPE
+    (134) parameter_type -> . BOOLEAN_TYPE
+    (135) parameter_type -> . STRING_TYPE
+    (136) parameter_type -> . FLOAT_TYPE
+    (137) parameter_type -> . ARRAY_TYPE
+    (138) parameter_type -> . BOOL_TYPE
+    (139) parameter_type -> . REAL_TYPE
+    (140) parameter_type -> . DOUBLE_TYPE
+    (141) parameter_type -> .
 
+    RPAREN          reduce using rule 129 (parameter_list -> .)
     INT_TYPE        shift and go to state 142
     BOOLEAN_TYPE    shift and go to state 143
     STRING_TYPE     shift and go to state 144
@@ -4223,8 +4226,8 @@ state 120
     BOOL_TYPE       shift and go to state 147
     REAL_TYPE       shift and go to state 148
     DOUBLE_TYPE     shift and go to state 149
-    AMPERSAND       reduce using rule 140 (parameter_type -> .)
-    VARIABLE        reduce using rule 140 (parameter_type -> .)
+    AMPERSAND       reduce using rule 141 (parameter_type -> .)
+    VARIABLE        reduce using rule 141 (parameter_type -> .)
 
     parameter_list                 shift and go to state 139
     parameter                      shift and go to state 140
@@ -4627,16 +4630,16 @@ state 131
 
 state 132
 
-    (159) array_pair_list -> array_pair array_pair_list_ARR_PAIR .
+    (160) array_pair_list -> array_pair array_pair_list_ARR_PAIR .
 
-    RPAREN          reduce using rule 159 (array_pair_list -> array_pair array_pair_list_ARR_PAIR .)
+    RPAREN          reduce using rule 160 (array_pair_list -> array_pair array_pair_list_ARR_PAIR .)
 
 
 state 133
 
-    (160) array_pair_list_ARR_PAIR -> COLON . array_pair array_pair_list_ARR_PAIR
-    (162) array_pair -> . expr array_pair_ATTR_EXPR_OPT
-    (163) array_pair -> . array_pair_EXPR_ATTR_OPT AMPERSAND variable
+    (161) array_pair_list_ARR_PAIR -> COLON . array_pair array_pair_list_ARR_PAIR
+    (163) array_pair -> . expr array_pair_ATTR_EXPR_OPT
+    (164) array_pair -> . array_pair_EXPR_ATTR_OPT AMPERSAND variable
     (66) expr -> . INCREMENT variable
     (67) expr -> . variable INCREMENT
     (68) expr -> . DECREMENT variable
@@ -4660,8 +4663,8 @@ state 133
     (86) expr -> . CONSTANT_ENCAPSED_STRING
     (87) expr -> . TRUE
     (88) expr -> . FALSE
-    (166) array_pair_EXPR_ATTR_OPT -> . expr ATTR_ASSOC
-    (167) array_pair_EXPR_ATTR_OPT -> .
+    (167) array_pair_EXPR_ATTR_OPT -> . expr ATTR_ASSOC
+    (168) array_pair_EXPR_ATTR_OPT -> .
     (110) variable -> . base_variable
     (111) variable -> . function_call
     (35) unary_operator -> . EXC_DOT
@@ -4690,7 +4693,7 @@ state 133
     CONSTANT_ENCAPSED_STRING shift and go to state 23
     TRUE            shift and go to state 24
     FALSE           shift and go to state 25
-    AMPERSAND       reduce using rule 167 (array_pair_EXPR_ATTR_OPT -> .)
+    AMPERSAND       reduce using rule 168 (array_pair_EXPR_ATTR_OPT -> .)
     EXC_DOT         shift and go to state 27
     PLUS            shift and go to state 28
     MINUS           shift and go to state 29
@@ -4714,16 +4717,16 @@ state 133
 
 state 134
 
-    (162) array_pair -> expr array_pair_ATTR_EXPR_OPT .
+    (163) array_pair -> expr array_pair_ATTR_EXPR_OPT .
 
-    COLON           reduce using rule 162 (array_pair -> expr array_pair_ATTR_EXPR_OPT .)
-    RPAREN          reduce using rule 162 (array_pair -> expr array_pair_ATTR_EXPR_OPT .)
+    COLON           reduce using rule 163 (array_pair -> expr array_pair_ATTR_EXPR_OPT .)
+    RPAREN          reduce using rule 163 (array_pair -> expr array_pair_ATTR_EXPR_OPT .)
 
 
 state 135
 
-    (166) array_pair_EXPR_ATTR_OPT -> expr ATTR_ASSOC .
-    (164) array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC . expr
+    (167) array_pair_EXPR_ATTR_OPT -> expr ATTR_ASSOC .
+    (165) array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC . expr
     (66) expr -> . INCREMENT variable
     (67) expr -> . variable INCREMENT
     (68) expr -> . DECREMENT variable
@@ -4764,7 +4767,7 @@ state 135
 
   ! shift/reduce conflict for DOLAR resolved as shift
   ! shift/reduce conflict for VARIABLE resolved as shift
-    AMPERSAND       reduce using rule 166 (array_pair_EXPR_ATTR_OPT -> expr ATTR_ASSOC .)
+    AMPERSAND       reduce using rule 167 (array_pair_EXPR_ATTR_OPT -> expr ATTR_ASSOC .)
     INCREMENT       shift and go to state 13
     DECREMENT       shift and go to state 15
     LPAREN          shift and go to state 9
@@ -4797,7 +4800,7 @@ state 135
 
 state 136
 
-    (163) array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND . variable
+    (164) array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND . variable
     (110) variable -> . base_variable
     (111) variable -> . function_call
     (112) base_variable -> . reference_variable
@@ -4908,17 +4911,17 @@ state 139
 state 140
 
     (128) parameter_list -> parameter . parameter_list_COLON_PARAMETER
-    (129) parameter_list_COLON_PARAMETER -> . COLON parameter parameter_list_COLON_PARAMETER
-    (130) parameter_list_COLON_PARAMETER -> .
+    (130) parameter_list_COLON_PARAMETER -> . COLON parameter parameter_list_COLON_PARAMETER
+    (131) parameter_list_COLON_PARAMETER -> .
 
     COLON           shift and go to state 158
-    RPAREN          reduce using rule 130 (parameter_list_COLON_PARAMETER -> .)
+    RPAREN          reduce using rule 131 (parameter_list_COLON_PARAMETER -> .)
 
     parameter_list_COLON_PARAMETER shift and go to state 157
 
 state 141
 
-    (131) parameter -> parameter_type . AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+    (132) parameter -> parameter_type . AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
     (19) AMPERSAND_OPT -> . AMPERSAND
     (20) AMPERSAND_OPT -> .
 
@@ -4929,66 +4932,66 @@ state 141
 
 state 142
 
-    (132) parameter_type -> INT_TYPE .
+    (133) parameter_type -> INT_TYPE .
 
-    AMPERSAND       reduce using rule 132 (parameter_type -> INT_TYPE .)
-    VARIABLE        reduce using rule 132 (parameter_type -> INT_TYPE .)
+    AMPERSAND       reduce using rule 133 (parameter_type -> INT_TYPE .)
+    VARIABLE        reduce using rule 133 (parameter_type -> INT_TYPE .)
 
 
 state 143
 
-    (133) parameter_type -> BOOLEAN_TYPE .
+    (134) parameter_type -> BOOLEAN_TYPE .
 
-    AMPERSAND       reduce using rule 133 (parameter_type -> BOOLEAN_TYPE .)
-    VARIABLE        reduce using rule 133 (parameter_type -> BOOLEAN_TYPE .)
+    AMPERSAND       reduce using rule 134 (parameter_type -> BOOLEAN_TYPE .)
+    VARIABLE        reduce using rule 134 (parameter_type -> BOOLEAN_TYPE .)
 
 
 state 144
 
-    (134) parameter_type -> STRING_TYPE .
+    (135) parameter_type -> STRING_TYPE .
 
-    AMPERSAND       reduce using rule 134 (parameter_type -> STRING_TYPE .)
-    VARIABLE        reduce using rule 134 (parameter_type -> STRING_TYPE .)
+    AMPERSAND       reduce using rule 135 (parameter_type -> STRING_TYPE .)
+    VARIABLE        reduce using rule 135 (parameter_type -> STRING_TYPE .)
 
 
 state 145
 
-    (135) parameter_type -> FLOAT_TYPE .
+    (136) parameter_type -> FLOAT_TYPE .
 
-    AMPERSAND       reduce using rule 135 (parameter_type -> FLOAT_TYPE .)
-    VARIABLE        reduce using rule 135 (parameter_type -> FLOAT_TYPE .)
+    AMPERSAND       reduce using rule 136 (parameter_type -> FLOAT_TYPE .)
+    VARIABLE        reduce using rule 136 (parameter_type -> FLOAT_TYPE .)
 
 
 state 146
 
-    (136) parameter_type -> ARRAY_TYPE .
+    (137) parameter_type -> ARRAY_TYPE .
 
-    AMPERSAND       reduce using rule 136 (parameter_type -> ARRAY_TYPE .)
-    VARIABLE        reduce using rule 136 (parameter_type -> ARRAY_TYPE .)
+    AMPERSAND       reduce using rule 137 (parameter_type -> ARRAY_TYPE .)
+    VARIABLE        reduce using rule 137 (parameter_type -> ARRAY_TYPE .)
 
 
 state 147
 
-    (137) parameter_type -> BOOL_TYPE .
+    (138) parameter_type -> BOOL_TYPE .
 
-    AMPERSAND       reduce using rule 137 (parameter_type -> BOOL_TYPE .)
-    VARIABLE        reduce using rule 137 (parameter_type -> BOOL_TYPE .)
+    AMPERSAND       reduce using rule 138 (parameter_type -> BOOL_TYPE .)
+    VARIABLE        reduce using rule 138 (parameter_type -> BOOL_TYPE .)
 
 
 state 148
 
-    (138) parameter_type -> REAL_TYPE .
+    (139) parameter_type -> REAL_TYPE .
 
-    AMPERSAND       reduce using rule 138 (parameter_type -> REAL_TYPE .)
-    VARIABLE        reduce using rule 138 (parameter_type -> REAL_TYPE .)
+    AMPERSAND       reduce using rule 139 (parameter_type -> REAL_TYPE .)
+    VARIABLE        reduce using rule 139 (parameter_type -> REAL_TYPE .)
 
 
 state 149
 
-    (139) parameter_type -> DOUBLE_TYPE .
+    (140) parameter_type -> DOUBLE_TYPE .
 
-    AMPERSAND       reduce using rule 139 (parameter_type -> DOUBLE_TYPE .)
-    VARIABLE        reduce using rule 139 (parameter_type -> DOUBLE_TYPE .)
+    AMPERSAND       reduce using rule 140 (parameter_type -> DOUBLE_TYPE .)
+    VARIABLE        reduce using rule 140 (parameter_type -> DOUBLE_TYPE .)
 
 
 state 150
@@ -5161,18 +5164,18 @@ state 152
 
 state 153
 
-    (160) array_pair_list_ARR_PAIR -> COLON array_pair . array_pair_list_ARR_PAIR
-    (160) array_pair_list_ARR_PAIR -> . COLON array_pair array_pair_list_ARR_PAIR
-    (161) array_pair_list_ARR_PAIR -> .
+    (161) array_pair_list_ARR_PAIR -> COLON array_pair . array_pair_list_ARR_PAIR
+    (161) array_pair_list_ARR_PAIR -> . COLON array_pair array_pair_list_ARR_PAIR
+    (162) array_pair_list_ARR_PAIR -> .
 
     COLON           shift and go to state 133
-    RPAREN          reduce using rule 161 (array_pair_list_ARR_PAIR -> .)
+    RPAREN          reduce using rule 162 (array_pair_list_ARR_PAIR -> .)
 
     array_pair_list_ARR_PAIR       shift and go to state 163
 
 state 154
 
-    (164) array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC expr .
+    (165) array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC expr .
     (73) expr -> expr . INTE_DOT expr DDOT expr
     (74) expr -> expr . comparission_operator expr
     (77) expr -> expr . arithmetic_operator expr
@@ -5190,8 +5193,8 @@ state 154
     (50) arithmetic_operator -> . TIMES
     (51) arithmetic_operator -> . MINUS
 
-    COLON           reduce using rule 164 (array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC expr .)
-    RPAREN          reduce using rule 164 (array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC expr .)
+    COLON           reduce using rule 165 (array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC expr .)
+    RPAREN          reduce using rule 165 (array_pair_ATTR_EXPR_OPT -> ATTR_ASSOC expr .)
     INTE_DOT        shift and go to state 52
     EQUALS          shift and go to state 55
     GREAT_THAN      shift and go to state 56
@@ -5212,10 +5215,10 @@ state 154
 
 state 155
 
-    (163) array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND variable .
+    (164) array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND variable .
 
-    COLON           reduce using rule 163 (array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND variable .)
-    RPAREN          reduce using rule 163 (array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND variable .)
+    COLON           reduce using rule 164 (array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND variable .)
+    RPAREN          reduce using rule 164 (array_pair -> array_pair_EXPR_ATTR_OPT AMPERSAND variable .)
 
 
 state 156
@@ -5234,17 +5237,17 @@ state 157
 
 state 158
 
-    (129) parameter_list_COLON_PARAMETER -> COLON . parameter parameter_list_COLON_PARAMETER
-    (131) parameter -> . parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
-    (132) parameter_type -> . INT_TYPE
-    (133) parameter_type -> . BOOLEAN_TYPE
-    (134) parameter_type -> . STRING_TYPE
-    (135) parameter_type -> . FLOAT_TYPE
-    (136) parameter_type -> . ARRAY_TYPE
-    (137) parameter_type -> . BOOL_TYPE
-    (138) parameter_type -> . REAL_TYPE
-    (139) parameter_type -> . DOUBLE_TYPE
-    (140) parameter_type -> .
+    (130) parameter_list_COLON_PARAMETER -> COLON . parameter parameter_list_COLON_PARAMETER
+    (132) parameter -> . parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+    (133) parameter_type -> . INT_TYPE
+    (134) parameter_type -> . BOOLEAN_TYPE
+    (135) parameter_type -> . STRING_TYPE
+    (136) parameter_type -> . FLOAT_TYPE
+    (137) parameter_type -> . ARRAY_TYPE
+    (138) parameter_type -> . BOOL_TYPE
+    (139) parameter_type -> . REAL_TYPE
+    (140) parameter_type -> . DOUBLE_TYPE
+    (141) parameter_type -> .
 
     INT_TYPE        shift and go to state 142
     BOOLEAN_TYPE    shift and go to state 143
@@ -5254,15 +5257,15 @@ state 158
     BOOL_TYPE       shift and go to state 147
     REAL_TYPE       shift and go to state 148
     DOUBLE_TYPE     shift and go to state 149
-    AMPERSAND       reduce using rule 140 (parameter_type -> .)
-    VARIABLE        reduce using rule 140 (parameter_type -> .)
+    AMPERSAND       reduce using rule 141 (parameter_type -> .)
+    VARIABLE        reduce using rule 141 (parameter_type -> .)
 
     parameter                      shift and go to state 165
     parameter_type                 shift and go to state 141
 
 state 159
 
-    (131) parameter -> parameter_type AMPERSAND_OPT . VARIABLE parameter_ASSIGN_STATIC_OPT
+    (132) parameter -> parameter_type AMPERSAND_OPT . VARIABLE parameter_ASSIGN_STATIC_OPT
 
     VARIABLE        shift and go to state 166
 
@@ -5366,9 +5369,9 @@ state 162
 
 state 163
 
-    (160) array_pair_list_ARR_PAIR -> COLON array_pair array_pair_list_ARR_PAIR .
+    (161) array_pair_list_ARR_PAIR -> COLON array_pair array_pair_list_ARR_PAIR .
 
-    RPAREN          reduce using rule 160 (array_pair_list_ARR_PAIR -> COLON array_pair array_pair_list_ARR_PAIR .)
+    RPAREN          reduce using rule 161 (array_pair_list_ARR_PAIR -> COLON array_pair array_pair_list_ARR_PAIR .)
 
 
 state 164
@@ -5462,24 +5465,24 @@ state 164
 
 state 165
 
-    (129) parameter_list_COLON_PARAMETER -> COLON parameter . parameter_list_COLON_PARAMETER
-    (129) parameter_list_COLON_PARAMETER -> . COLON parameter parameter_list_COLON_PARAMETER
-    (130) parameter_list_COLON_PARAMETER -> .
+    (130) parameter_list_COLON_PARAMETER -> COLON parameter . parameter_list_COLON_PARAMETER
+    (130) parameter_list_COLON_PARAMETER -> . COLON parameter parameter_list_COLON_PARAMETER
+    (131) parameter_list_COLON_PARAMETER -> .
 
     COLON           shift and go to state 158
-    RPAREN          reduce using rule 130 (parameter_list_COLON_PARAMETER -> .)
+    RPAREN          reduce using rule 131 (parameter_list_COLON_PARAMETER -> .)
 
     parameter_list_COLON_PARAMETER shift and go to state 171
 
 state 166
 
-    (131) parameter -> parameter_type AMPERSAND_OPT VARIABLE . parameter_ASSIGN_STATIC_OPT
-    (141) parameter_ASSIGN_STATIC_OPT -> . ASSIGN static_scalar
-    (142) parameter_ASSIGN_STATIC_OPT -> .
+    (132) parameter -> parameter_type AMPERSAND_OPT VARIABLE . parameter_ASSIGN_STATIC_OPT
+    (142) parameter_ASSIGN_STATIC_OPT -> . ASSIGN static_scalar
+    (143) parameter_ASSIGN_STATIC_OPT -> .
 
     ASSIGN          shift and go to state 173
-    COLON           reduce using rule 142 (parameter_ASSIGN_STATIC_OPT -> .)
-    RPAREN          reduce using rule 142 (parameter_ASSIGN_STATIC_OPT -> .)
+    COLON           reduce using rule 143 (parameter_ASSIGN_STATIC_OPT -> .)
+    RPAREN          reduce using rule 143 (parameter_ASSIGN_STATIC_OPT -> .)
 
     parameter_ASSIGN_STATIC_OPT    shift and go to state 172
 
@@ -5621,28 +5624,28 @@ state 170
 
 state 171
 
-    (129) parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER .
+    (130) parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER .
 
-    RPAREN          reduce using rule 129 (parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER .)
+    RPAREN          reduce using rule 130 (parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER .)
 
 
 state 172
 
-    (131) parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .
+    (132) parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .
 
-    COLON           reduce using rule 131 (parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .)
-    RPAREN          reduce using rule 131 (parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .)
+    COLON           reduce using rule 132 (parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .)
+    RPAREN          reduce using rule 132 (parameter -> parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT .)
 
 
 state 173
 
-    (141) parameter_ASSIGN_STATIC_OPT -> ASSIGN . static_scalar
-    (143) static_scalar -> . common_scalar
-    (144) static_scalar -> . PLUS static_scalar
-    (145) static_scalar -> . MINUS static_scalar
-    (146) common_scalar -> . NUMBER_REAL
-    (147) common_scalar -> . NUMBER_INTEGER
-    (148) common_scalar -> . CONSTANT_ENCAPSED_STRING
+    (142) parameter_ASSIGN_STATIC_OPT -> ASSIGN . static_scalar
+    (144) static_scalar -> . common_scalar
+    (145) static_scalar -> . PLUS static_scalar
+    (146) static_scalar -> . MINUS static_scalar
+    (147) common_scalar -> . NUMBER_REAL
+    (148) common_scalar -> . NUMBER_INTEGER
+    (149) common_scalar -> . CONSTANT_ENCAPSED_STRING
 
     PLUS            shift and go to state 180
     MINUS           shift and go to state 181
@@ -5732,29 +5735,29 @@ state 177
 
 state 178
 
-    (141) parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .
+    (142) parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .
 
-    COLON           reduce using rule 141 (parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .)
-    RPAREN          reduce using rule 141 (parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .)
+    COLON           reduce using rule 142 (parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .)
+    RPAREN          reduce using rule 142 (parameter_ASSIGN_STATIC_OPT -> ASSIGN static_scalar .)
 
 
 state 179
 
-    (143) static_scalar -> common_scalar .
+    (144) static_scalar -> common_scalar .
 
-    COLON           reduce using rule 143 (static_scalar -> common_scalar .)
-    RPAREN          reduce using rule 143 (static_scalar -> common_scalar .)
+    COLON           reduce using rule 144 (static_scalar -> common_scalar .)
+    RPAREN          reduce using rule 144 (static_scalar -> common_scalar .)
 
 
 state 180
 
-    (144) static_scalar -> PLUS . static_scalar
-    (143) static_scalar -> . common_scalar
-    (144) static_scalar -> . PLUS static_scalar
-    (145) static_scalar -> . MINUS static_scalar
-    (146) common_scalar -> . NUMBER_REAL
-    (147) common_scalar -> . NUMBER_INTEGER
-    (148) common_scalar -> . CONSTANT_ENCAPSED_STRING
+    (145) static_scalar -> PLUS . static_scalar
+    (144) static_scalar -> . common_scalar
+    (145) static_scalar -> . PLUS static_scalar
+    (146) static_scalar -> . MINUS static_scalar
+    (147) common_scalar -> . NUMBER_REAL
+    (148) common_scalar -> . NUMBER_INTEGER
+    (149) common_scalar -> . CONSTANT_ENCAPSED_STRING
 
     PLUS            shift and go to state 180
     MINUS           shift and go to state 181
@@ -5767,13 +5770,13 @@ state 180
 
 state 181
 
-    (145) static_scalar -> MINUS . static_scalar
-    (143) static_scalar -> . common_scalar
-    (144) static_scalar -> . PLUS static_scalar
-    (145) static_scalar -> . MINUS static_scalar
-    (146) common_scalar -> . NUMBER_REAL
-    (147) common_scalar -> . NUMBER_INTEGER
-    (148) common_scalar -> . CONSTANT_ENCAPSED_STRING
+    (146) static_scalar -> MINUS . static_scalar
+    (144) static_scalar -> . common_scalar
+    (145) static_scalar -> . PLUS static_scalar
+    (146) static_scalar -> . MINUS static_scalar
+    (147) common_scalar -> . NUMBER_REAL
+    (148) common_scalar -> . NUMBER_INTEGER
+    (149) common_scalar -> . CONSTANT_ENCAPSED_STRING
 
     PLUS            shift and go to state 180
     MINUS           shift and go to state 181
@@ -5786,26 +5789,26 @@ state 181
 
 state 182
 
-    (146) common_scalar -> NUMBER_REAL .
+    (147) common_scalar -> NUMBER_REAL .
 
-    COLON           reduce using rule 146 (common_scalar -> NUMBER_REAL .)
-    RPAREN          reduce using rule 146 (common_scalar -> NUMBER_REAL .)
+    COLON           reduce using rule 147 (common_scalar -> NUMBER_REAL .)
+    RPAREN          reduce using rule 147 (common_scalar -> NUMBER_REAL .)
 
 
 state 183
 
-    (147) common_scalar -> NUMBER_INTEGER .
+    (148) common_scalar -> NUMBER_INTEGER .
 
-    COLON           reduce using rule 147 (common_scalar -> NUMBER_INTEGER .)
-    RPAREN          reduce using rule 147 (common_scalar -> NUMBER_INTEGER .)
+    COLON           reduce using rule 148 (common_scalar -> NUMBER_INTEGER .)
+    RPAREN          reduce using rule 148 (common_scalar -> NUMBER_INTEGER .)
 
 
 state 184
 
-    (148) common_scalar -> CONSTANT_ENCAPSED_STRING .
+    (149) common_scalar -> CONSTANT_ENCAPSED_STRING .
 
-    COLON           reduce using rule 148 (common_scalar -> CONSTANT_ENCAPSED_STRING .)
-    RPAREN          reduce using rule 148 (common_scalar -> CONSTANT_ENCAPSED_STRING .)
+    COLON           reduce using rule 149 (common_scalar -> CONSTANT_ENCAPSED_STRING .)
+    RPAREN          reduce using rule 149 (common_scalar -> CONSTANT_ENCAPSED_STRING .)
 
 
 state 185
@@ -5995,18 +5998,18 @@ state 187
 
 state 188
 
-    (144) static_scalar -> PLUS static_scalar .
+    (145) static_scalar -> PLUS static_scalar .
 
-    COLON           reduce using rule 144 (static_scalar -> PLUS static_scalar .)
-    RPAREN          reduce using rule 144 (static_scalar -> PLUS static_scalar .)
+    COLON           reduce using rule 145 (static_scalar -> PLUS static_scalar .)
+    RPAREN          reduce using rule 145 (static_scalar -> PLUS static_scalar .)
 
 
 state 189
 
-    (145) static_scalar -> MINUS static_scalar .
+    (146) static_scalar -> MINUS static_scalar .
 
-    COLON           reduce using rule 145 (static_scalar -> MINUS static_scalar .)
-    RPAREN          reduce using rule 145 (static_scalar -> MINUS static_scalar .)
+    COLON           reduce using rule 146 (static_scalar -> MINUS static_scalar .)
+    RPAREN          reduce using rule 146 (static_scalar -> MINUS static_scalar .)
 
 
 state 190
