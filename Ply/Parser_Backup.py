@@ -1,3 +1,8 @@
+def p_inner_statement_MUL(p):
+  '''
+  inner_statement_MUL : inner_statement inner_statement_MUL
+    |  
+  '''
 
 def p_inner_statement(p):
   '''

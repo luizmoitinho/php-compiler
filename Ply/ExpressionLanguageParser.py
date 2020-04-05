@@ -6,12 +6,6 @@ def p_main(p):
   '''
   main : BEGIN_PROGRAM main_INNER END_PROGRAM 
   '''
-  
-def p_main_INNER(p):
-  '''
-  main_INNER : inner_statement main_INNER
-    | 
-  '''
 
 def p_inner_statement(p):
   '''
@@ -22,28 +16,56 @@ def p_inner_statement(p):
 def p_statement(p):
   '''
   statement : expr SEMICOLON
-    | statement_IF statement_elseif statement_else 
-    | WHILE LPAREN expr RPAREN LKEY statement_MUL RKEY
-    | BREAK X SEMICOLON
-    | CONTINUE EXPR_OPT SEMICOLON
-    | SEMICOLON
-    
-  '''
-  
-def p_statement_MUL(p):
-  '''
-  statement_MUL : statement statement_MUL
-    | 
+    | statement_if statement_elseif statement_else 
+    | WHILE expr_paren statement_BLOCK_OPT
+    | DO statement_BLOCK_OPT WHILE expr_paren SEMICOLON
+    | FOR LPAREN for_expr_OPT SEMICOLON for_expr_OPT SEMICOLON for_expr_OPT RPAREN statement_BLOCK_OPT
+    | statement_foreach
+    | BREAK expr_OPT SEMICOLON
+    | CONTINUE expr_OPT SEMICOLON
+    | RETURN expr_return_OPT SEMICOLON
+    | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
   '''
 
-def p_statement_IF(p):
+
+def p_ampersand_variable(p):
   '''
-  statement_IF : IF LPAREN expr RPAREN statement_BLOCK_OPT
+  ampersand_variable : AMPERSAND_OPT VARIABLE
+  '''
+
+def p_global_var(p):
+  '''
+  global_var : VARIABLE
+    | DOLAR VARIABLE
+    | DOLAR LKEY expr RKEY 
+  '''
+
+def p_statement_COLON_GLOBAL(p):
+  '''
+  statement_COLON_GLOBAL : COLON global_var statement_COLON_GLOBAL
+    | 
+  '''
+  
+
+def p_expr_paren(p):
+  '''
+  expr_paren : LPAREN expr RPAREN
+  '''
+
+def p_expr_return_OPT(p):
+  '''
+  expr_return_OPT :  expr 
+    |
+  '''
+
+def p_statement_if(p):
+  '''
+  statement_if : IF expr_paren statement_BLOCK_OPT
   '''
 
 def p_statement_elseif(p):
   '''
-  statement_elseif : ELSEIF LPAREN expr RPAREN statement_BLOCK_OPT
+  statement_elseif : ELSEIF expr_paren statement_BLOCK_OPT
     |
   '''
 
@@ -53,43 +75,33 @@ def p_statement_else(p):
     | 
   '''
 
-def p_statement_BLOCK_OPT(p):
+def p_statement_foreach(p):
   '''
-  statement_BLOCK_OPT : statement 
-    | LKEY statement_MUL RKEY 
-  ''' 
-
-def p_AMPERSAND_OPT(p):
-  '''
-  AMPERSAND_OPT : AMPERSAND
-    | 
+  statement_foreach : FOREACH LPAREN foreach_first_param AS ampersand_variable statement_attr_variable_OPT RPAREN statement_BLOCK_OPT
   '''
 
+def p_foreach_first_param(p):
+  '''
+  foreach_first_param : variable
+    | expr
+  '''
 
-#  | variable_without_objects LPAREN function_call_parameter_list RPAREN 
+def p_for_expr_OPT(p):
+  '''
+  for_expr_OPT : expr for_expr_COLON_EXPR
+   | 
+  '''
+  
 def p_function_call(p):
   '''
   function_call : ID LPAREN function_call_parameter_list RPAREN
     | base_variable
   '''
 
-
 def p_function_call_parameter_list(p):
   '''
   function_call_parameter_list : function_call_parameter function_call_list_COLON_FUNCTION
   | 
-  '''
-
-def p_function_call_list_COLON_FUNCTION(p):
-  '''
-  function_call_list_COLON_FUNCTION : COLON function_call_parameter function_call_list_COLON_FUNCTION
-    | 
-  '''
-
-def p_expr_without_variable_COLON_ASSIGNMENT(p):
-  '''
-  expr_without_variable_COLON_ASSIGNMENT : COLON assignment_list_element expr_without_variable_COLON_ASSIGNMENT
-    | 
   '''
 
 def p_function_call_parameter(p):
@@ -102,12 +114,6 @@ def p_assignment_list_element(p):
   '''
   assignment_list_element : variable
     | LIST LPAREN assignment_list_element assignment_list_element_COLON_ASSIGNMENT  RPAREN
-  '''
-
-def p_assignment_list_element_COLON_ASSIGNMENT(p):
-  '''
-  assignment_list_element_COLON_ASSIGNMENT : COLON assignment_list_element assignment_list_element_COLON_ASSIGNMENT
-    | 
   '''
   
 def p_unary_operator(p):
@@ -176,8 +182,8 @@ def p_expr(p):
     | variable assign_operator AMPERSAND expr
     | expr arithmetic_operator expr
     | LPAREN type_cast_operator RPAREN expr
-    | EXIT expr_without_variable_EXIT
-    | DIE expr_without_variable_EXIT
+    | EXIT expr_EXIT
+    | DIE expr_EXIT
     | ARRAY_TYPE LPAREN array_pair_list RPAREN
     | function_call
     | variable
@@ -186,18 +192,6 @@ def p_expr(p):
     | CONSTANT_ENCAPSED_STRING
     | TRUE
     | FALSE
-  '''  
-
-def p_expr_OPT(p):
-  '''
-  p_expr_OPT :  expr
-  | 
-  '''
-
-def p_expr_without_variable_ENCAPS(p):
-  '''
-  expr_without_variable_ENCAPS : encaps expr_without_variable_ENCAPS
-    |
   '''
   
 def p_encaps(p):
@@ -230,10 +224,9 @@ def p_encaps_var_offset(p):
     | VARIABLE
   '''
 
-
-def p_expr_without_variable_EXIT(p):
+def p_expr_EXIT(p):
   '''
-  expr_without_variable_EXIT : exit_expr
+  expr_EXIT : exit_expr
     | 
   '''
 
@@ -264,46 +257,16 @@ def p_reference_variable(p):
   '''
   reference_variable : compound_variable reference_variable_SELECTOR
   '''
-
-def p_reference_variable_SELECTOR(p):
-  '''
-  reference_variable_SELECTOR : selector reference_variable_SELECTOR
-    | 
-  '''
   
 def p_compound_variable(p):
   '''
   compound_variable : VARIABLE 
     | DOLAR LKEY expr RKEY 
   '''
-  
-
-def p_simple_indirect_reference_DOLAR(p):
-  '''
-  simple_indirect_reference_DOLAR : DOLAR simple_indirect_reference_DOLAR
-    | 
-  '''
 
 def p_selector(p):
   '''
   selector : LBRACKET selector_EXPR RBRACKET 
-  '''
-    
-def p_selector_EXPR(p):
-  '''
-  selector_EXPR : expr
-    |
-  '''
-  
-def p_variable_name(p):
-  '''
-  variable_name : VARIABLE
-  '''
-
-def p_inner_statement_MUL(p):
-  '''
-  inner_statement_MUL : inner_statement inner_statement_MUL
-    |  
   '''
 
 def p_function_declaration_statement(p):
@@ -316,12 +279,6 @@ def p_parameter_list(p):
   parameter_list : parameter parameter_list_COLON_PARAMETER 
     |
   '''  
-
-def p_parameter_list_COLON_PARAMETER(p):
-  '''
-  parameter_list_COLON_PARAMETER : COLON parameter parameter_list_COLON_PARAMETER
-    | 
-  '''
 
 def p_parameter(p):
   ''' 
@@ -341,12 +298,6 @@ def p_parameter_type(p):
     | 
   '''
 
-def p_parameter_ASSIGN_STATIC_OPT(p):
-  '''
-  parameter_ASSIGN_STATIC_OPT : ASSIGN static_scalar
-    |
-  '''
-
 #VERIFICAR SYNTAX
 def p_static_scalar(p):
   '''
@@ -362,15 +313,136 @@ def p_common_scalar(p):
     | CONSTANT_ENCAPSED_STRING
   '''
 
+def p_static_array_pair_list(p):
+  '''
+  static_array_pair_list : static_array_pair static_array_pair_list_COLON_STATIC static_array_pair_list_COLON 
+  '''
+
+def p_static_array_pair(p):
+  ''' 
+  static_array_pair : static_scalar static_array_pair_ATTR_STATIC
+  '''
+  
+def p_array_pair_list(p):
+  '''
+  array_pair_list : array_pair array_pair_list_ARR_PAIR 
+    | 
+  '''
+
+def p_array_pair(p):
+  ''' 
+  array_pair : expr array_pair_ATTR_EXPR_OPT
+    | array_pair_EXPR_ATTR_OPT AMPERSAND variable
+  '''
+  
+def p_main_INNER(p):
+  '''
+  main_INNER : inner_statement main_INNER
+    | 
+  '''
+  
+# Expressões regulares transformadas em regras.
+# ======================================================================
+def p_statement_MUL(p):
+  '''
+  statement_MUL : statement statement_MUL
+    | 
+  '''
+
+def p_inner_statement_MUL(p):
+  '''
+  inner_statement_MUL : inner_statement inner_statement_MUL
+    |
+  '''
+  
+def p_for_expr_COLON_EXPR(p):
+  '''
+  for_expr_COLON_EXPR : COLON expr for_expr_COLON_EXPR
+    | 
+  '''
+  
+def p_statement_BLOCK_OPT(p):
+  '''
+  statement_BLOCK_OPT : statement 
+    | LKEY statement_MUL RKEY 
+  ''' 
+  
+def p_AMPERSAND_OPT(p):
+  '''
+  AMPERSAND_OPT : AMPERSAND
+    | 
+  '''
+  
+def p_statement_attr_variable_OPT(p):
+  '''
+  statement_attr_variable_OPT : ATTR_ASSOC ampersand_variable 
+    |
+  '''
+
+def p_function_call_list_COLON_FUNCTION(p):
+  '''
+  function_call_list_COLON_FUNCTION : COLON function_call_parameter function_call_list_COLON_FUNCTION
+    | 
+  '''
+  
+def p_expr_without_variable_COLON_ASSIGNMENT(p):
+  '''
+  expr_without_variable_COLON_ASSIGNMENT : COLON assignment_list_element expr_without_variable_COLON_ASSIGNMENT
+    | 
+  '''
+  
+def p_assignment_list_element_COLON_ASSIGNMENT(p):
+  '''
+  assignment_list_element_COLON_ASSIGNMENT : COLON assignment_list_element assignment_list_element_COLON_ASSIGNMENT
+    | 
+  '''
+  
+def p_expr_OPT(p):
+  '''
+  expr_OPT : expr 
+    | 
+  '''
+  
+def p_expr_without_variable_ENCAPS(p):
+  '''
+  expr_without_variable_ENCAPS : encaps expr_without_variable_ENCAPS
+    |
+  '''
+  
+def p_parameter_list_COLON_PARAMETER(p):
+  '''
+  parameter_list_COLON_PARAMETER : COLON parameter parameter_list_COLON_PARAMETER
+    | 
+  '''
+  
+def p_parameter_ASSIGN_STATIC_OPT(p):
+  '''
+  parameter_ASSIGN_STATIC_OPT : ASSIGN static_scalar
+    |
+  '''
+  
+def p_reference_variable_SELECTOR(p):
+  '''
+  reference_variable_SELECTOR : selector reference_variable_SELECTOR
+    | 
+  '''
+  
+def p_simple_indirect_reference_DOLAR(p):
+  '''
+  simple_indirect_reference_DOLAR : DOLAR simple_indirect_reference_DOLAR
+    | 
+  '''
+  
+def p_selector_EXPR(p):
+  '''
+  selector_EXPR : expr
+    |
+  '''
+  
 def p_static_scalar_OPT(p): 
   '''
   static_scalar_OPT : static_array_pair_list
     | 
-  '''
-
-def p_static_array_pair_list(p):
-  '''
-  static_array_pair_list : static_array_pair static_array_pair_list_COLON_STATIC static_array_pair_list_COLON 
   '''
   
 def p_static_array_pair_list_COLON_STATIC(p):
@@ -384,34 +456,17 @@ def p_static_array_pair_list_COLON(p):
   static_array_pair_list_COLON : COLON
     | 
   '''
-
-def p_static_array_pair(p):
-  ''' 
-  static_array_pair : static_scalar static_array_pair_ATTR_STATIC
-  '''
   
 def p_static_array_pair_ATTR_STATIC(p):
   '''
   static_array_pair_ATTR_STATIC : ATTR_ASSOC static_scalar
     | 
   '''
-  
-def p_array_pair_list(p):
-  '''
-  array_pair_list : array_pair array_pair_list_ARR_PAIR 
-  |
-  '''
 
 def p_array_pair_list_ARR_PAIR(p):
   '''
   array_pair_list_ARR_PAIR : COLON array_pair array_pair_list_ARR_PAIR
     | 
-  '''
-
-def p_array_pair(p):
-  ''' 
-  array_pair : expr array_pair_ATTR_EXPR_OPT
-    | array_pair_EXPR_ATTR_OPT AMPERSAND variable
   '''
 
 def p_array_pair_ATTR_EXPR_OPT(p):
@@ -432,13 +487,12 @@ def p_error(p):
       
 
 lex.lex()
-arquivo = '''<?php
-  while($x<10){
-    if($x==9){
-      $maior = $x;
-    }
-    $x--;
-  }
+arquivo = '''
+<?php
+  function sum(int $x, int $y) {
+    $z = $x + $y;
+    return;
+}
 ?>'''
 lex.input(arquivo)
 
