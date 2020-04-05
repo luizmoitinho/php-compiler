@@ -22,7 +22,10 @@ def p_inner_statement(p):
 def p_statement(p):
   '''
   statement : expr SEMICOLON
-    | IF LPAREN expr RPAREN LKEY statement_MUL RKEY statement_elseif statement_else 
+    | statement_IF statement_elseif statement_else 
+    | WHILE LPAREN expr RPAREN LKEY statement_MUL RKEY
+    | BREAK X SEMICOLON
+    | CONTINUE EXPR_OPT SEMICOLON
     | SEMICOLON
     
   '''
@@ -33,39 +36,35 @@ def p_statement_MUL(p):
     | 
   '''
 
-def p_statement_elseif(p):
+def p_statement_IF(p):
   '''
-  statement_elseif : ELSEIF LPAREN expr RPAREN  statement_elseif_OPT
-    |
+  statement_IF : IF LPAREN expr RPAREN statement_BLOCK_OPT
   '''
 
-def p_statement_elseif_OPT(p):
+def p_statement_elseif(p):
   '''
-  statement_elseif_OPT : statement 
-    | LKEY statement_MUL RKEY
+  statement_elseif : ELSEIF LPAREN expr RPAREN statement_BLOCK_OPT
+    |
   '''
 
 def p_statement_else(p):
   '''
-  statement_else : ELSE else_OPT
+  statement_else : ELSE statement_BLOCK_OPT
     | 
   '''
 
-def p_else_OPT(p):
+def p_statement_BLOCK_OPT(p):
   '''
-  else_OPT : statement
+  statement_BLOCK_OPT : statement 
     | LKEY statement_MUL RKEY 
-  '''
+  ''' 
 
-
-  
 def p_AMPERSAND_OPT(p):
   '''
   AMPERSAND_OPT : AMPERSAND
     | 
   '''
 
-  
 
 #  | variable_without_objects LPAREN function_call_parameter_list RPAREN 
 def p_function_call(p):
@@ -189,6 +188,11 @@ def p_expr(p):
     | FALSE
   '''  
 
+def p_expr_OPT(p):
+  '''
+  p_expr_OPT :  expr
+  | 
+  '''
 
 def p_expr_without_variable_ENCAPS(p):
   '''
@@ -395,6 +399,7 @@ def p_static_array_pair_ATTR_STATIC(p):
 def p_array_pair_list(p):
   '''
   array_pair_list : array_pair array_pair_list_ARR_PAIR 
+  |
   '''
 
 def p_array_pair_list_ARR_PAIR(p):
@@ -428,12 +433,12 @@ def p_error(p):
 
 lex.lex()
 arquivo = '''<?php
-    function add($valor){
-      
+  while($x<10){
+    if($x==9){
+      $maior = $x;
     }
-    function add($valor){
-      
-    }
+    $x--;
+  }
 ?>'''
 lex.input(arquivo)
 
