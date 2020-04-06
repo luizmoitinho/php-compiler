@@ -1,17 +1,24 @@
 import ply.yacc as yacc
 import ply.lex as lex
+import Visitor as vis
 from ExpressionLanguageLex import *
+import SintaxeAbstrata as sa
 
 def p_main(p):
   '''
   main : BEGIN_PROGRAM main_INNER END_PROGRAM 
   '''
+  if len(p) == 4:
+    p[0] = sa.Main_MainInner(p[2])
+    print(p[2])
 
 def p_inner_statement(p):
   '''
-  inner_statement : function_declaration_statement 
+  inner_statement : function_declaration_statement
     | statement
   '''
+  if isinstance(p[1], sa.Statement):
+    p[0] = sa.InnerStatement_Statement(p[1])
 
 def p_statement(p):
   '''
@@ -26,7 +33,8 @@ def p_statement(p):
     | RETURN expr_return_OPT SEMICOLON
     | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
   '''
-
+  if isinstance(p[1], sa.Expr):
+    p[0] = sa.Statement_Expr(p[1], p[2])
 
 def p_ampersand_variable(p):
   '''
@@ -46,7 +54,6 @@ def p_statement_COLON_GLOBAL(p):
     | 
   '''
   
-
 def p_expr_paren(p):
   '''
   expr_paren : LPAREN expr RPAREN
@@ -115,6 +122,7 @@ def p_assignment_list_element(p):
   assignment_list_element : variable
     | LIST LPAREN assignment_list_element assignment_list_element_COLON_ASSIGNMENT  RPAREN
   '''
+  
   
 def p_unary_operator(p):
   '''
@@ -193,6 +201,8 @@ def p_expr(p):
     | TRUE
     | FALSE
   '''
+  if p[1] == 'true':
+    p[0] = sa.Expr_True(p[1])
   
 def p_encaps(p):
   '''
@@ -206,15 +216,15 @@ def p_encaps(p):
 
 def p_encaps_var(p):
   '''
-  encaps_var : VARIABLE encaps_var_1
+  encaps_var : VARIABLE encaps_var_OPT
     | DOLAR LBRACKET expr RBRACKET
     | DOLAR  LKEY ID LBRACKET expr RBRACKET RKEY
     | LKEY variable RKEY
   '''
 
-def p_encaps_var_1(p):
+def p_encaps_var_OPT(p):
   '''
-  encaps_var_1 : LBRACKET encaps_var_offset RBRACKET
+  encaps_var_OPT : LBRACKET encaps_var_offset RBRACKET
     | 
   '''
 
@@ -232,13 +242,7 @@ def p_expr_EXIT(p):
 
 def p_exit_expr(p):
   '''
-  exit_expr : LPAREN exit_expr_EXPR RPAREN   
-  '''
-  
-def p_exit_expr_EXPR(p):
-  '''
-  exit_expr_EXPR : expr
-    | 
+  exit_expr : LPAREN expr_OPT RPAREN   
   '''
 
 def p_variable(p):
@@ -335,14 +339,19 @@ def p_array_pair(p):
     | array_pair_EXPR_ATTR_OPT AMPERSAND variable
   '''
   
+# Expressões regulares transformadas em regras.
+# ======================================================================
+
 def p_main_INNER(p):
   '''
   main_INNER : inner_statement main_INNER
     | 
   '''
-  
-# Expressões regulares transformadas em regras.
-# ======================================================================
+  if len(p) == 3:
+    p[0] = sa.MainInner_InnerStatement(p[1], p[2])
+  else: 
+    p[0] = sa.MainInner_Empty()
+
 def p_statement_MUL(p):
   '''
   statement_MUL : statement statement_MUL
@@ -489,14 +498,12 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  function sum(int $x, int $y) {
-    $z = $x + $y;
-    return;
-}
+  true;
+  true;
 ?>'''
 lex.input(arquivo)
 
 parser = yacc.yacc()
-result = parser.parse(debug=True)
-#v = Visitor()
-#result.accept(v)
+result = parser.parse(debug=False)
+v = vis.Visitor()
+result.accept(v)
