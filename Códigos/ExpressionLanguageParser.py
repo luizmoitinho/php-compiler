@@ -4,6 +4,13 @@ import Visitor as vis
 from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
 
+
+precedence = (
+     ('left', 'PLUS', 'MINUS'),
+     ('left', 'TIMES', 'DIVIDE'),
+
+ )
+
 def p_main(p):
   '''
   main : BEGIN_PROGRAM main_INNER END_PROGRAM 
@@ -145,15 +152,16 @@ def p_type_cast_operator(p):
       | UNSET
   '''
 
-def p_arithmetic_operator(p):
+def p_arithmetic_expr(p):
   '''
-  arithmetic_operator : PLUS
-    | DIVIDE
-    | PERCENT
-    | TIMES
-    | MINUS
+  arithmetic_expr : arithmetic_expr PLUS arithmetic_expr               
+    | arithmetic_expr MINUS arithmetic_expr               
+    | arithmetic_expr TIMES arithmetic_expr               
+    | arithmetic_expr DIVIDE arithmetic_expr              
+    | LPAREN arithmetic_expr RPAREN                   
+    | NUMBER_INTEGER 
+    | NUMBER_REAL                                    
   '''
-
 def p_assign_operator(p):
   '''
   assign_operator : ADD_ASSIGN
@@ -189,7 +197,7 @@ def p_expr(p):
     | expr comparission_operator expr
     | variable assign_operator expr
     | variable assign_operator AMPERSAND expr
-    | expr arithmetic_operator expr
+    | arithmetic_expr expr
     | LPAREN type_cast_operator RPAREN expr
     | EXIT expr_EXIT
     | DIE expr_EXIT
@@ -499,8 +507,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-if($x==10)
-  $x= 10;
+ $x = 10 + 20
 ?>'''
 lex.input(arquivo)
 
