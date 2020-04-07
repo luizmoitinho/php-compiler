@@ -15,6 +15,7 @@ class Visitor():
 
   def visitStatement_Expr(self, statement_expr):
     statement_expr.expr.accept(self)
+    print(';')
 
   def visitExpr_True(self, expr_true):
     print('true', end=' ')
