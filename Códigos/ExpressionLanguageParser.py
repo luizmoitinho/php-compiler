@@ -7,6 +7,7 @@ import SintaxeAbstrata as sa
 def p_main(p):
   '''
   main : BEGIN_PROGRAM main_INNER END_PROGRAM 
+  | BEGIN_PROGRAM END_PROGRAM
   '''
   if len(p) == 4:
     p[0] = sa.Main_MainInner(p[2])
@@ -345,7 +346,7 @@ def p_array_pair(p):
 def p_main_INNER(p):
   '''
   main_INNER : inner_statement main_INNER
-    | 
+    | inner_statement
   '''
   if len(p) == 3:
     p[0] = sa.MainInner_InnerStatement(p[1], p[2])
@@ -498,12 +499,12 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  true;
-  true;
+if($x==10)
+  $x= 10;
 ?>'''
 lex.input(arquivo)
 
 parser = yacc.yacc()
-result = parser.parse(debug=False)
-v = vis.Visitor()
-result.accept(v)
+result = parser.parse(debug=True)
+#v = vis.Visitor()
+#result.accept(v)
