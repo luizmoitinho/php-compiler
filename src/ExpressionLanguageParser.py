@@ -216,8 +216,8 @@ def p_expr(p):
     | DIE expr_EXIT
     | ARRAY_TYPE LPAREN array_pair_list RPAREN
     | ARRAY_TYPE LPAREN RPAREN
-    | function_call
     | variable
+    | function_call
     | NUMBER_REAL
     | NUMBER_INTEGER
     | CONSTANT_ENCAPSED_STRING
@@ -269,10 +269,10 @@ def p_exit_expr(p):
     | LPAREN RPAREN
   '''
 
+# Removido chamada a function_call
 def p_variable(p):
   '''
   variable : base_variable
-    | function_call
   '''
   
 def p_base_variable(p):
@@ -476,9 +476,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  for ($i = 0, $i < count($people);;) {
-    $valor = 'puta merda';
-}
+  add() = $valor;
 ?>'''
 lex.input(arquivo)
 parser = yacc.yacc()
