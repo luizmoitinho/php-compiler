@@ -4,11 +4,9 @@ import Visitor as vis
 from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
 
-
 precedence = (
      ('left', 'PLUS', 'MINUS'),
      ('left', 'TIMES', 'DIVIDE'),
-
  )
 
 def p_main(p):
@@ -46,7 +44,13 @@ def p_statement(p):
 
 def p_ampersand_variable(p):
   '''
-  ampersand_variable : AMPERSAND_OPT VARIABLE
+  ampersand_variable : AMPERSAND VARIABLE
+  '''
+  
+def p_AMPERSAND_OPT(p):
+  '''
+  AMPERSAND_OPT : AMPERSAND
+    | 
   '''
 
 def p_global_var(p):
@@ -171,6 +175,15 @@ def p_assign_operator(p):
     | DIVIDE_ASSIGN
     | ASSIGN
   '''
+  
+def p_arithmetic_operator(p):
+  '''
+  arithmetic_operator : PLUS
+    | DIVIDE
+    | PERCENT
+    | TIMES
+    | MINUS
+  '''
 
 def p_comparission_operator(p): 
   '''
@@ -197,7 +210,7 @@ def p_expr(p):
     | expr comparission_operator expr
     | variable assign_operator expr
     | variable assign_operator AMPERSAND expr
-    | arithmetic_expr expr
+    | expr arithmetic_operator expr
     | LPAREN type_cast_operator RPAREN expr
     | EXIT expr_EXIT
     | DIE expr_EXIT
@@ -284,18 +297,31 @@ def p_selector(p):
 
 def p_function_declaration_statement(p):
   '''
-  function_declaration_statement : FUNCTION AMPERSAND_OPT ID LPAREN parameter_list RPAREN LKEY inner_statement_MUL RKEY
+  function_declaration_statement : FUNCTION ID LPAREN RPAREN LKEY RKEY
+    | FUNCTION AMPERSAND ID LPAREN RPAREN LKEY RKEY
+    | FUNCTION AMPERSAND ID LPAREN parameter_list RPAREN LKEY RKEY
+    | FUNCTION AMPERSAND ID LPAREN RPAREN LKEY inner_statement_MUL RKEY
+    | FUNCTION AMPERSAND ID LPAREN parameter_list RPAREN LKEY inner_statement_MUL RKEY
+    | FUNCTION ID LPAREN parameter_list RPAREN LKEY RKEY
+    | FUNCTION ID LPAREN RPAREN LKEY inner_statement_MUL RKEY
+    | FUNCTION ID LPAREN parameter_list RPAREN LKEY inner_statement_MUL RKEY
   '''
 
 def p_parameter_list(p):  
   '''
   parameter_list : parameter parameter_list_COLON_PARAMETER 
-    |
+    | parameter
   '''  
 
 def p_parameter(p):
   ''' 
-  parameter : parameter_type AMPERSAND_OPT VARIABLE parameter_ASSIGN_STATIC_OPT
+  parameter : VARIABLE
+    | VARIABLE ASSIGN static_scalar
+    | parameter_type VARIABLE
+    | parameter_type AMPERSAND VARIABLE
+    | AMPERSAND VARIABLE
+    | AMPERSAND VARIABLE ASSIGN static_scalar
+    | parameter_type AMPERSAND VARIABLE ASSIGN static_scalar
   '''
 
 def p_parameter_type(p):
@@ -308,7 +334,6 @@ def p_parameter_type(p):
     | BOOL_TYPE
     | REAL_TYPE
     | DOUBLE_TYPE
-    | 
   '''
 
 #VERIFICAR SYNTAX
@@ -326,15 +351,6 @@ def p_common_scalar(p):
     | CONSTANT_ENCAPSED_STRING
   '''
 
-def p_static_array_pair_list(p):
-  '''
-  static_array_pair_list : static_array_pair static_array_pair_list_COLON_STATIC static_array_pair_list_COLON 
-  '''
-
-def p_static_array_pair(p):
-  ''' 
-  static_array_pair : static_scalar static_array_pair_ATTR_STATIC
-  '''
   
 def p_array_pair_list(p):
   '''
@@ -348,6 +364,7 @@ def p_array_pair(p):
     | array_pair_EXPR_ATTR_OPT AMPERSAND variable
   '''
   
+
 # Expressões regulares transformadas em regras.
 # ======================================================================
 
@@ -358,8 +375,6 @@ def p_main_INNER(p):
   '''
   if len(p) == 3:
     p[0] = sa.MainInner_InnerStatement(p[1], p[2])
-  else: 
-    p[0] = sa.MainInner_Empty()
 
 def p_statement_MUL(p):
   '''
@@ -370,7 +385,7 @@ def p_statement_MUL(p):
 def p_inner_statement_MUL(p):
   '''
   inner_statement_MUL : inner_statement inner_statement_MUL
-    |
+    | inner_statement
   '''
   
 def p_for_expr_COLON_EXPR(p):
@@ -384,12 +399,6 @@ def p_statement_BLOCK_OPT(p):
   statement_BLOCK_OPT : statement 
     | LKEY statement_MUL RKEY 
   ''' 
-  
-def p_AMPERSAND_OPT(p):
-  '''
-  AMPERSAND_OPT : AMPERSAND
-    | 
-  '''
   
 def p_statement_attr_variable_OPT(p):
   '''
@@ -430,13 +439,7 @@ def p_expr_without_variable_ENCAPS(p):
 def p_parameter_list_COLON_PARAMETER(p):
   '''
   parameter_list_COLON_PARAMETER : COLON parameter parameter_list_COLON_PARAMETER
-    | 
-  '''
-  
-def p_parameter_ASSIGN_STATIC_OPT(p):
-  '''
-  parameter_ASSIGN_STATIC_OPT : ASSIGN static_scalar
-    |
+    | COLON parameter
   '''
   
 def p_reference_variable_SELECTOR(p):
@@ -455,30 +458,6 @@ def p_selector_EXPR(p):
   '''
   selector_EXPR : expr
     |
-  '''
-  
-def p_static_scalar_OPT(p): 
-  '''
-  static_scalar_OPT : static_array_pair_list
-    | 
-  '''
-  
-def p_static_array_pair_list_COLON_STATIC(p):
-  '''
-  static_array_pair_list_COLON_STATIC : COLON static_array_pair static_array_pair_list_COLON_STATIC
-    | 
-  '''
-
-def p_static_array_pair_list_COLON(p): 
-  '''
-  static_array_pair_list_COLON : COLON
-    | 
-  '''
-  
-def p_static_array_pair_ATTR_STATIC(p):
-  '''
-  static_array_pair_ATTR_STATIC : ATTR_ASSOC static_scalar
-    | 
   '''
 
 def p_array_pair_list_ARR_PAIR(p):
@@ -507,7 +486,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
- $x = 10 + 20
+  
 ?>'''
 lex.input(arquivo)
 
