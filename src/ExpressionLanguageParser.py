@@ -29,15 +29,21 @@ def p_inner_statement(p):
 def p_statement(p):
   '''
   statement : expr SEMICOLON
+    | statement_if statement_elseif
     | statement_if statement_elseif statement_else 
+    | statement_if
+    | statement_if statement_else 
     | WHILE expr_paren statement_BLOCK_OPT
     | DO statement_BLOCK_OPT WHILE expr_paren SEMICOLON
-    | FOR LPAREN for_expr_OPT SEMICOLON for_expr_OPT SEMICOLON for_expr_OPT RPAREN statement_BLOCK_OPT
-    | statement_foreach
-    | BREAK expr_OPT SEMICOLON
-    | CONTINUE expr_OPT SEMICOLON
-    | RETURN expr_return_OPT SEMICOLON
+    | FOR LPAREN statement_for RPAREN statement_BLOCK_OPT
+    | BREAK expr SEMICOLON
+    | BREAK SEMICOLON
+    | CONTINUE expr SEMICOLON
+    | CONTINUE SEMICOLON
+    | RETURN expr SEMICOLON 
+    | RETURN SEMICOLON
     | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
+    | GLOBAL global_var SEMICOLON
   '''
   if isinstance(p[1], sa.Expr):
     p[0] = sa.Statement_Expr(p[1], p[2])
@@ -45,14 +51,21 @@ def p_statement(p):
 def p_ampersand_variable(p):
   '''
   ampersand_variable : AMPERSAND VARIABLE
+    | VARIABLE
   '''
   
-def p_AMPERSAND_OPT(p):
+def p_statement_for(p):
   '''
-  AMPERSAND_OPT : AMPERSAND
-    | 
+  statement_for : SEMICOLON SEMICOLON 
+  | for_expr_OPT SEMICOLON SEMICOLON
+  | for_expr_OPT SEMICOLON for_expr_OPT SEMICOLON 
+  | for_expr_OPT SEMICOLON SEMICOLON for_expr_OPT
+  | SEMICOLON for_expr_OPT SEMICOLON
+  | SEMICOLON for_expr_OPT SEMICOLON for_expr_OPT
+  | SEMICOLON SEMICOLON for_expr_OPT
+  | for_expr_OPT SEMICOLON for_expr_OPT SEMICOLON for_expr_OPT
   '''
-
+  
 def p_global_var(p):
   '''
   global_var : VARIABLE
@@ -63,18 +76,12 @@ def p_global_var(p):
 def p_statement_COLON_GLOBAL(p):
   '''
   statement_COLON_GLOBAL : COLON global_var statement_COLON_GLOBAL
-    | 
+    | COLON global_var
   '''
   
 def p_expr_paren(p):
   '''
   expr_paren : LPAREN expr RPAREN
-  '''
-
-def p_expr_return_OPT(p):
-  '''
-  expr_return_OPT :  expr 
-    |
   '''
 
 def p_statement_if(p):
@@ -85,30 +92,23 @@ def p_statement_if(p):
 def p_statement_elseif(p):
   '''
   statement_elseif : ELSEIF expr_paren statement_BLOCK_OPT
-    |
   '''
 
 def p_statement_else(p):
   '''
   statement_else : ELSE statement_BLOCK_OPT
-    | 
   '''
 
 def p_statement_foreach(p):
   '''
-  statement_foreach : FOREACH LPAREN foreach_first_param AS ampersand_variable statement_attr_variable_OPT RPAREN statement_BLOCK_OPT
-  '''
-
-def p_foreach_first_param(p):
-  '''
-  foreach_first_param : variable
-    | expr
+  statement_foreach : FOREACH LPAREN expr AS ampersand_variable RPAREN statement_BLOCK_OPT
+  | FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_BLOCK_OPT
   '''
 
 def p_for_expr_OPT(p):
   '''
   for_expr_OPT : expr for_expr_COLON_EXPR
-   | 
+   | expr
   '''
   
 def p_function_call(p):
@@ -215,6 +215,7 @@ def p_expr(p):
     | EXIT expr_EXIT
     | DIE expr_EXIT
     | ARRAY_TYPE LPAREN array_pair_list RPAREN
+    | ARRAY_TYPE LPAREN RPAREN
     | function_call
     | variable
     | NUMBER_REAL
@@ -264,7 +265,8 @@ def p_expr_EXIT(p):
 
 def p_exit_expr(p):
   '''
-  exit_expr : LPAREN expr_OPT RPAREN   
+  exit_expr : LPAREN expr RPAREN
+    | LPAREN RPAREN
   '''
 
 def p_variable(p):
@@ -350,20 +352,20 @@ def p_common_scalar(p):
     | NUMBER_INTEGER
     | CONSTANT_ENCAPSED_STRING
   '''
-
   
 def p_array_pair_list(p):
   '''
   array_pair_list : array_pair array_pair_list_ARR_PAIR 
-    | 
+    | array_pair
   '''
 
 def p_array_pair(p):
   ''' 
-  array_pair : expr array_pair_ATTR_EXPR_OPT
+  array_pair : expr
+    | expr array_pair_ATTR_EXPR_OPT
     | array_pair_EXPR_ATTR_OPT AMPERSAND variable
+    | AMPERSAND variable
   '''
-  
 
 # Expressões regulares transformadas em regras.
 # ======================================================================
@@ -376,35 +378,30 @@ def p_main_INNER(p):
   if len(p) == 3:
     p[0] = sa.MainInner_InnerStatement(p[1], p[2])
 
-def p_statement_MUL(p):
-  '''
-  statement_MUL : statement statement_MUL
-    | 
-  '''
-
 def p_inner_statement_MUL(p):
   '''
   inner_statement_MUL : inner_statement inner_statement_MUL
     | inner_statement
   '''
   
+def p_statement_MUL(p):
+  '''
+  statement_MUL : statement statement_MUL
+    | statement
+  '''
+  
 def p_for_expr_COLON_EXPR(p):
   '''
   for_expr_COLON_EXPR : COLON expr for_expr_COLON_EXPR
-    | 
+    | COLON expr
   '''
   
 def p_statement_BLOCK_OPT(p):
   '''
   statement_BLOCK_OPT : statement 
     | LKEY statement_MUL RKEY 
+    | LKEY RKEY
   ''' 
-  
-def p_statement_attr_variable_OPT(p):
-  '''
-  statement_attr_variable_OPT : ATTR_ASSOC ampersand_variable 
-    |
-  '''
 
 def p_function_call_list_COLON_FUNCTION(p):
   '''
@@ -421,12 +418,6 @@ def p_expr_without_variable_COLON_ASSIGNMENT(p):
 def p_assignment_list_element_COLON_ASSIGNMENT(p):
   '''
   assignment_list_element_COLON_ASSIGNMENT : COLON assignment_list_element assignment_list_element_COLON_ASSIGNMENT
-    | 
-  '''
-  
-def p_expr_OPT(p):
-  '''
-  expr_OPT : expr 
     | 
   '''
   
@@ -463,7 +454,7 @@ def p_selector_EXPR(p):
 def p_array_pair_list_ARR_PAIR(p):
   '''
   array_pair_list_ARR_PAIR : COLON array_pair array_pair_list_ARR_PAIR
-    | 
+    | COLON array_pair
   '''
 
 def p_array_pair_ATTR_EXPR_OPT(p):
@@ -475,7 +466,6 @@ def p_array_pair_ATTR_EXPR_OPT(p):
 def p_array_pair_EXPR_ATTR_OPT(p):
   '''
   array_pair_EXPR_ATTR_OPT : expr ATTR_ASSOC
-    |
   '''
 
 def p_error(p):
@@ -486,10 +476,11 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  
+  for ($i = 0, $i < count($people);;) {
+    $valor = 'puta merda';
+}
 ?>'''
 lex.input(arquivo)
-
 parser = yacc.yacc()
 result = parser.parse(debug=True)
 #v = vis.Visitor()
