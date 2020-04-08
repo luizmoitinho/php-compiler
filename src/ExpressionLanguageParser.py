@@ -29,34 +29,68 @@ def p_inner_statement(p):
 def p_statement(p):
   '''
   statement : expr SEMICOLON
-    | statement_if statement_elseif
-    | statement_if statement_elseif statement_else 
-    | statement_if
-    | statement_if statement_else 
-    | WHILE expr_paren statement_BLOCK_OPT
-    | DO statement_BLOCK_OPT WHILE expr_paren SEMICOLON
-    | FOR LPAREN statement_for RPAREN statement_BLOCK_OPT
-    | BREAK expr SEMICOLON
-    | BREAK SEMICOLON
-    | CONTINUE expr SEMICOLON
-    | CONTINUE SEMICOLON
-    | RETURN expr SEMICOLON 
-    | RETURN SEMICOLON
+    | if_statement
+    | while_statement
+    | do_statement
+    | for_statement
+    | break_statement
+    | continue_statement
+    | return_statement
     | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
     | GLOBAL global_var SEMICOLON
   '''
   if isinstance(p[1], sa.Expr):
     p[0] = sa.Statement_Expr(p[1], p[2])
-
-def p_ampersand_variable(p):
+    
+def p_if_statement(p):
   '''
-  ampersand_variable : AMPERSAND VARIABLE
-    | VARIABLE
+  if_statement : statement_if if_statement_complement
+    | statement_if
   '''
   
-def p_statement_for(p):
+def p_if_statement_complement(p):
   '''
-  statement_for : SEMICOLON SEMICOLON 
+  if_statement_complement : statement_elseif
+    | statement_elseif statement_else
+    | statement_else
+  '''
+    
+def p_while_statement(p):
+  '''
+  while_statement : WHILE expr_parentheses statement_BLOCK_OPT
+  '''
+
+def p_do_statement(p):
+  '''
+  do_statement : DO statement_BLOCK_OPT WHILE expr_parentheses SEMICOLON
+  '''
+
+def p_break_statement(p):
+  '''
+  break_statement : BREAK expr SEMICOLON
+    | BREAK SEMICOLON
+  '''
+
+def p_continue_statement(p):
+  '''
+  continue_statement : CONTINUE expr SEMICOLON
+    | CONTINUE SEMICOLON
+  '''
+  
+def p_return_statement(p):
+  '''
+  return_statement : RETURN expr SEMICOLON 
+    | RETURN SEMICOLON
+  '''
+  
+def p_for_statement(p):
+  '''
+  for_statement : FOR LPAREN for_parameters RPAREN statement_BLOCK_OPT
+  '''
+  
+def p_for_parameters(p):
+  '''
+  for_parameters : SEMICOLON SEMICOLON 
   | for_expr_OPT SEMICOLON SEMICOLON
   | for_expr_OPT SEMICOLON for_expr_OPT SEMICOLON 
   | for_expr_OPT SEMICOLON SEMICOLON for_expr_OPT
@@ -79,19 +113,25 @@ def p_statement_COLON_GLOBAL(p):
     | COLON global_var
   '''
   
-def p_expr_paren(p):
+def p_ampersand_variable(p):
   '''
-  expr_paren : LPAREN expr RPAREN
+  ampersand_variable : AMPERSAND VARIABLE
+    | VARIABLE
+  '''
+  
+def p_expr_parentheses(p):
+  '''
+  expr_parentheses : LPAREN expr RPAREN
   '''
 
 def p_statement_if(p):
   '''
-  statement_if : IF expr_paren statement_BLOCK_OPT
+  statement_if : IF expr_parentheses statement_BLOCK_OPT
   '''
 
 def p_statement_elseif(p):
   '''
-  statement_elseif : ELSEIF expr_paren statement_BLOCK_OPT
+  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT
   '''
 
 def p_statement_else(p):
@@ -156,6 +196,7 @@ def p_type_cast_operator(p):
       | UNSET
   '''
 
+# Removida no momento
 def p_arithmetic_expr(p):
   '''
   arithmetic_expr : arithmetic_expr PLUS arithmetic_expr               
@@ -166,6 +207,7 @@ def p_arithmetic_expr(p):
     | NUMBER_INTEGER 
     | NUMBER_REAL                                    
   '''
+  
 def p_assign_operator(p):
   '''
   assign_operator : ADD_ASSIGN
@@ -421,12 +463,6 @@ def p_assignment_list_element_COLON_ASSIGNMENT(p):
     | 
   '''
   
-def p_expr_without_variable_ENCAPS(p):
-  '''
-  expr_without_variable_ENCAPS : encaps expr_without_variable_ENCAPS
-    |
-  '''
-  
 def p_parameter_list_COLON_PARAMETER(p):
   '''
   parameter_list_COLON_PARAMETER : COLON parameter parameter_list_COLON_PARAMETER
@@ -471,12 +507,17 @@ def p_array_pair_EXPR_ATTR_OPT(p):
 def p_error(p):
     print(p)
     print("Syntax error in input!")
-      
+ 
 
 lex.lex()
 arquivo = '''
 <?php
-  add() = $valor;
+  while ($valor < 150){
+    $valor ++;
+  }
+  while ($valor < 150){
+    $valor ++;
+  }
 ?>'''
 lex.input(arquivo)
 parser = yacc.yacc()
