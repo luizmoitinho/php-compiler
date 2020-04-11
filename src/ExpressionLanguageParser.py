@@ -167,6 +167,7 @@ def p_function_call_parameter_list(p):
 def p_function_call_parameter(p):
   '''
   function_call_parameter : variable
+    | expr
     | AMPERSAND VARIABLE
   '''
 
@@ -494,10 +495,16 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  while ($valor[0][1] < 150){
-    $valor = add();
+function fibonacci($valor){
+  if($valor == 1){
+    return 1;
   }
-?>'''
+  else {
+    return fibonacci($valor - 1) + fibonacci($valor - 2);
+  }
+}
+?>
+'''
 
 lex.input(arquivo)
 parser = yacc.yacc()
