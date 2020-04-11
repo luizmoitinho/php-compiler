@@ -408,8 +408,8 @@ def p_array_pair_list(p):
 def p_array_pair(p):
   ''' 
   array_pair : expr
-    | expr array_pair_ATTR_EXPR_OPT
-    | array_pair_EXPR_ATTR_OPT AMPERSAND variable
+    | expr ATTR_ASSOC expr
+    | expr ATTR_ASSOC AMPERSAND variable
     | AMPERSAND variable
   '''
 
@@ -483,17 +483,6 @@ def p_array_pair_list_ARR_PAIR(p):
   '''
   array_pair_list_ARR_PAIR : COLON array_pair array_pair_list_ARR_PAIR
     | COLON array_pair
-  '''
-
-def p_array_pair_ATTR_EXPR_OPT(p):
-  '''
-  array_pair_ATTR_EXPR_OPT : ATTR_ASSOC expr 
-    |
-  '''
-
-def p_array_pair_EXPR_ATTR_OPT(p):
-  '''
-  array_pair_EXPR_ATTR_OPT : expr ATTR_ASSOC
   '''
 
 def p_error(p):
