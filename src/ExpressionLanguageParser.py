@@ -269,6 +269,7 @@ def p_expr(p):
   if p[1] == 'true':
     p[0] = sa.Expr_True(p[1])
   
+#Não identificado para que serve
 def p_encaps(p):
   '''
   encaps : encaps_var
@@ -326,6 +327,7 @@ def p_base_variable(p):
 def p_reference_variable(p):
   '''
   reference_variable : compound_variable reference_variable_SELECTOR
+    | compound_variable
   '''
   
 def p_compound_variable(p):
@@ -334,9 +336,11 @@ def p_compound_variable(p):
     | DOLAR LKEY expr RKEY 
   '''
 
+#Utilizado para indexação
 def p_selector(p):
   '''
-  selector : LBRACKET selector_EXPR RBRACKET 
+  selector : LBRACKET expr RBRACKET 
+    | LBRACKET RBRACKET
   '''
 
 def p_function_declaration_statement(p):
@@ -451,12 +455,6 @@ def p_function_call_list_COLON_FUNCTION(p):
     | 
   '''
   
-def p_expr_without_variable_COLON_ASSIGNMENT(p):
-  '''
-  expr_without_variable_COLON_ASSIGNMENT : COLON assignment_list_element expr_without_variable_COLON_ASSIGNMENT
-    | 
-  '''
-  
 def p_assignment_list_element_COLON_ASSIGNMENT(p):
   '''
   assignment_list_element_COLON_ASSIGNMENT : COLON assignment_list_element assignment_list_element_COLON_ASSIGNMENT
@@ -472,19 +470,13 @@ def p_parameter_list_COLON_PARAMETER(p):
 def p_reference_variable_SELECTOR(p):
   '''
   reference_variable_SELECTOR : selector reference_variable_SELECTOR
-    | 
+    | selector
   '''
   
 def p_simple_indirect_reference_DOLAR(p):
   '''
   simple_indirect_reference_DOLAR : DOLAR simple_indirect_reference_DOLAR
-    | 
-  '''
-  
-def p_selector_EXPR(p):
-  '''
-  selector_EXPR : expr
-    |
+    | DOLAR
   '''
 
 def p_array_pair_list_ARR_PAIR(p):
@@ -512,13 +504,11 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  while ($valor < 150){
-    $valor ++;
-  }
-  while ($valor < 150){
-    $valor ++;
+  while ($valor[0][1] < 150){
+    $valor;
   }
 ?>'''
+
 lex.input(arquivo)
 parser = yacc.yacc()
 result = parser.parse(debug=True)
