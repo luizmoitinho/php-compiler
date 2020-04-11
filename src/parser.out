@@ -73,9 +73,9 @@ Rule 49    statement_foreach -> FOREACH LPAREN expr AS ampersand_variable ATTR_A
 Rule 50    for_expr_OPT -> expr for_expr_COLON_EXPR
 Rule 51    for_expr_OPT -> expr
 Rule 52    function_call -> ID LPAREN function_call_parameter_list RPAREN
-Rule 53    function_call -> base_variable
+Rule 53    function_call -> ID LPAREN RPAREN
 Rule 54    function_call_parameter_list -> function_call_parameter function_call_list_COLON_FUNCTION
-Rule 55    function_call_parameter_list -> <empty>
+Rule 55    function_call_parameter_list -> function_call_parameter
 Rule 56    function_call_parameter -> variable
 Rule 57    function_call_parameter -> AMPERSAND VARIABLE
 Rule 58    assignment_list_element -> variable
@@ -218,7 +218,7 @@ Rule 194   statement_BLOCK_OPT -> statement
 Rule 195   statement_BLOCK_OPT -> LKEY statement_MUL RKEY
 Rule 196   statement_BLOCK_OPT -> LKEY RKEY
 Rule 197   function_call_list_COLON_FUNCTION -> COLON function_call_parameter function_call_list_COLON_FUNCTION
-Rule 198   function_call_list_COLON_FUNCTION -> <empty>
+Rule 198   function_call_list_COLON_FUNCTION -> COLON function_call_parameter
 Rule 199   assignment_list_element_COLON_ASSIGNMENT -> COLON assignment_list_element assignment_list_element_COLON_ASSIGNMENT
 Rule 200   assignment_list_element_COLON_ASSIGNMENT -> <empty>
 Rule 201   parameter_list_COLON_PARAMETER -> COLON parameter parameter_list_COLON_PARAMETER
@@ -248,7 +248,7 @@ BOOL_TYPE            : 70 171
 BREAK                : 22 23
 CASE                 : 
 CLONE                : 
-COLON                : 40 41 192 193 197 199 201 202 207 208
+COLON                : 40 41 192 193 197 198 199 201 202 207 208
 COMMENT_MULTI        : 
 COMMENT_SINGLE       : 
 CONCATENATE          : 
@@ -279,7 +279,7 @@ FUNCTION             : 149 150 151 152 153 154 155 156
 GLOBAL               : 13 14
 GREAT_EQUAL          : 94
 GREAT_THAN           : 91
-ID                   : 52 130 149 150 151 152 153 154 155 156
+ID                   : 52 53 130 149 150 151 152 153 154 155 156
 IDENTATION           : 
 IF                   : 45
 INCREMENT            : 98 99
@@ -291,7 +291,7 @@ LESS_EQUAL           : 93
 LESS_THAN            : 92
 LIST                 : 59
 LKEY                 : 39 126 130 131 146 149 150 151 152 153 154 155 156 195 196
-LPAREN               : 28 44 48 49 52 59 76 103 110 113 114 124 138 139 149 150 151 152 153 154 155 156
+LPAREN               : 28 44 48 49 52 53 59 76 103 110 113 114 124 138 139 149 150 151 152 153 154 155 156
 MINUS                : 62 73 89 176
 MOD_ASSIGN           : 81
 NOT_EQUAL            : 95
@@ -306,7 +306,7 @@ REAL_TYPE            : 66 172
 RETURN               : 26 27
 RIGHT_LOGICAL        : 97
 RKEY                 : 39 127 130 131 146 149 150 151 152 153 154 155 156 195 196
-RPAREN               : 28 44 48 49 52 59 76 103 110 113 114 125 138 139 149 150 151 152 153 154 155 156
+RPAREN               : 28 44 48 49 52 53 59 76 103 110 113 114 125 138 139 149 150 151 152 153 154 155 156
 SEMICOLON            : 5 13 14 21 22 23 24 25 26 27 29 29 30 30 31 31 32 32 33 33 34 34 35 35 36 36
 STRING               : 134
 STRING_TYPE          : 67 168
@@ -330,7 +330,7 @@ array_pair_list_ARR_PAIR : 180 207
 assign_operator      : 107 108
 assignment_list_element : 59 199
 assignment_list_element_COLON_ASSIGNMENT : 59 199
-base_variable        : 53 140
+base_variable        : 140
 break_statement      : 10
 common_scalar        : 174
 comparission_operator : 106
@@ -351,7 +351,7 @@ for_parameters       : 28
 for_statement        : 9
 function_call        : 116
 function_call_list_COLON_FUNCTION : 54 197
-function_call_parameter : 54 197
+function_call_parameter : 54 55 197 198
 function_call_parameter_list : 52
 function_declaration_statement : 3
 global_var           : 13 14 40 41
@@ -468,7 +468,7 @@ state 2
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -608,7 +608,7 @@ state 5
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -754,6 +754,7 @@ state 8
 state 9
 
     (52) function_call -> ID . LPAREN function_call_parameter_list RPAREN
+    (53) function_call -> ID . LPAREN RPAREN
 
     LPAREN          shift and go to state 54
 
@@ -800,7 +801,7 @@ state 10
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -1167,7 +1168,7 @@ state 20
     VARIABLE        shift and go to state 49
 
     variable                       shift and go to state 86
-    base_variable                  shift and go to state 87
+    base_variable                  shift and go to state 40
     reference_variable             shift and go to state 45
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
@@ -1187,9 +1188,9 @@ state 21
     (83) assign_operator -> . DIVIDE_ASSIGN
     (84) assign_operator -> . ASSIGN
 
-    INCREMENT       shift and go to state 88
-    DECREMENT       shift and go to state 89
-    LBRACKET        shift and go to state 90
+    INCREMENT       shift and go to state 87
+    DECREMENT       shift and go to state 88
+    LBRACKET        shift and go to state 89
     SEMICOLON       reduce using rule 115 (expr -> variable .)
     INTE_DOT        reduce using rule 115 (expr -> variable .)
     EQUALS          reduce using rule 115 (expr -> variable .)
@@ -1211,14 +1212,14 @@ state 21
     ATTR_ASSOC      reduce using rule 115 (expr -> variable .)
     COLON           reduce using rule 115 (expr -> variable .)
     RKEY            reduce using rule 115 (expr -> variable .)
-    ADD_ASSIGN      shift and go to state 92
-    SUB_ASSIGN      shift and go to state 93
-    MOD_ASSIGN      shift and go to state 94
-    PLUS_ASSIGN     shift and go to state 95
-    DIVIDE_ASSIGN   shift and go to state 96
-    ASSIGN          shift and go to state 97
+    ADD_ASSIGN      shift and go to state 91
+    SUB_ASSIGN      shift and go to state 92
+    MOD_ASSIGN      shift and go to state 93
+    PLUS_ASSIGN     shift and go to state 94
+    DIVIDE_ASSIGN   shift and go to state 95
+    ASSIGN          shift and go to state 96
 
-    assign_operator                shift and go to state 91
+    assign_operator                shift and go to state 90
 
 state 22
 
@@ -1236,8 +1237,8 @@ state 22
     DOLAR           shift and go to state 48
     VARIABLE        shift and go to state 49
 
-    variable                       shift and go to state 98
-    base_variable                  shift and go to state 87
+    variable                       shift and go to state 97
+    base_variable                  shift and go to state 40
     reference_variable             shift and go to state 45
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
@@ -1274,7 +1275,7 @@ state 23
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -1303,7 +1304,7 @@ state 23
     VARIABLE        shift and go to state 49
 
     unary_operator                 shift and go to state 23
-    expr                           shift and go to state 99
+    expr                           shift and go to state 98
     variable                       shift and go to state 21
     function_call                  shift and go to state 27
     base_variable                  shift and go to state 40
@@ -1340,10 +1341,10 @@ state 24
     ATTR_ASSOC      reduce using rule 137 (expr_EXIT -> .)
     COLON           reduce using rule 137 (expr_EXIT -> .)
     RKEY            reduce using rule 137 (expr_EXIT -> .)
-    LPAREN          shift and go to state 102
+    LPAREN          shift and go to state 101
 
-    expr_EXIT                      shift and go to state 100
-    exit_expr                      shift and go to state 101
+    expr_EXIT                      shift and go to state 99
+    exit_expr                      shift and go to state 100
 
 state 25
 
@@ -1374,17 +1375,17 @@ state 25
     ATTR_ASSOC      reduce using rule 137 (expr_EXIT -> .)
     COLON           reduce using rule 137 (expr_EXIT -> .)
     RKEY            reduce using rule 137 (expr_EXIT -> .)
-    LPAREN          shift and go to state 102
+    LPAREN          shift and go to state 101
 
-    expr_EXIT                      shift and go to state 103
-    exit_expr                      shift and go to state 101
+    expr_EXIT                      shift and go to state 102
+    exit_expr                      shift and go to state 100
 
 state 26
 
     (113) expr -> ARRAY_TYPE . LPAREN array_pair_list RPAREN
     (114) expr -> ARRAY_TYPE . LPAREN RPAREN
 
-    LPAREN          shift and go to state 104
+    LPAREN          shift and go to state 103
 
 
 state 27
@@ -1589,24 +1590,24 @@ state 33
     VARIABLE        reduce using rule 16 (if_statement -> statement_if .)
     END_PROGRAM     reduce using rule 16 (if_statement -> statement_if .)
     RKEY            reduce using rule 16 (if_statement -> statement_if .)
-    ELSEIF          shift and go to state 108
-    ELSE            shift and go to state 109
+    ELSEIF          shift and go to state 107
+    ELSE            shift and go to state 108
 
   ! ELSEIF          [ reduce using rule 16 (if_statement -> statement_if .) ]
   ! ELSE            [ reduce using rule 16 (if_statement -> statement_if .) ]
 
-    if_statement_complement        shift and go to state 105
-    statement_elseif               shift and go to state 106
-    statement_else                 shift and go to state 107
+    if_statement_complement        shift and go to state 104
+    statement_elseif               shift and go to state 105
+    statement_else                 shift and go to state 106
 
 state 34
 
     (20) while_statement -> WHILE . expr_parentheses statement_BLOCK_OPT
     (44) expr_parentheses -> . LPAREN expr RPAREN
 
-    LPAREN          shift and go to state 111
+    LPAREN          shift and go to state 110
 
-    expr_parentheses               shift and go to state 110
+    expr_parentheses               shift and go to state 109
 
 state 35
 
@@ -1664,7 +1665,7 @@ state 35
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -1675,7 +1676,7 @@ state 35
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    LKEY            shift and go to state 114
+    LKEY            shift and go to state 113
     GLOBAL          shift and go to state 19
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
@@ -1702,8 +1703,8 @@ state 35
     DOLAR           shift and go to state 48
     VARIABLE        shift and go to state 49
 
-    statement_BLOCK_OPT            shift and go to state 112
-    statement                      shift and go to state 113
+    statement_BLOCK_OPT            shift and go to state 111
+    statement                      shift and go to state 112
     expr                           shift and go to state 11
     if_statement                   shift and go to state 12
     while_statement                shift and go to state 13
@@ -1725,7 +1726,7 @@ state 36
 
     (28) for_statement -> FOR . LPAREN for_parameters RPAREN statement_BLOCK_OPT
 
-    LPAREN          shift and go to state 115
+    LPAREN          shift and go to state 114
 
 
 state 37
@@ -1761,7 +1762,7 @@ state 37
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -1771,7 +1772,7 @@ state 37
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    SEMICOLON       shift and go to state 117
+    SEMICOLON       shift and go to state 116
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
     LPAREN          shift and go to state 10
@@ -1790,7 +1791,7 @@ state 37
     DOLAR           shift and go to state 48
     VARIABLE        shift and go to state 49
 
-    expr                           shift and go to state 116
+    expr                           shift and go to state 115
     variable                       shift and go to state 21
     unary_operator                 shift and go to state 23
     function_call                  shift and go to state 27
@@ -1832,7 +1833,7 @@ state 38
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -1842,7 +1843,7 @@ state 38
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    SEMICOLON       shift and go to state 119
+    SEMICOLON       shift and go to state 118
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
     LPAREN          shift and go to state 10
@@ -1861,7 +1862,7 @@ state 38
     DOLAR           shift and go to state 48
     VARIABLE        shift and go to state 49
 
-    expr                           shift and go to state 118
+    expr                           shift and go to state 117
     variable                       shift and go to state 21
     unary_operator                 shift and go to state 23
     function_call                  shift and go to state 27
@@ -1903,7 +1904,7 @@ state 39
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -1913,7 +1914,7 @@ state 39
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    SEMICOLON       shift and go to state 121
+    SEMICOLON       shift and go to state 120
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
     LPAREN          shift and go to state 10
@@ -1932,7 +1933,7 @@ state 39
     DOLAR           shift and go to state 48
     VARIABLE        shift and go to state 49
 
-    expr                           shift and go to state 120
+    expr                           shift and go to state 119
     variable                       shift and go to state 21
     unary_operator                 shift and go to state 23
     function_call                  shift and go to state 27
@@ -1944,29 +1945,7 @@ state 39
 state 40
 
     (140) variable -> base_variable .
-    (53) function_call -> base_variable .
 
-  ! reduce/reduce conflict for SEMICOLON resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for INTE_DOT resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for EQUALS resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for GREAT_THAN resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for LESS_THAN resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for LESS_EQUAL resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for GREAT_EQUAL resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for NOT_EQUAL resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for LEFT_LOGICAL resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for RIGHT_LOGICAL resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for PLUS resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for DIVIDE resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for PERCENT resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for TIMES resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for MINUS resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for RPAREN resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for DDOT resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for RBRACKET resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for ATTR_ASSOC resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for COLON resolved using rule 53 (function_call -> base_variable .)
-  ! reduce/reduce conflict for RKEY resolved using rule 53 (function_call -> base_variable .)
     INCREMENT       reduce using rule 140 (variable -> base_variable .)
     DECREMENT       reduce using rule 140 (variable -> base_variable .)
     LBRACKET        reduce using rule 140 (variable -> base_variable .)
@@ -1976,49 +1955,27 @@ state 40
     PLUS_ASSIGN     reduce using rule 140 (variable -> base_variable .)
     DIVIDE_ASSIGN   reduce using rule 140 (variable -> base_variable .)
     ASSIGN          reduce using rule 140 (variable -> base_variable .)
-    SEMICOLON       reduce using rule 53 (function_call -> base_variable .)
-    INTE_DOT        reduce using rule 53 (function_call -> base_variable .)
-    EQUALS          reduce using rule 53 (function_call -> base_variable .)
-    GREAT_THAN      reduce using rule 53 (function_call -> base_variable .)
-    LESS_THAN       reduce using rule 53 (function_call -> base_variable .)
-    LESS_EQUAL      reduce using rule 53 (function_call -> base_variable .)
-    GREAT_EQUAL     reduce using rule 53 (function_call -> base_variable .)
-    NOT_EQUAL       reduce using rule 53 (function_call -> base_variable .)
-    LEFT_LOGICAL    reduce using rule 53 (function_call -> base_variable .)
-    RIGHT_LOGICAL   reduce using rule 53 (function_call -> base_variable .)
-    PLUS            reduce using rule 53 (function_call -> base_variable .)
-    DIVIDE          reduce using rule 53 (function_call -> base_variable .)
-    PERCENT         reduce using rule 53 (function_call -> base_variable .)
-    TIMES           reduce using rule 53 (function_call -> base_variable .)
-    MINUS           reduce using rule 53 (function_call -> base_variable .)
-    RPAREN          reduce using rule 53 (function_call -> base_variable .)
-    DDOT            reduce using rule 53 (function_call -> base_variable .)
-    RBRACKET        reduce using rule 53 (function_call -> base_variable .)
-    ATTR_ASSOC      reduce using rule 53 (function_call -> base_variable .)
-    COLON           reduce using rule 53 (function_call -> base_variable .)
-    RKEY            reduce using rule 53 (function_call -> base_variable .)
-
-  ! SEMICOLON       [ reduce using rule 140 (variable -> base_variable .) ]
-  ! INTE_DOT        [ reduce using rule 140 (variable -> base_variable .) ]
-  ! EQUALS          [ reduce using rule 140 (variable -> base_variable .) ]
-  ! GREAT_THAN      [ reduce using rule 140 (variable -> base_variable .) ]
-  ! LESS_THAN       [ reduce using rule 140 (variable -> base_variable .) ]
-  ! LESS_EQUAL      [ reduce using rule 140 (variable -> base_variable .) ]
-  ! GREAT_EQUAL     [ reduce using rule 140 (variable -> base_variable .) ]
-  ! NOT_EQUAL       [ reduce using rule 140 (variable -> base_variable .) ]
-  ! LEFT_LOGICAL    [ reduce using rule 140 (variable -> base_variable .) ]
-  ! RIGHT_LOGICAL   [ reduce using rule 140 (variable -> base_variable .) ]
-  ! PLUS            [ reduce using rule 140 (variable -> base_variable .) ]
-  ! DIVIDE          [ reduce using rule 140 (variable -> base_variable .) ]
-  ! PERCENT         [ reduce using rule 140 (variable -> base_variable .) ]
-  ! TIMES           [ reduce using rule 140 (variable -> base_variable .) ]
-  ! MINUS           [ reduce using rule 140 (variable -> base_variable .) ]
-  ! RPAREN          [ reduce using rule 140 (variable -> base_variable .) ]
-  ! DDOT            [ reduce using rule 140 (variable -> base_variable .) ]
-  ! RBRACKET        [ reduce using rule 140 (variable -> base_variable .) ]
-  ! ATTR_ASSOC      [ reduce using rule 140 (variable -> base_variable .) ]
-  ! COLON           [ reduce using rule 140 (variable -> base_variable .) ]
-  ! RKEY            [ reduce using rule 140 (variable -> base_variable .) ]
+    SEMICOLON       reduce using rule 140 (variable -> base_variable .)
+    INTE_DOT        reduce using rule 140 (variable -> base_variable .)
+    EQUALS          reduce using rule 140 (variable -> base_variable .)
+    GREAT_THAN      reduce using rule 140 (variable -> base_variable .)
+    LESS_THAN       reduce using rule 140 (variable -> base_variable .)
+    LESS_EQUAL      reduce using rule 140 (variable -> base_variable .)
+    GREAT_EQUAL     reduce using rule 140 (variable -> base_variable .)
+    NOT_EQUAL       reduce using rule 140 (variable -> base_variable .)
+    LEFT_LOGICAL    reduce using rule 140 (variable -> base_variable .)
+    RIGHT_LOGICAL   reduce using rule 140 (variable -> base_variable .)
+    PLUS            reduce using rule 140 (variable -> base_variable .)
+    DIVIDE          reduce using rule 140 (variable -> base_variable .)
+    PERCENT         reduce using rule 140 (variable -> base_variable .)
+    TIMES           reduce using rule 140 (variable -> base_variable .)
+    MINUS           reduce using rule 140 (variable -> base_variable .)
+    RPAREN          reduce using rule 140 (variable -> base_variable .)
+    DDOT            reduce using rule 140 (variable -> base_variable .)
+    RBRACKET        reduce using rule 140 (variable -> base_variable .)
+    ATTR_ASSOC      reduce using rule 140 (variable -> base_variable .)
+    COLON           reduce using rule 140 (variable -> base_variable .)
+    RKEY            reduce using rule 140 (variable -> base_variable .)
 
 
 state 41
@@ -2095,9 +2052,9 @@ state 44
     (45) statement_if -> IF . expr_parentheses statement_BLOCK_OPT
     (44) expr_parentheses -> . LPAREN expr RPAREN
 
-    LPAREN          shift and go to state 111
+    LPAREN          shift and go to state 110
 
-    expr_parentheses               shift and go to state 122
+    expr_parentheses               shift and go to state 121
 
 state 45
 
@@ -2144,9 +2101,9 @@ state 46
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
     VARIABLE        shift and go to state 49
-    DOLAR           shift and go to state 124
+    DOLAR           shift and go to state 123
 
-    reference_variable             shift and go to state 123
+    reference_variable             shift and go to state 122
     compound_variable              shift and go to state 47
 
 state 47
@@ -2188,12 +2145,12 @@ state 47
     ATTR_ASSOC      reduce using rule 144 (reference_variable -> compound_variable .)
     COLON           reduce using rule 144 (reference_variable -> compound_variable .)
     RKEY            reduce using rule 144 (reference_variable -> compound_variable .)
-    LBRACKET        shift and go to state 127
+    LBRACKET        shift and go to state 126
 
   ! LBRACKET        [ reduce using rule 144 (reference_variable -> compound_variable .) ]
 
-    reference_variable_SELECTOR    shift and go to state 125
-    selector                       shift and go to state 126
+    reference_variable_SELECTOR    shift and go to state 124
+    selector                       shift and go to state 125
 
 state 48
 
@@ -2205,12 +2162,12 @@ state 48
 
   ! shift/reduce conflict for DOLAR resolved as shift
     VARIABLE        reduce using rule 206 (simple_indirect_reference_DOLAR -> DOLAR .)
-    LKEY            shift and go to state 130
-    DOLAR           shift and go to state 128
+    LKEY            shift and go to state 129
+    DOLAR           shift and go to state 127
 
   ! DOLAR           [ reduce using rule 206 (simple_indirect_reference_DOLAR -> DOLAR .) ]
 
-    simple_indirect_reference_DOLAR shift and go to state 129
+    simple_indirect_reference_DOLAR shift and go to state 128
 
 state 49
 
@@ -2269,7 +2226,7 @@ state 52
     (155) function_declaration_statement -> FUNCTION ID . LPAREN RPAREN LKEY inner_statement_MUL RKEY
     (156) function_declaration_statement -> FUNCTION ID . LPAREN parameter_list RPAREN LKEY inner_statement_MUL RKEY
 
-    LPAREN          shift and go to state 131
+    LPAREN          shift and go to state 130
 
 
 state 53
@@ -2279,14 +2236,15 @@ state 53
     (152) function_declaration_statement -> FUNCTION AMPERSAND . ID LPAREN RPAREN LKEY inner_statement_MUL RKEY
     (153) function_declaration_statement -> FUNCTION AMPERSAND . ID LPAREN parameter_list RPAREN LKEY inner_statement_MUL RKEY
 
-    ID              shift and go to state 132
+    ID              shift and go to state 131
 
 
 state 54
 
     (52) function_call -> ID LPAREN . function_call_parameter_list RPAREN
+    (53) function_call -> ID LPAREN . RPAREN
     (54) function_call_parameter_list -> . function_call_parameter function_call_list_COLON_FUNCTION
-    (55) function_call_parameter_list -> .
+    (55) function_call_parameter_list -> . function_call_parameter
     (56) function_call_parameter -> . variable
     (57) function_call_parameter -> . AMPERSAND VARIABLE
     (140) variable -> . base_variable
@@ -2299,15 +2257,15 @@ state 54
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    RPAREN          reduce using rule 55 (function_call_parameter_list -> .)
+    RPAREN          shift and go to state 133
     AMPERSAND       shift and go to state 136
     DOLAR           shift and go to state 48
     VARIABLE        shift and go to state 49
 
-    function_call_parameter_list   shift and go to state 133
+    function_call_parameter_list   shift and go to state 132
     function_call_parameter        shift and go to state 134
     variable                       shift and go to state 135
-    base_variable                  shift and go to state 87
+    base_variable                  shift and go to state 40
     reference_variable             shift and go to state 45
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
@@ -2364,7 +2322,7 @@ state 57
     (114) expr -> ARRAY_TYPE . LPAREN RPAREN
     (68) type_cast_operator -> ARRAY_TYPE .
 
-    LPAREN          shift and go to state 104
+    LPAREN          shift and go to state 103
     RPAREN          reduce using rule 68 (type_cast_operator -> ARRAY_TYPE .)
 
 
@@ -2492,7 +2450,7 @@ state 67
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -2561,7 +2519,7 @@ state 68
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -2630,7 +2588,7 @@ state 69
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -3024,33 +2982,6 @@ state 86
 
 state 87
 
-    (140) variable -> base_variable .
-
-    SEMICOLON       reduce using rule 140 (variable -> base_variable .)
-    INTE_DOT        reduce using rule 140 (variable -> base_variable .)
-    EQUALS          reduce using rule 140 (variable -> base_variable .)
-    GREAT_THAN      reduce using rule 140 (variable -> base_variable .)
-    LESS_THAN       reduce using rule 140 (variable -> base_variable .)
-    LESS_EQUAL      reduce using rule 140 (variable -> base_variable .)
-    GREAT_EQUAL     reduce using rule 140 (variable -> base_variable .)
-    NOT_EQUAL       reduce using rule 140 (variable -> base_variable .)
-    LEFT_LOGICAL    reduce using rule 140 (variable -> base_variable .)
-    RIGHT_LOGICAL   reduce using rule 140 (variable -> base_variable .)
-    PLUS            reduce using rule 140 (variable -> base_variable .)
-    DIVIDE          reduce using rule 140 (variable -> base_variable .)
-    PERCENT         reduce using rule 140 (variable -> base_variable .)
-    TIMES           reduce using rule 140 (variable -> base_variable .)
-    MINUS           reduce using rule 140 (variable -> base_variable .)
-    RPAREN          reduce using rule 140 (variable -> base_variable .)
-    DDOT            reduce using rule 140 (variable -> base_variable .)
-    RBRACKET        reduce using rule 140 (variable -> base_variable .)
-    ATTR_ASSOC      reduce using rule 140 (variable -> base_variable .)
-    COLON           reduce using rule 140 (variable -> base_variable .)
-    RKEY            reduce using rule 140 (variable -> base_variable .)
-
-
-state 88
-
     (99) expr -> variable INCREMENT .
 
     SEMICOLON       reduce using rule 99 (expr -> variable INCREMENT .)
@@ -3076,7 +3007,7 @@ state 88
     RKEY            reduce using rule 99 (expr -> variable INCREMENT .)
 
 
-state 89
+state 88
 
     (101) expr -> variable DECREMENT .
 
@@ -3103,7 +3034,7 @@ state 89
     RKEY            reduce using rule 101 (expr -> variable DECREMENT .)
 
 
-state 90
+state 89
 
     (102) expr -> variable LBRACKET . expr RBRACKET
     (98) expr -> . INCREMENT variable
@@ -3135,7 +3066,7 @@ state 90
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -3172,7 +3103,7 @@ state 90
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 91
+state 90
 
     (107) expr -> variable assign_operator . expr
     (108) expr -> variable assign_operator . AMPERSAND expr
@@ -3205,7 +3136,7 @@ state 91
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -3243,7 +3174,7 @@ state 91
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 92
+state 91
 
     (79) assign_operator -> ADD_ASSIGN .
 
@@ -3267,7 +3198,7 @@ state 92
     VARIABLE        reduce using rule 79 (assign_operator -> ADD_ASSIGN .)
 
 
-state 93
+state 92
 
     (80) assign_operator -> SUB_ASSIGN .
 
@@ -3291,7 +3222,7 @@ state 93
     VARIABLE        reduce using rule 80 (assign_operator -> SUB_ASSIGN .)
 
 
-state 94
+state 93
 
     (81) assign_operator -> MOD_ASSIGN .
 
@@ -3315,7 +3246,7 @@ state 94
     VARIABLE        reduce using rule 81 (assign_operator -> MOD_ASSIGN .)
 
 
-state 95
+state 94
 
     (82) assign_operator -> PLUS_ASSIGN .
 
@@ -3339,7 +3270,7 @@ state 95
     VARIABLE        reduce using rule 82 (assign_operator -> PLUS_ASSIGN .)
 
 
-state 96
+state 95
 
     (83) assign_operator -> DIVIDE_ASSIGN .
 
@@ -3363,7 +3294,7 @@ state 96
     VARIABLE        reduce using rule 83 (assign_operator -> DIVIDE_ASSIGN .)
 
 
-state 97
+state 96
 
     (84) assign_operator -> ASSIGN .
 
@@ -3387,7 +3318,7 @@ state 97
     VARIABLE        reduce using rule 84 (assign_operator -> ASSIGN .)
 
 
-state 98
+state 97
 
     (100) expr -> DECREMENT variable .
 
@@ -3414,7 +3345,7 @@ state 98
     RKEY            reduce using rule 100 (expr -> DECREMENT variable .)
 
 
-state 99
+state 98
 
     (104) expr -> unary_operator expr .
     (105) expr -> expr . INTE_DOT expr DDOT expr
@@ -3488,7 +3419,7 @@ state 99
     comparission_operator          shift and go to state 68
     arithmetic_operator            shift and go to state 69
 
-state 100
+state 99
 
     (111) expr -> EXIT expr_EXIT .
 
@@ -3515,7 +3446,7 @@ state 100
     RKEY            reduce using rule 111 (expr -> EXIT expr_EXIT .)
 
 
-state 101
+state 100
 
     (136) expr_EXIT -> exit_expr .
 
@@ -3542,7 +3473,7 @@ state 101
     RKEY            reduce using rule 136 (expr_EXIT -> exit_expr .)
 
 
-state 102
+state 101
 
     (138) exit_expr -> LPAREN . expr RPAREN
     (139) exit_expr -> LPAREN . RPAREN
@@ -3575,7 +3506,7 @@ state 102
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -3613,7 +3544,7 @@ state 102
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 103
+state 102
 
     (112) expr -> DIE expr_EXIT .
 
@@ -3640,7 +3571,7 @@ state 103
     RKEY            reduce using rule 112 (expr -> DIE expr_EXIT .)
 
 
-state 104
+state 103
 
     (113) expr -> ARRAY_TYPE LPAREN . array_pair_list RPAREN
     (114) expr -> ARRAY_TYPE LPAREN . RPAREN
@@ -3679,7 +3610,7 @@ state 104
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -3720,7 +3651,7 @@ state 104
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 105
+state 104
 
     (15) if_statement -> statement_if if_statement_complement .
 
@@ -3756,7 +3687,7 @@ state 105
     ELSE            reduce using rule 15 (if_statement -> statement_if if_statement_complement .)
 
 
-state 106
+state 105
 
     (17) if_statement_complement -> statement_elseif .
     (18) if_statement_complement -> statement_elseif . statement_else
@@ -3792,13 +3723,13 @@ state 106
     END_PROGRAM     reduce using rule 17 (if_statement_complement -> statement_elseif .)
     RKEY            reduce using rule 17 (if_statement_complement -> statement_elseif .)
     ELSEIF          reduce using rule 17 (if_statement_complement -> statement_elseif .)
-    ELSE            shift and go to state 109
+    ELSE            shift and go to state 108
 
   ! ELSE            [ reduce using rule 17 (if_statement_complement -> statement_elseif .) ]
 
     statement_else                 shift and go to state 157
 
-state 107
+state 106
 
     (19) if_statement_complement -> statement_else .
 
@@ -3834,16 +3765,16 @@ state 107
     ELSE            reduce using rule 19 (if_statement_complement -> statement_else .)
 
 
-state 108
+state 107
 
     (46) statement_elseif -> ELSEIF . expr_parentheses statement_BLOCK_OPT
     (44) expr_parentheses -> . LPAREN expr RPAREN
 
-    LPAREN          shift and go to state 111
+    LPAREN          shift and go to state 110
 
     expr_parentheses               shift and go to state 158
 
-state 109
+state 108
 
     (47) statement_else -> ELSE . statement_BLOCK_OPT
     (194) statement_BLOCK_OPT -> . statement
@@ -3899,7 +3830,7 @@ state 109
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -3910,7 +3841,7 @@ state 109
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    LKEY            shift and go to state 114
+    LKEY            shift and go to state 113
     GLOBAL          shift and go to state 19
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
@@ -3938,7 +3869,7 @@ state 109
     VARIABLE        shift and go to state 49
 
     statement_BLOCK_OPT            shift and go to state 159
-    statement                      shift and go to state 113
+    statement                      shift and go to state 112
     expr                           shift and go to state 11
     if_statement                   shift and go to state 12
     while_statement                shift and go to state 13
@@ -3956,7 +3887,7 @@ state 109
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 110
+state 109
 
     (20) while_statement -> WHILE expr_parentheses . statement_BLOCK_OPT
     (194) statement_BLOCK_OPT -> . statement
@@ -4012,7 +3943,7 @@ state 110
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -4023,7 +3954,7 @@ state 110
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    LKEY            shift and go to state 114
+    LKEY            shift and go to state 113
     GLOBAL          shift and go to state 19
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
@@ -4051,7 +3982,7 @@ state 110
     VARIABLE        shift and go to state 49
 
     statement_BLOCK_OPT            shift and go to state 160
-    statement                      shift and go to state 113
+    statement                      shift and go to state 112
     expr                           shift and go to state 11
     if_statement                   shift and go to state 12
     while_statement                shift and go to state 13
@@ -4069,7 +4000,7 @@ state 110
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 111
+state 110
 
     (44) expr_parentheses -> LPAREN . expr RPAREN
     (98) expr -> . INCREMENT variable
@@ -4101,7 +4032,7 @@ state 111
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -4138,14 +4069,14 @@ state 111
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 112
+state 111
 
     (21) do_statement -> DO statement_BLOCK_OPT . WHILE expr_parentheses SEMICOLON
 
     WHILE           shift and go to state 162
 
 
-state 113
+state 112
 
     (194) statement_BLOCK_OPT -> statement .
 
@@ -4181,7 +4112,7 @@ state 113
     ELSE            reduce using rule 194 (statement_BLOCK_OPT -> statement .)
 
 
-state 114
+state 113
 
     (195) statement_BLOCK_OPT -> LKEY . statement_MUL RKEY
     (196) statement_BLOCK_OPT -> LKEY . RKEY
@@ -4237,7 +4168,7 @@ state 114
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -4294,7 +4225,7 @@ state 114
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 115
+state 114
 
     (28) for_statement -> FOR LPAREN . for_parameters RPAREN statement_BLOCK_OPT
     (29) for_parameters -> . SEMICOLON SEMICOLON
@@ -4336,7 +4267,7 @@ state 115
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -4376,7 +4307,7 @@ state 115
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 116
+state 115
 
     (22) break_statement -> BREAK expr . SEMICOLON
     (105) expr -> expr . INTE_DOT expr DDOT expr
@@ -4415,7 +4346,7 @@ state 116
     comparission_operator          shift and go to state 68
     arithmetic_operator            shift and go to state 69
 
-state 117
+state 116
 
     (23) break_statement -> BREAK SEMICOLON .
 
@@ -4451,7 +4382,7 @@ state 117
     ELSE            reduce using rule 23 (break_statement -> BREAK SEMICOLON .)
 
 
-state 118
+state 117
 
     (24) continue_statement -> CONTINUE expr . SEMICOLON
     (105) expr -> expr . INTE_DOT expr DDOT expr
@@ -4490,7 +4421,7 @@ state 118
     comparission_operator          shift and go to state 68
     arithmetic_operator            shift and go to state 69
 
-state 119
+state 118
 
     (25) continue_statement -> CONTINUE SEMICOLON .
 
@@ -4526,7 +4457,7 @@ state 119
     ELSE            reduce using rule 25 (continue_statement -> CONTINUE SEMICOLON .)
 
 
-state 120
+state 119
 
     (26) return_statement -> RETURN expr . SEMICOLON
     (105) expr -> expr . INTE_DOT expr DDOT expr
@@ -4565,7 +4496,7 @@ state 120
     comparission_operator          shift and go to state 68
     arithmetic_operator            shift and go to state 69
 
-state 121
+state 120
 
     (27) return_statement -> RETURN SEMICOLON .
 
@@ -4601,7 +4532,7 @@ state 121
     ELSE            reduce using rule 27 (return_statement -> RETURN SEMICOLON .)
 
 
-state 122
+state 121
 
     (45) statement_if -> IF expr_parentheses . statement_BLOCK_OPT
     (194) statement_BLOCK_OPT -> . statement
@@ -4657,7 +4588,7 @@ state 122
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -4668,7 +4599,7 @@ state 122
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    LKEY            shift and go to state 114
+    LKEY            shift and go to state 113
     GLOBAL          shift and go to state 19
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
@@ -4696,7 +4627,7 @@ state 122
     VARIABLE        shift and go to state 49
 
     statement_BLOCK_OPT            shift and go to state 173
-    statement                      shift and go to state 113
+    statement                      shift and go to state 112
     expr                           shift and go to state 11
     if_statement                   shift and go to state 12
     while_statement                shift and go to state 13
@@ -4714,7 +4645,7 @@ state 122
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 123
+state 122
 
     (142) base_variable -> simple_indirect_reference_DOLAR reference_variable .
 
@@ -4750,14 +4681,14 @@ state 123
     RKEY            reduce using rule 142 (base_variable -> simple_indirect_reference_DOLAR reference_variable .)
 
 
-state 124
+state 123
 
     (146) compound_variable -> DOLAR . LKEY expr RKEY
 
-    LKEY            shift and go to state 130
+    LKEY            shift and go to state 129
 
 
-state 125
+state 124
 
     (143) reference_variable -> compound_variable reference_variable_SELECTOR .
 
@@ -4793,7 +4724,7 @@ state 125
     RKEY            reduce using rule 143 (reference_variable -> compound_variable reference_variable_SELECTOR .)
 
 
-state 126
+state 125
 
     (203) reference_variable_SELECTOR -> selector . reference_variable_SELECTOR
     (204) reference_variable_SELECTOR -> selector .
@@ -4832,14 +4763,14 @@ state 126
     ATTR_ASSOC      reduce using rule 204 (reference_variable_SELECTOR -> selector .)
     COLON           reduce using rule 204 (reference_variable_SELECTOR -> selector .)
     RKEY            reduce using rule 204 (reference_variable_SELECTOR -> selector .)
-    LBRACKET        shift and go to state 127
+    LBRACKET        shift and go to state 126
 
   ! LBRACKET        [ reduce using rule 204 (reference_variable_SELECTOR -> selector .) ]
 
-    selector                       shift and go to state 126
+    selector                       shift and go to state 125
     reference_variable_SELECTOR    shift and go to state 174
 
-state 127
+state 126
 
     (147) selector -> LBRACKET . expr RBRACKET
     (148) selector -> LBRACKET . RBRACKET
@@ -4872,7 +4803,7 @@ state 127
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -4910,7 +4841,7 @@ state 127
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 128
+state 127
 
     (205) simple_indirect_reference_DOLAR -> DOLAR . simple_indirect_reference_DOLAR
     (206) simple_indirect_reference_DOLAR -> DOLAR .
@@ -4919,13 +4850,13 @@ state 128
 
   ! shift/reduce conflict for DOLAR resolved as shift
     VARIABLE        reduce using rule 206 (simple_indirect_reference_DOLAR -> DOLAR .)
-    DOLAR           shift and go to state 128
+    DOLAR           shift and go to state 127
 
   ! DOLAR           [ reduce using rule 206 (simple_indirect_reference_DOLAR -> DOLAR .) ]
 
-    simple_indirect_reference_DOLAR shift and go to state 129
+    simple_indirect_reference_DOLAR shift and go to state 128
 
-state 129
+state 128
 
     (205) simple_indirect_reference_DOLAR -> DOLAR simple_indirect_reference_DOLAR .
 
@@ -4933,7 +4864,7 @@ state 129
     DOLAR           reduce using rule 205 (simple_indirect_reference_DOLAR -> DOLAR simple_indirect_reference_DOLAR .)
 
 
-state 130
+state 129
 
     (146) compound_variable -> DOLAR LKEY . expr RKEY
     (98) expr -> . INCREMENT variable
@@ -4965,7 +4896,7 @@ state 130
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -5002,7 +4933,7 @@ state 130
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
 
-state 131
+state 130
 
     (149) function_declaration_statement -> FUNCTION ID LPAREN . RPAREN LKEY RKEY
     (154) function_declaration_statement -> FUNCTION ID LPAREN . parameter_list RPAREN LKEY RKEY
@@ -5042,7 +4973,7 @@ state 131
     parameter                      shift and go to state 180
     parameter_type                 shift and go to state 182
 
-state 132
+state 131
 
     (150) function_declaration_statement -> FUNCTION AMPERSAND ID . LPAREN RPAREN LKEY RKEY
     (151) function_declaration_statement -> FUNCTION AMPERSAND ID . LPAREN parameter_list RPAREN LKEY RKEY
@@ -5052,21 +4983,49 @@ state 132
     LPAREN          shift and go to state 192
 
 
-state 133
+state 132
 
     (52) function_call -> ID LPAREN function_call_parameter_list . RPAREN
 
     RPAREN          shift and go to state 193
 
 
+state 133
+
+    (53) function_call -> ID LPAREN RPAREN .
+
+    SEMICOLON       reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    INTE_DOT        reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    EQUALS          reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    GREAT_THAN      reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    LESS_THAN       reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    LESS_EQUAL      reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    GREAT_EQUAL     reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    NOT_EQUAL       reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    LEFT_LOGICAL    reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    RIGHT_LOGICAL   reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    PLUS            reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    DIVIDE          reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    PERCENT         reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    TIMES           reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    MINUS           reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    RPAREN          reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    DDOT            reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    RBRACKET        reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    ATTR_ASSOC      reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    COLON           reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+    RKEY            reduce using rule 53 (function_call -> ID LPAREN RPAREN .)
+
+
 state 134
 
     (54) function_call_parameter_list -> function_call_parameter . function_call_list_COLON_FUNCTION
+    (55) function_call_parameter_list -> function_call_parameter .
     (197) function_call_list_COLON_FUNCTION -> . COLON function_call_parameter function_call_list_COLON_FUNCTION
-    (198) function_call_list_COLON_FUNCTION -> .
+    (198) function_call_list_COLON_FUNCTION -> . COLON function_call_parameter
 
+    RPAREN          reduce using rule 55 (function_call_parameter_list -> function_call_parameter .)
     COLON           shift and go to state 195
-    RPAREN          reduce using rule 198 (function_call_list_COLON_FUNCTION -> .)
 
     function_call_list_COLON_FUNCTION shift and go to state 194
 
@@ -5144,7 +5103,7 @@ state 138
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -5464,7 +5423,7 @@ state 146
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -5646,7 +5605,7 @@ state 149
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -5855,7 +5814,7 @@ state 156
     VARIABLE        shift and go to state 49
 
     variable                       shift and go to state 209
-    base_variable                  shift and go to state 87
+    base_variable                  shift and go to state 40
     reference_variable             shift and go to state 45
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
@@ -5952,7 +5911,7 @@ state 158
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -5963,7 +5922,7 @@ state 158
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    LKEY            shift and go to state 114
+    LKEY            shift and go to state 113
     GLOBAL          shift and go to state 19
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
@@ -5991,7 +5950,7 @@ state 158
     VARIABLE        shift and go to state 49
 
     statement_BLOCK_OPT            shift and go to state 210
-    statement                      shift and go to state 113
+    statement                      shift and go to state 112
     expr                           shift and go to state 11
     if_statement                   shift and go to state 12
     while_statement                shift and go to state 13
@@ -6125,7 +6084,7 @@ state 162
     (21) do_statement -> DO statement_BLOCK_OPT WHILE . expr_parentheses SEMICOLON
     (44) expr_parentheses -> . LPAREN expr RPAREN
 
-    LPAREN          shift and go to state 111
+    LPAREN          shift and go to state 110
 
     expr_parentheses               shift and go to state 212
 
@@ -6228,7 +6187,7 @@ state 165
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -6329,7 +6288,7 @@ state 167
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -6914,6 +6873,7 @@ state 194
 state 195
 
     (197) function_call_list_COLON_FUNCTION -> COLON . function_call_parameter function_call_list_COLON_FUNCTION
+    (198) function_call_list_COLON_FUNCTION -> COLON . function_call_parameter
     (56) function_call_parameter -> . variable
     (57) function_call_parameter -> . AMPERSAND VARIABLE
     (140) variable -> . base_variable
@@ -6932,7 +6892,7 @@ state 195
 
     function_call_parameter        shift and go to state 233
     variable                       shift and go to state 135
-    base_variable                  shift and go to state 87
+    base_variable                  shift and go to state 40
     reference_variable             shift and go to state 45
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
@@ -7051,7 +7011,7 @@ state 198
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -7374,7 +7334,7 @@ state 207
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -7446,7 +7406,7 @@ state 208
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -7667,7 +7627,7 @@ state 215
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -7678,7 +7638,7 @@ state 215
     (145) compound_variable -> . VARIABLE
     (146) compound_variable -> . DOLAR LKEY expr RKEY
 
-    LKEY            shift and go to state 114
+    LKEY            shift and go to state 113
     GLOBAL          shift and go to state 19
     INCREMENT       shift and go to state 20
     DECREMENT       shift and go to state 22
@@ -7706,7 +7666,7 @@ state 215
     VARIABLE        shift and go to state 49
 
     statement_BLOCK_OPT            shift and go to state 241
-    statement                      shift and go to state 113
+    statement                      shift and go to state 112
     expr                           shift and go to state 11
     if_statement                   shift and go to state 12
     while_statement                shift and go to state 13
@@ -7759,7 +7719,7 @@ state 216
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -7843,7 +7803,7 @@ state 218
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -7923,7 +7883,7 @@ state 220
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -8098,7 +8058,7 @@ state 223
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -8271,11 +8231,12 @@ state 232
 state 233
 
     (197) function_call_list_COLON_FUNCTION -> COLON function_call_parameter . function_call_list_COLON_FUNCTION
+    (198) function_call_list_COLON_FUNCTION -> COLON function_call_parameter .
     (197) function_call_list_COLON_FUNCTION -> . COLON function_call_parameter function_call_list_COLON_FUNCTION
-    (198) function_call_list_COLON_FUNCTION -> .
+    (198) function_call_list_COLON_FUNCTION -> . COLON function_call_parameter
 
+    RPAREN          reduce using rule 198 (function_call_list_COLON_FUNCTION -> COLON function_call_parameter .)
     COLON           shift and go to state 195
-    RPAREN          reduce using rule 198 (function_call_list_COLON_FUNCTION -> .)
 
     function_call_list_COLON_FUNCTION shift and go to state 263
 
@@ -8437,7 +8398,7 @@ state 239
     VARIABLE        shift and go to state 49
 
     variable                       shift and go to state 265
-    base_variable                  shift and go to state 87
+    base_variable                  shift and go to state 40
     reference_variable             shift and go to state 45
     simple_indirect_reference_DOLAR shift and go to state 46
     compound_variable              shift and go to state 47
@@ -8556,7 +8517,7 @@ state 243
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -8638,7 +8599,7 @@ state 245
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -8829,7 +8790,7 @@ state 249
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -8955,7 +8916,7 @@ state 250
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -9200,7 +9161,7 @@ state 261
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -9332,7 +9293,7 @@ state 267
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
     (143) reference_variable -> . compound_variable reference_variable_SELECTOR
@@ -9625,7 +9586,7 @@ state 281
     (61) unary_operator -> . PLUS
     (62) unary_operator -> . MINUS
     (52) function_call -> . ID LPAREN function_call_parameter_list RPAREN
-    (53) function_call -> . base_variable
+    (53) function_call -> . ID LPAREN RPAREN
     (45) statement_if -> . IF expr_parentheses statement_BLOCK_OPT
     (141) base_variable -> . reference_variable
     (142) base_variable -> . simple_indirect_reference_DOLAR reference_variable
@@ -9849,23 +9810,23 @@ WARNING: shift/reduce conflict for ELSEIF in state 33 resolved as shift
 WARNING: shift/reduce conflict for ELSE in state 33 resolved as shift
 WARNING: shift/reduce conflict for LBRACKET in state 47 resolved as shift
 WARNING: shift/reduce conflict for DOLAR in state 48 resolved as shift
-WARNING: shift/reduce conflict for INTE_DOT in state 99 resolved as shift
-WARNING: shift/reduce conflict for EQUALS in state 99 resolved as shift
-WARNING: shift/reduce conflict for GREAT_THAN in state 99 resolved as shift
-WARNING: shift/reduce conflict for LESS_THAN in state 99 resolved as shift
-WARNING: shift/reduce conflict for LESS_EQUAL in state 99 resolved as shift
-WARNING: shift/reduce conflict for GREAT_EQUAL in state 99 resolved as shift
-WARNING: shift/reduce conflict for NOT_EQUAL in state 99 resolved as shift
-WARNING: shift/reduce conflict for LEFT_LOGICAL in state 99 resolved as shift
-WARNING: shift/reduce conflict for RIGHT_LOGICAL in state 99 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 99 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 99 resolved as shift
-WARNING: shift/reduce conflict for PERCENT in state 99 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 99 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 99 resolved as shift
-WARNING: shift/reduce conflict for ELSE in state 106 resolved as shift
-WARNING: shift/reduce conflict for LBRACKET in state 126 resolved as shift
-WARNING: shift/reduce conflict for DOLAR in state 128 resolved as shift
+WARNING: shift/reduce conflict for INTE_DOT in state 98 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 98 resolved as shift
+WARNING: shift/reduce conflict for GREAT_THAN in state 98 resolved as shift
+WARNING: shift/reduce conflict for LESS_THAN in state 98 resolved as shift
+WARNING: shift/reduce conflict for LESS_EQUAL in state 98 resolved as shift
+WARNING: shift/reduce conflict for GREAT_EQUAL in state 98 resolved as shift
+WARNING: shift/reduce conflict for NOT_EQUAL in state 98 resolved as shift
+WARNING: shift/reduce conflict for LEFT_LOGICAL in state 98 resolved as shift
+WARNING: shift/reduce conflict for RIGHT_LOGICAL in state 98 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 98 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 98 resolved as shift
+WARNING: shift/reduce conflict for PERCENT in state 98 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 98 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 98 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 105 resolved as shift
+WARNING: shift/reduce conflict for LBRACKET in state 125 resolved as shift
+WARNING: shift/reduce conflict for DOLAR in state 127 resolved as shift
 WARNING: shift/reduce conflict for INTE_DOT in state 140 resolved as shift
 WARNING: shift/reduce conflict for EQUALS in state 140 resolved as shift
 WARNING: shift/reduce conflict for GREAT_THAN in state 140 resolved as shift
@@ -9950,5 +9911,3 @@ WARNING: shift/reduce conflict for DIVIDE in state 234 resolved as shift
 WARNING: shift/reduce conflict for PERCENT in state 234 resolved as shift
 WARNING: shift/reduce conflict for TIMES in state 234 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 234 resolved as shift
-WARNING: reduce/reduce conflict in state 40 resolved using rule (function_call -> base_variable)
-WARNING: rejected rule (variable -> base_variable) in state 40

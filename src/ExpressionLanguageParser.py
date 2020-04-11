@@ -151,16 +151,17 @@ def p_for_expr_OPT(p):
    | expr
   '''
   
+#porq function_call deriva para base_variable?
 def p_function_call(p):
   '''
   function_call : ID LPAREN function_call_parameter_list RPAREN
-    | base_variable
+    | ID LPAREN RPAREN
   '''
 
 def p_function_call_parameter_list(p):
   '''
   function_call_parameter_list : function_call_parameter function_call_list_COLON_FUNCTION
-  | 
+    | function_call_parameter
   '''
 
 def p_function_call_parameter(p):
@@ -452,7 +453,7 @@ def p_statement_BLOCK_OPT(p):
 def p_function_call_list_COLON_FUNCTION(p):
   '''
   function_call_list_COLON_FUNCTION : COLON function_call_parameter function_call_list_COLON_FUNCTION
-    | 
+    | COLON function_call_parameter
   '''
   
 def p_assignment_list_element_COLON_ASSIGNMENT(p):
@@ -494,7 +495,7 @@ lex.lex()
 arquivo = '''
 <?php
   while ($valor[0][1] < 150){
-    $valor;
+    $valor = add();
   }
 ?>'''
 
