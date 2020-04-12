@@ -5,8 +5,9 @@ from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
 
 precedence = (
-     ('left', 'PLUS', 'MINUS'),
-     ('left', 'TIMES', 'DIVIDE'),
+  ('left', 'PLUS', 'MINUS'),
+  ('left', 'TIMES', 'DIVIDE'),
+  ('right', 'UMINUS'),
  )
 
 def p_main(p):
@@ -33,6 +34,7 @@ def p_statement(p):
     | while_statement
     | do_statement
     | for_statement
+    | foreach_statement
     | break_statement
     | continue_statement
     | return_statement
@@ -139,9 +141,9 @@ def p_statement_else(p):
   statement_else : ELSE statement_BLOCK_OPT
   '''
 
-def p_statement_foreach(p):
+def p_foreach_statement(p):
   '''
-  statement_foreach : FOREACH LPAREN expr AS ampersand_variable RPAREN statement_BLOCK_OPT
+  foreach_statement : FOREACH LPAREN expr AS ampersand_variable RPAREN statement_BLOCK_OPT
   | FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_BLOCK_OPT
   '''
 
@@ -164,10 +166,10 @@ def p_function_call_parameter_list(p):
     | function_call_parameter
   '''
 
+
 def p_function_call_parameter(p):
   '''
-  function_call_parameter : variable
-    | expr
+  function_call_parameter : expr
     | AMPERSAND VARIABLE
   '''
 
@@ -196,18 +198,6 @@ def p_type_cast_operator(p):
       | BOOLEAN_TYPE
       | BOOL_TYPE
       | UNSET
-  '''
-
-# Removida no momento
-def p_arithmetic_expr(p):
-  '''
-  arithmetic_expr : arithmetic_expr PLUS arithmetic_expr               
-    | arithmetic_expr MINUS arithmetic_expr               
-    | arithmetic_expr TIMES arithmetic_expr               
-    | arithmetic_expr DIVIDE arithmetic_expr              
-    | LPAREN arithmetic_expr RPAREN                   
-    | NUMBER_INTEGER 
-    | NUMBER_REAL                                    
   '''
   
 def p_assign_operator(p):
@@ -239,7 +229,13 @@ def p_comparission_operator(p):
     | NOT_EQUAL
     | LEFT_LOGICAL
     | RIGHT_LOGICAL
+    | AND
+    | OR
   '''
+  
+def p_expr_uminus(p):
+  '''expr : MINUS expr %prec UMINUS'''
+  
 
 def p_expr(p): 
   ''' 
@@ -247,20 +243,19 @@ def p_expr(p):
     | variable INCREMENT
     | DECREMENT variable
     | variable DECREMENT
-    | variable LBRACKET expr RBRACKET
+    | variable assign_operator expr
+    | variable assign_operator AMPERSAND expr
+    | variable
     | LPAREN expr RPAREN
     | unary_operator expr
     | expr INTE_DOT expr DDOT expr
     | expr comparission_operator expr
-    | variable assign_operator expr
-    | variable assign_operator AMPERSAND expr
     | expr arithmetic_operator expr
     | LPAREN type_cast_operator RPAREN expr
     | EXIT expr_EXIT
     | DIE expr_EXIT
     | ARRAY_TYPE LPAREN array_pair_list RPAREN
     | ARRAY_TYPE LPAREN RPAREN
-    | variable
     | function_call
     | NUMBER_REAL
     | NUMBER_INTEGER
@@ -271,36 +266,7 @@ def p_expr(p):
   if p[1] == 'true':
     p[0] = sa.Expr_True(p[1])
   
-#Não identificado para que serve
-def p_encaps(p):
-  '''
-  encaps : encaps_var
-    | VARIABLE
-    | LPAREN
-    | RPAREN
-    | LKEY
-    | RKEY
-  '''
 
-def p_encaps_var(p):
-  '''
-  encaps_var : VARIABLE encaps_var_OPT
-    | DOLAR LBRACKET expr RBRACKET
-    | DOLAR  LKEY ID LBRACKET expr RBRACKET RKEY
-    | LKEY variable RKEY
-  '''
-
-def p_encaps_var_OPT(p):
-  '''
-  encaps_var_OPT : LBRACKET encaps_var_offset RBRACKET
-    | 
-  '''
-
-def p_encaps_var_offset(p):
-  '''
-  encaps_var_offset : STRING 
-    | VARIABLE
-  '''
 
 def p_expr_EXIT(p):
   '''
@@ -495,14 +461,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-function fibonacci($valor){
-  if($valor == 1){
-    return 1;
-  }
-  else {
-    return fibonacci($valor - 1) + fibonacci($valor - 2);
-  }
-}
+  $valor = $N - -1;
 ?>
 '''
 
