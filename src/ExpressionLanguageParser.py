@@ -17,7 +17,18 @@ def p_main(p):
   '''
   if len(p) == 4:
     p[0] = sa.Main_MainInner(p[2])
-    print(p[2])
+  else:
+    p[0] = sa.Main_MainInner_Empty()
+    
+def p_main_INNER(p):
+  '''
+  main_INNER : inner_statement main_INNER
+    | inner_statement
+  '''
+  if len(p) == 3:
+    p[0] = sa.MainInner_InnerStatement_MainInner(p[1], p[2])
+  else:
+    p[0] = sa.MainInner_InnerStatement(p[1])
 
 def p_inner_statement(p):
   '''
@@ -26,6 +37,8 @@ def p_inner_statement(p):
   '''
   if isinstance(p[1], sa.Statement):
     p[0] = sa.InnerStatement_Statement(p[1])
+  else:
+    p[0] = sa.InnerStatement_FuncDecStatement(p[1])
 
 def p_statement(p):
   '''
@@ -232,10 +245,6 @@ def p_comparission_operator(p):
     | AND
     | OR
   '''
-  
-def p_expr_uminus(p):
-  '''expr : MINUS expr %prec UMINUS'''
-  
 
 def p_expr(p): 
   ''' 
@@ -247,33 +256,34 @@ def p_expr(p):
     | variable assign_operator AMPERSAND expr
     | variable
     | LPAREN expr RPAREN
-    | unary_operator expr
     | expr INTE_DOT expr DDOT expr
     | expr comparission_operator expr
     | expr arithmetic_operator expr
+    | MINUS expr %prec UMINUS
     | LPAREN type_cast_operator RPAREN expr
-    | EXIT expr_EXIT
-    | DIE expr_EXIT
+    | EXIT exit_expr
+    | EXIT
+    | DIE exit_expr
+    | DIE
     | ARRAY_TYPE LPAREN array_pair_list RPAREN
     | ARRAY_TYPE LPAREN RPAREN
     | function_call
-    | NUMBER_REAL
-    | NUMBER_INTEGER
-    | CONSTANT_ENCAPSED_STRING
+    | scalar
     | TRUE
     | FALSE
   '''
   if p[1] == 'true':
     p[0] = sa.Expr_True(p[1])
+  elif p[1] == 'false':
+    p[0] = sa.Expr_False(p[1])
   
-
-
-def p_expr_EXIT(p):
+def p_scalar(p):
   '''
-  expr_EXIT : exit_expr
-    | 
+  scalar : NUMBER_REAL
+    | NUMBER_INTEGER
+    | CONSTANT_ENCAPSED_STRING
   '''
-
+  
 def p_exit_expr(p):
   '''
   exit_expr : LPAREN expr RPAREN
@@ -283,12 +293,7 @@ def p_exit_expr(p):
 # Removido chamada a function_call
 def p_variable(p):
   '''
-  variable : base_variable
-  '''
-  
-def p_base_variable(p):
-  '''
-  base_variable : reference_variable
+  variable : reference_variable
     | simple_indirect_reference_DOLAR reference_variable
   '''
   
@@ -304,7 +309,6 @@ def p_compound_variable(p):
     | DOLAR LKEY expr RKEY 
   '''
 
-#Utilizado para indexação
 def p_selector(p):
   '''
   selector : LBRACKET expr RBRACKET 
@@ -313,14 +317,30 @@ def p_selector(p):
 
 def p_function_declaration_statement(p):
   '''
-  function_declaration_statement : FUNCTION ID LPAREN RPAREN LKEY RKEY
-    | FUNCTION AMPERSAND ID LPAREN RPAREN LKEY RKEY
-    | FUNCTION AMPERSAND ID LPAREN parameter_list RPAREN LKEY RKEY
-    | FUNCTION AMPERSAND ID LPAREN RPAREN LKEY inner_statement_MUL RKEY
-    | FUNCTION AMPERSAND ID LPAREN parameter_list RPAREN LKEY inner_statement_MUL RKEY
-    | FUNCTION ID LPAREN parameter_list RPAREN LKEY RKEY
-    | FUNCTION ID LPAREN RPAREN LKEY inner_statement_MUL RKEY
-    | FUNCTION ID LPAREN parameter_list RPAREN LKEY inner_statement_MUL RKEY
+  function_declaration_statement : FUNCTION fds_id fds_parameter fds_statements
+  '''
+  p[0] = sa.funcDecStatement_Function(p[2], p[3], p[4])
+  
+def p_fds_statements(p):
+  '''
+  fds_statements : LKEY inner_statement_MUL RKEY
+    | LKEY RKEY
+  '''
+  
+def p_fds_id(p):
+  '''
+  fds_id : AMPERSAND ID
+    | ID
+  '''
+  if len(p) == 3:
+    p[0] = sa.Fds_id_withAmpersand(p[2])
+  else:
+    p[0] = sa.Fds_id_noAmpersand(p[1])
+  
+def p_fds_parameter(p):
+  '''
+  fds_parameter : LPAREN parameter_list RPAREN
+    | LPAREN RPAREN
   '''
 
 def p_parameter_list(p):  
@@ -383,14 +403,6 @@ def p_array_pair(p):
 
 # Expressões regulares transformadas em regras.
 # ======================================================================
-
-def p_main_INNER(p):
-  '''
-  main_INNER : inner_statement main_INNER
-    | inner_statement
-  '''
-  if len(p) == 3:
-    p[0] = sa.MainInner_InnerStatement(p[1], p[2])
 
 def p_inner_statement_MUL(p):
   '''
@@ -461,12 +473,14 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  $valor = $N - -1;
+  function add(){
+    
+  } 
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
 result = parser.parse(debug=True)
-#v = vis.Visitor()
-#result.accept(v)
+v = vis.Visitor()
+result.accept(v)

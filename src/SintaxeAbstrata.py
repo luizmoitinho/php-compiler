@@ -15,6 +15,10 @@ class Main_MainInner(Main):
   def accept(self, Visitor):
     Visitor.visitMain_MainInner(self)
     
+class Main_MainInner_Empty(Main):
+  def accept(self, Visitor):
+    Visitor.visitMain_MainInner_Empty(self)
+    
 
 #MAIN_INNER ABSTRATA E CONCRETAS  
 class MainInner(metaclass=ABCMeta):
@@ -22,19 +26,18 @@ class MainInner(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
 
-class MainInner_InnerStatement(MainInner):
+class MainInner_InnerStatement_MainInner(MainInner):
   def __init__(self, innerStatement, mainInner):
     self.innerStatement = innerStatement
     self.mainInner = mainInner
   def accept(self, Visitor):
-    Visitor.visitMainInner_InnerStatement(self)
+    Visitor.visitMainInner_InnerStatement_MainInner(self)
 
-#pag 58 pdf ply
-class MainInner_Empty(MainInner):
-  def __init__(self):
-    self.empty = [ ]
+class MainInner_InnerStatement(MainInner):
+  def __init__(self, innerStatement):
+    self.innerStatement = innerStatement
   def accept(self, Visitor):
-    Visitor.visitMainInner_Empty(self)
+    Visitor.visitMainInner_InnerStatement(self)
 
 class InnerStatement(metaclass = ABCMeta):
     @abstractmethod
@@ -64,6 +67,66 @@ class Statement_Expr(Statement):
     self.semiColon = semiColon
   def accept(self, Visitor):
     Visitor.visitStatement_Expr(self)
+
+class FuncDecStatement(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class funcDecStatement_Function(FuncDecStatement):
+  def __init__(self, fds_id, fds_parameter, fds_statements):
+    self.fds_id = fds_id
+    self.fds_parameter = fds_parameter
+    self.fds_statements = fds_statements
+  def accept(self, Visitor):
+    Visitor.visitFuncDecStatement_Function(self)
+
+class Fds_id(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Fds_id_withAmpersand(Fds_id):
+  def __init__(self, id):
+    self.id = id
+  def accept(self, Visitor):
+    Visitor.visitFds_id_withAmpersand(self)
+    
+class Fds_id_noAmpersand(Fds_id):
+  def __init__(self, id):
+    self.id = id
+  def accept(self, Visitor):
+    Visitor.visitFds_id_noAmpersand(self)
+    
+class Fds_parameter(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Fds_parameter_withParameter(Fds_parameter):
+  def __init__(self, parameter_list):
+    self.parameter_list = parameter_list
+  def accept(self, Visitor):
+    Visitor.visitFds_parameter_withParameter(self)
+    
+class Fds_parameter_noParameter(Fds_parameter):
+  def accept(self, Visitor):
+    Visitor.visitFds_parameter_noParameter(self)
+
+class Fds_statements(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Fds_statements_withStatements(Fds_statements):
+  def __init__(self, inner_statement_MUL):
+    self.inner_statement_MUL = inner_statement_MUL
+  def accept(self, Visitor):
+    Visitor.visitFds_statements_withStatements(self)
+    
+class Fds_statements_noStatements(Fds_statements):
+  def accept(self, Visitor):
+    Visitor.visitFds_statements_noStatements(self)
 
 class AmpersandVariable(metaclass = ABCMeta):
     @abstractmethod
@@ -155,6 +218,12 @@ class Expr_True(Expr):
     self.true = true
   def accept(self, Visitor):
     Visitor.visitExpr_True(self)
+    
+class Expr_False(Expr):
+  def __init__(self, false):
+    self.false = false
+  def accept(self, Visitor):
+    Visitor.visitExpr_False(self)
 
 
 class Expr_ArithmeticOperator(Expr):
