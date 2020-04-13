@@ -7,7 +7,7 @@ import SintaxeAbstrata as sa
 precedence = (
   ('left', 'PLUS', 'MINUS'),
   ('left', 'TIMES', 'DIVIDE'),
-  ('right', 'UMINUS'),
+  #('right', 'UMINUS'),
  )
 
 def p_main(p):
@@ -39,7 +39,46 @@ def p_inner_statement(p):
     p[0] = sa.InnerStatement_Statement(p[1])
   else:
     p[0] = sa.InnerStatement_FuncDecStatement(p[1])
-
+    
+def p_expr(p):
+  '''
+  expr : expr1 expr2
+    | expr1
+    | expr3 
+  '''
+def p_expr2(p): 
+  '''
+  expr2 : INTE_DOT expr DDOT expr 
+    | comparission_operator expr 
+    | arithmetic_operator expr
+  '''
+def p_expr3(p): 
+  '''
+  expr3 : variable assign_operator expr
+    | variable assign_operator AMPERSAND expr
+    | LPAREN type_cast_operator RPAREN expr
+  '''
+  
+def p_expr1(p): 
+  ''' 
+  expr1 : INCREMENT variable
+    | variable INCREMENT
+    | DECREMENT variable
+    | variable DECREMENT
+    | variable
+    | LPAREN expr RPAREN
+    | EXIT exit_expr
+    | EXIT
+    | DIE exit_expr
+    | DIE
+    | ARRAY_TYPE LPAREN array_pair_list RPAREN
+    | ARRAY_TYPE LPAREN RPAREN
+    | function_call
+    | scalar
+    | TRUE
+    | FALSE
+  '''
+  
 def p_statement(p):
   '''
   statement : expr SEMICOLON
@@ -60,13 +99,12 @@ def p_statement(p):
 def p_if_statement(p):
   '''
   if_statement : statement_if if_statement_complement
-    | statement_if
+    | statement_if 
   '''
   
 def p_if_statement_complement(p):
   '''
   if_statement_complement : statement_elseif
-    | statement_elseif statement_else
     | statement_else
   '''
     
@@ -163,7 +201,7 @@ def p_foreach_statement(p):
 def p_for_expr_OPT(p):
   '''
   for_expr_OPT : expr for_expr_COLON_EXPR
-   | expr
+  | expr
   '''
   
 #porq function_call deriva para base_variable?
@@ -176,7 +214,7 @@ def p_function_call(p):
 def p_function_call_parameter_list(p):
   '''
   function_call_parameter_list : function_call_parameter function_call_list_COLON_FUNCTION
-    | function_call_parameter
+    |  function_call_parameter
   '''
 
 
@@ -191,7 +229,6 @@ def p_assignment_list_element(p):
   assignment_list_element : variable
     | LIST LPAREN assignment_list_element assignment_list_element_COLON_ASSIGNMENT  RPAREN
   '''
-  
   
 def p_unary_operator(p):
   '''
@@ -246,37 +283,6 @@ def p_comparission_operator(p):
     | OR
   '''
 
-def p_expr(p): 
-  ''' 
-  expr : INCREMENT variable
-    | variable INCREMENT
-    | DECREMENT variable
-    | variable DECREMENT
-    | variable assign_operator expr
-    | variable assign_operator AMPERSAND expr
-    | variable
-    | LPAREN expr RPAREN
-    | expr INTE_DOT expr DDOT expr
-    | expr comparission_operator expr
-    | expr arithmetic_operator expr
-    | MINUS expr %prec UMINUS
-    | LPAREN type_cast_operator RPAREN expr
-    | EXIT exit_expr
-    | EXIT
-    | DIE exit_expr
-    | DIE
-    | ARRAY_TYPE LPAREN array_pair_list RPAREN
-    | ARRAY_TYPE LPAREN RPAREN
-    | function_call
-    | scalar
-    | TRUE
-    | FALSE
-  '''
-  if p[1] == 'true':
-    p[0] = sa.Expr_True(p[1])
-  elif p[1] == 'false':
-    p[0] = sa.Expr_False(p[1])
-  
 def p_scalar(p):
   '''
   scalar : NUMBER_REAL
@@ -300,7 +306,7 @@ def p_variable(p):
 def p_reference_variable(p):
   '''
   reference_variable : compound_variable reference_variable_SELECTOR
-    | compound_variable
+  | compound_variable
   '''
   
 def p_compound_variable(p):
@@ -326,6 +332,10 @@ def p_fds_statements(p):
   fds_statements : LKEY inner_statement_MUL RKEY
     | LKEY RKEY
   '''
+  if len(p) == 4:
+    p[0] = sa.Fds_statements_withStatements(p[2])
+  else: 
+    p[0] = sa.Fds_statements_noStatements()
   
 def p_fds_id(p):
   '''
@@ -342,23 +352,49 @@ def p_fds_parameter(p):
   fds_parameter : LPAREN parameter_list RPAREN
     | LPAREN RPAREN
   '''
+  if len(p) == 4:
+    p[0] = sa.Fds_parameter_withParameter(p[2])
+  else:
+    p[0] = sa.Fds_parameter_noParameter()
 
 def p_parameter_list(p):  
   '''
   parameter_list : parameter parameter_list_COLON_PARAMETER 
     | parameter
   '''  
+  if len(p) == 3:
+    p[0] = sa.ParameterList_Parameter_Mul(p[1], p[2])
+  else:
+    p[0] = sa.ParameterList_Parameter_Single(p[1])
 
 def p_parameter(p):
   ''' 
-  parameter : VARIABLE
+  parameter : VARIABLE 
+    | parameter_prefix VARIABLE
     | VARIABLE ASSIGN static_scalar
-    | parameter_type VARIABLE
-    | parameter_type AMPERSAND VARIABLE
-    | AMPERSAND VARIABLE
-    | AMPERSAND VARIABLE ASSIGN static_scalar
-    | parameter_type AMPERSAND VARIABLE ASSIGN static_scalar
+    | parameter_prefix VARIABLE ASSIGN static_scalar
   '''
+  if len(p) == 5:
+    p[0] = sa.Parameter_Full(p[1], p[2], p[4])
+  elif len(p) == 4:
+    p[0] = sa.Parameter_Var_Sufix(p[1], p[3])
+  elif len(p) == 3:
+    p[0] = sa.Parameter_Prefix_Var(p[1], p[2])
+  else: 
+    p[0] = sa.Parameter_Var(p[1])
+  
+def p_parameter_prefix(p):
+  '''
+  parameter_prefix : parameter_type AMPERSAND
+    | AMPERSAND
+    | parameter_type
+  '''
+  if len(p) == 3:
+    p[0] = sa.ParameterPrefix_PType_Amp(p[1])
+  elif isinstance(p[1], sa.ParameterType):
+    p[0] = sa.ParameterPrefix_PType(p[1])
+  else:
+    p[0] = sa.ParameterPrefix_Ampersand()
 
 def p_parameter_type(p):
   '''
@@ -366,11 +402,12 @@ def p_parameter_type(p):
     | BOOLEAN_TYPE
     | STRING_TYPE
     | FLOAT_TYPE
-    | ARRAY_TYPE 
+    | ARRAY_TYPE
     | BOOL_TYPE
     | REAL_TYPE
     | DOUBLE_TYPE
   '''
+  p[0] = sa.ParameterType_Type(p[1])
 
 #VERIFICAR SYNTAX
 def p_static_scalar(p):
@@ -379,6 +416,12 @@ def p_static_scalar(p):
     | PLUS static_scalar
     | MINUS static_scalar
   '''
+  if len(p) == 2:
+    p[0] = sa.StaticScalar_CommonScalar(p[1])
+  elif p[1] == '+':
+    p[0] = sa.StaticScalar_Plus_Static(p[2]) 
+  else:
+    p[0] = sa.StaticScalar_Minus_Static(p[2])
 
 def p_common_scalar(p): 
   '''
@@ -386,6 +429,7 @@ def p_common_scalar(p):
     | NUMBER_INTEGER
     | CONSTANT_ENCAPSED_STRING
   '''
+  p[0] = sa.CommonScalar_Token(p[1])
   
 def p_array_pair_list(p):
   '''
@@ -409,6 +453,10 @@ def p_inner_statement_MUL(p):
   inner_statement_MUL : inner_statement inner_statement_MUL
     | inner_statement
   '''
+  if len(p) == 3:
+    p[0] = sa.InnerStatementMul_Mul(p[1], p[2])
+  else:
+    p[0] = sa.InnerStatementMul_Single(p[1])
   
 def p_statement_MUL(p):
   '''
@@ -446,13 +494,17 @@ def p_parameter_list_COLON_PARAMETER(p):
   parameter_list_COLON_PARAMETER : COLON parameter parameter_list_COLON_PARAMETER
     | COLON parameter
   '''
+  if len(p) == 4:
+    p[0] = sa.ParameterListColonParameter_Mul(p[2], p[3])
+  else:
+    p[0] = sa.ParameterListColonParameter_Single(p[2])
   
 def p_reference_variable_SELECTOR(p):
   '''
   reference_variable_SELECTOR : selector reference_variable_SELECTOR
     | selector
   '''
-  
+
 def p_simple_indirect_reference_DOLAR(p):
   '''
   simple_indirect_reference_DOLAR : DOLAR simple_indirect_reference_DOLAR
@@ -473,9 +525,8 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  function add(){
-    
-  } 
+  function add(&$valor = 10,int &$valor2 = -25){
+  }
 ?>
 '''
 

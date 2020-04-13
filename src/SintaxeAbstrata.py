@@ -51,10 +51,28 @@ class InnerStatement_Statement(InnerStatement):
     Visitor.visitInnerStatement_Statement(self)
     
 class InnerStatement_FuncDecStatement(InnerStatement):
-  def __init__(self,funcDecStatement):
+  def __init__(self, funcDecStatement):
     self.funcDecStatement = funcDecStatement
-  def accecpt(self, Visitor):
+  def accept(self, Visitor):
     Visitor.visitInnerStatement_FuncDecStatement(self)
+    
+class InnerStatementMul(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class InnerStatementMul_Mul(InnerStatementMul):
+  def __init__(self, innerStatement, innerStatementMul):
+    self.innerStatement = innerStatement
+    self.innerStatementMul = innerStatementMul
+  def accept(self, Visitor):
+    Visitor.visitInnerStatementMul_Mul(self)
+    
+class InnerStatementMul_Single(InnerStatementMul):
+  def __init__(self, innerStatement):
+    self.innerStatement = innerStatement
+  def accept(self, Visitor):
+    Visitor.visitInnerStatementMul_Single(self)
 
 class Statement(metaclass = ABCMeta):
     @abstractmethod
@@ -128,6 +146,141 @@ class Fds_statements_noStatements(Fds_statements):
   def accept(self, Visitor):
     Visitor.visitFds_statements_noStatements(self)
 
+class ParameterList(metaclass = ABCMeta):
+    @abstractmethod
+    def accept(self, Visitor):
+      pass
+    
+class ParameterList_Parameter_Mul(ParameterList):
+  def __init__(self, parameter, parameter_list_colon_parameter):
+    self.parameter = parameter
+    self.parameter_list_colon_parameter = parameter_list_colon_parameter
+  def accept(self, Visitor):
+    Visitor.visitParameterList_Parameter_Mul(self)
+    
+class ParameterList_Parameter_Single(ParameterList):
+  def __init__(self, parameter):
+    self.parameter = parameter
+  def accept(self, Visitor):
+    Visitor.visitParameterList_Parameter_Single(self)
+    
+class ParameterListColonParameter(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ParameterListColonParameter_Mul(ParameterListColonParameter):
+  def __init__(self, parameter, parameterListColonParameter):
+    self.parameter = parameter
+    self.parameterListColonParameter = parameterListColonParameter
+  def accept(self, Visitor):
+    Visitor.visitParameterListColonParameter_Mul(self)
+
+class ParameterListColonParameter_Single(ParameterListColonParameter):
+  def __init__(self, parameter):
+    self.parameter = parameter
+  def accept(self, Visitor):
+    Visitor.visitParameterListColonParameter_Single(self)
+    
+class Parameter(metaclass = ABCMeta):
+    @abstractmethod
+    def accept(self, Visitor):
+      pass
+    
+class Parameter_Var(Parameter):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitParameter_Var(self)
+    
+class Parameter_Prefix_Var(Parameter):
+  def __init__(self, prefix, variable):
+    self.prefix = prefix
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitParameter_Prefix_Var(self)
+    
+class Parameter_Var_Sufix(Parameter):
+  def __init__(self, variable, static_scalar):
+    self.variable = variable
+    self.static_scalar = static_scalar
+  def accept(self, Visitor):
+    Visitor.visitParameter_Var_Sufix(self)
+    
+class Parameter_Full(Parameter):
+  def __init__(self, prefix, variable, static_scalar):
+    self.prefix = prefix
+    self.variable = variable
+    self.static_scalar = static_scalar
+  def accept(self, Visitor):
+    Visitor.visitParameter_Full(self)
+    
+class ParameterPrefix(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ParameterPrefix_PType_Amp(ParameterPrefix):
+  def __init__(self, parameter_type):
+    self.parameter_type = parameter_type
+  def accept(self, Visitor):
+    Visitor.visitParameterPrefix_PType_Amp(self)
+    
+class ParameterPrefix_Ampersand(ParameterPrefix):
+  def accept(self, Visitor):
+    Visitor.visitParameterPrefix_Ampersand(self)
+    
+class ParameterPrefix_PType(ParameterPrefix):
+  def __init__(self, parameter_type):
+    self.parameter_type = parameter_type
+  def accept(self, Visitor):
+    Visitor.visitParameterPrefix_PType(self)
+    
+class ParameterType(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ParameterType_Type(ParameterType):
+  def __init__(self, p_type):
+    self.type = p_type
+  def accept(self, Visitor):
+    Visitor.visitParameterType_Type(self)
+    
+class StaticScalar(metaclass = ABCMeta):
+    @abstractmethod
+    def accept(self, Visitor):
+      pass
+    
+class StaticScalar_CommonScalar(StaticScalar):
+  def __init__(self, common_scalar):
+    self.common_scalar = common_scalar
+  def accept(self, Visitor):
+    Visitor.visitStaticScalar_CommonScalar(self)
+    
+class StaticScalar_Plus_Static(StaticScalar):
+  def __init__(self, static_scalar):
+    self.static_scalar = static_scalar
+  def accept(self, Visitor):
+    Visitor.visitStaticScalar_Plus_Static(self)  
+  
+class StaticScalar_Minus_Static(StaticScalar):
+  def __init__(self, static_scalar):
+    self.static_scalar = static_scalar
+  def accept(self, Visitor):
+    Visitor.visitStaticScalar_Minus_Static(self)  
+    
+class CommonScalar(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+    
+class CommonScalar_Token(CommonScalar):
+  def __init__(self, token):
+    self.token = token
+  def accept(self, Visitor):
+    Visitor.visitCommonScalar_Token(self)
+    
 class AmpersandVariable(metaclass = ABCMeta):
     @abstractmethod
     def accept(self, Visitor):
@@ -157,7 +310,6 @@ class StatementElse(metaclass = ABCMeta):
     @abstractmethod
     def accept(self, Visitor):
       pass 
-
 
 class StatementForeach(metaclass = ABCMeta):
     @abstractmethod
@@ -204,55 +356,7 @@ class ComparissonOperator(metaclass = ABCMeta):
     def accept(self, Visitor):
       pass 
 
-
-
-
-
 class Expr(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-    
-class Expr_True(Expr):
-  def __init__(self, true):
-    self.true = true
-  def accept(self, Visitor):
-    Visitor.visitExpr_True(self)
-    
-class Expr_False(Expr):
-  def __init__(self, false):
-    self.false = false
-  def accept(self, Visitor):
-    Visitor.visitExpr_False(self)
-
-
-class Expr_ArithmeticOperator(Expr):
-  def __init__(self, exp1, arithmeticOperator, exp2):
-    self.exp1 = exp1
-    self.arithmeticOperator = arithmeticOperator
-    self.exp2 = exp2
-  def accept(self, Visitor):
-    Visitor.visitMainInnerStatement(self)
-
-
-
-
-class Encaps(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class EncapsVar(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class encapsVarOPT(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class EncapsVarOffSet(metaclass = ABCMeta):
     @abstractmethod
     def accept(self, Visitor):
       pass
@@ -282,31 +386,6 @@ class Selector(metaclass = ABCMeta):
     def accept(self, Visitor):
       pass
 
-class FuncDecStatement(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class ParameterList(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class Parameter(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class StaticScalar(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class CommonScalar(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
 class StaticArrPairList(metaclass = ABCMeta):
     @abstractmethod
     def accept(self, Visitor):
@@ -326,80 +405,3 @@ class ArrayPair(metaclass = ABCMeta):
     @abstractmethod
     def accept(self, Visitor):
       pass
-
-
-
-# ========== CLASSES CONCRETAS ================
-#class ClasseAbstrata_NomeRegra(NomeClasseAbstrata):
-#   .....
-#   .....
-
-
-
-
-    
-
-
-
-
-'''
-
-
-class ArithmeticOp_Soma(ArithmeticOperator):
-  def __init__(self, op):
-    self.exp1 = op
-  def accept(self, Visitor):
-    Visitor.visitArithmeticOp_Soma(self)
-
-
-
-class FunctionCallExpr(MainInner):
-  def __init__(self, exp1):
-    self.functionCall = functionCall
-  def accept(self, Visitor):
-    Visitor.visitMainInnerStatement(self)
-
-class FunctionCallExpr(MainInner):
-  def __init__(self, functionCall):
-    self.functionCall = functionCall
-  def accept(self, Visitor):
-    Visitor.visitMainInnerStatement(self)
-    
-
-
-
-
-
-
-class MainInnerStatement(MainInner):
-  def __init__(self, mainInner):
-    self.mainInner = mainInner
-
-  def accept(self, Visitor):
-    Visitor.visitMainInnerStatement(self)
-    
-class NumberRealCommonScalar(CommonScalar):
-  def __init__(self,numberReal):
-    self.numberReal = numberReal
-  def accept(self,Visitor):
-    Visitor.visitNumberRealCommonScalar(self)
-
-class NumberIntegerCommonScalar(CommonScalar):
-    def __init__(self,numberReal):
-        self.numberInteger = numberInteger
-    def accept(self,Visitor):
-        Visitor.visitNumberIntegerCommonScalar(self)        
-
-class ConstantEncapStrCommonScalar(CommonScalar):
-    def __init__(self,numberReal):
-        self.ConstantEncapStr = ConstantEncapStr
-    def accept(self,Visitor):
-        Visitor.visitConstantEncapStrCommonScalar(self)        
-
-class PlusStaticScalar(CommonScalar):
-    def __init__(self,numberReal):
-        self.ConstantEncapStr = ConstantEncapStr
-    def accept(self,Visitor):
-        Visitor.visitConstantEncapStrCommonScalar(self)       
-
-'''
