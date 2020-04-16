@@ -52,9 +52,9 @@ class Visitor():
     print(')', end='')
     
   def visitFds_statements_withStatements(self, fds_statements):
-    print('{', end='')
+    print('{')
     fds_statements.inner_statement_MUL.accept(self)
-    print('}', end='')
+    print('}')
     
   def visitFds_statements_noStatements(self, fds_statements):
     print('{')
@@ -130,6 +130,10 @@ class Visitor():
     
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
+    print(';')
+    
+  def visitStatement_Die(self, statement):
+    statement.die.accept(self)
     print(';')
     
   def visitExpr_Expr1_Expr2(self, expr):
@@ -243,6 +247,13 @@ class Visitor():
     
   def visitExit_Empty(self, _exit):
     print('exit', end='')
+    
+  def visitDie_ExitExpr(self, die):
+    print('die', end='')
+    die.exitExpr.accept(self)
+    
+  def visitDie_Empty(self, die):
+    print('die', end='')
     
   def visitExitExpr_Expr(self, exitExpr):
     print('(', end='')

@@ -117,6 +117,10 @@ def p_die_statement(p):
   die_statement : DIE exit_expr
     | DIE
   '''
+  if len(p) == 3:
+    p[0] = sa.Die_ExitExpr(p[2])
+  else:
+    p[0] = sa.Die_Empty()
 
 def p_exit_expr(p):
   '''
@@ -155,10 +159,13 @@ def p_statement(p):
     | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
     | GLOBAL global_var SEMICOLON
   '''
+  print(p[1])
   if isinstance(p[1], sa.Expr): 
     p[0] = sa.Statement_Expr(p[1], p[2])
   elif isinstance(p[1], sa.Exit):
     p[0] = sa.Statement_Exit(p[1])
+  elif isinstance(p[1], sa.Die):
+    p[0] = sa.Statement_Die(p[1])
   
 def p_if_statement(p):
   '''
@@ -596,7 +603,13 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    exit(1);
+    function add($valor1, $valor2){
+      die(1);
+      die;
+      die();
+      exit;
+      exit(1);  
+    }
 ?>
 '''
 

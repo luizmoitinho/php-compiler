@@ -91,6 +91,12 @@ class Statement_Exit(Statement):
     self.exit = exit
   def accept(self, Visitor):
     Visitor.visitStatement_Exit(self)
+    
+class Statement_Die(Statement):
+  def __init__(self, die):
+    self.die = die
+  def accept(self, Visitor):
+    Visitor.visitStatement_Die(self)
 
 class FuncDecStatement(metaclass = ABCMeta):
   @abstractmethod
@@ -546,6 +552,21 @@ class Exit_ExitExpr(Exit):
 class Exit_Empty(Exit):
   def accept(self, Visitor):
     Visitor.visitExit_Empty(self)
+    
+class Die(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Die_ExitExpr(Die):
+  def __init__(self, exitExpr):
+    self.exitExpr = exitExpr
+  def accept(self, Visitor):
+    Visitor.visitDie_ExitExpr(self)
+    
+class Die_Empty(Die):
+  def accept(self, Visitor):
+    Visitor.visitDie_Empty(self)
     
 class ExitExpr(metaclass = ABCMeta):
   @abstractmethod
