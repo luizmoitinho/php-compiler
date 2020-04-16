@@ -608,7 +608,7 @@ arquivo = '''
       die;
       die();
       exit;
-      exit(1);  
+      add(1, &$valor, 3); 
     }
 ?>
 '''

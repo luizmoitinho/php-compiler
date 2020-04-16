@@ -551,7 +551,7 @@ class Exit_ExitExpr(Exit):
     
 class Exit_Empty(Exit):
   def accept(self, Visitor):
-    Visitor.visitExit_Empty(self)
+    Visitor.visitExit_Empty()
     
 class Die(metaclass = ABCMeta):
   @abstractmethod
@@ -566,7 +566,7 @@ class Die_ExitExpr(Die):
     
 class Die_Empty(Die):
   def accept(self, Visitor):
-    Visitor.visitDie_Empty(self)
+    Visitor.visitDie_Empty()
     
 class ExitExpr(metaclass = ABCMeta):
   @abstractmethod
@@ -581,4 +581,4 @@ class ExitExpr_Expr(ExitExpr):
     
 class ExitExpr_Empty(ExitExpr):
   def accept(self, Visitor):
-    Visitor.visitExitExpr_Empty(self)
+    Visitor.visitExitExpr_Empty()

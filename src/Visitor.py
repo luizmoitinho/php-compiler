@@ -193,7 +193,8 @@ class Visitor():
     print(functionCall.id, '()')
     
   def visitFunctionCall_WithParameter(self, functionCall):
-    print(functionCall.id, '(')
+    print(functionCall.id, end='')
+    print('(', end='')
     functionCall.parameterList.accept(self)
     print(')', end='')
     
@@ -218,7 +219,7 @@ class Visitor():
     
   def visitFunctionCallParameter_AmpersandVariable(self, functionCallParameter):
     print('&', end='')
-    print(functionCallParameter.variable)
+    print(functionCallParameter.variable, end='')
   
   def visitVariable_Reference_Variable(self, variable):
     variable.reference_variable.accept(self)
@@ -245,14 +246,14 @@ class Visitor():
     print('exit', end='')
     _exit.exitExpr.accept(self)
     
-  def visitExit_Empty(self, _exit):
+  def visitExit_Empty(self):
     print('exit', end='')
     
   def visitDie_ExitExpr(self, die):
     print('die', end='')
     die.exitExpr.accept(self)
     
-  def visitDie_Empty(self, die):
+  def visitDie_Empty(self):
     print('die', end='')
     
   def visitExitExpr_Expr(self, exitExpr):
@@ -260,5 +261,5 @@ class Visitor():
     exitExpr.expr.accept(self)
     print(')', end='')
     
-  def visitExitExpr_Empty(self, exitExpr):
+  def visitExitExpr_Empty(self):
     print('()', end='')
