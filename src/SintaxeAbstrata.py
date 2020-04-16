@@ -85,6 +85,12 @@ class Statement_Expr(Statement):
     self.semiColon = semiColon
   def accept(self, Visitor):
     Visitor.visitStatement_Expr(self)
+    
+class Statement_Exit(Statement):
+  def __init__(self, exit):
+    self.exit = exit
+  def accept(self, Visitor):
+    Visitor.visitStatement_Exit(self)
 
 class FuncDecStatement(metaclass = ABCMeta):
   @abstractmethod
@@ -366,12 +372,6 @@ class ArrayPair_Attr_Expr(ArrayPair):
     self.expr2 = expr2
   def accept(self, Visitor):
     Visitor.visitArrayPair_Attr_Expr(self) 
-
-class Expr1_Exit(Expr1):
-  def __init__(self, exit):
-    self.exit = exit
-  def accept(self, Visitor):
-    Visitor.visitExpr1_Exit(self)
 
 class Expr1_FunctionCall(Expr1):
   def __init__(self, functionCall):

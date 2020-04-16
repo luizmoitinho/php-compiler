@@ -128,6 +128,10 @@ class Visitor():
     statement.expr.accept(self)
     print(';')
     
+  def visitStatement_Exit(self, statement):
+    statement.exit.accept(self)
+    print(';')
+    
   def visitExpr_Expr1_Expr2(self, expr):
     expr.expr1.accept(self)
     expr.expr2.accept(self)
@@ -171,9 +175,6 @@ class Visitor():
     arrayPair.expr1.accept(self)
     print('=', end='')
     arrayPair.expr2.accept(self)
-    
-  def visitExpr1_Exit(self, expr1):
-    expr1.exit.accept(self)
 
   def visitExpr1_Scalar(self, expr1):
     expr1.scalar.accept(self)

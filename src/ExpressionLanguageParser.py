@@ -85,16 +85,12 @@ def p_expr1(p):
     | variable DECREMENT
     | variable
     | LPAREN expr RPAREN
-    | exit
-    | die
     | ARRAY_TYPE array_declaration
     | function_call
     | scalar
     | TRUE
     | FALSE
   '''
-  print(p[1])
-  print('CHEGA AQUI')
   if p[1] == 'true':
     p[0] = sa.Expr1_True()
   elif p[1] == 'false':
@@ -105,12 +101,10 @@ def p_expr1(p):
     p[0] = sa.Expr1_FunctionCall(p[1])
   #elif isinstance(p[2], sa.ArrayDeclaration):
   #  p[0] = sa.Expr1_ArrayDeclaration(p[2])
-  elif isinstance(p[1], sa.Exit):
-    p[0] = sa.Expr1_Exit(p[1])
     
-def p_exit(p):
+def p_exit_statement(p):
   '''
-  exit : EXIT exit_expr
+  exit_statement : EXIT exit_expr
     | EXIT
   '''  
   if len(p) == 3:
@@ -118,9 +112,9 @@ def p_exit(p):
   else: 
     p[0] = sa.Exit_Empty()
   
-def p_die(p):
+def p_die_statement(p):
   '''
-  die : DIE exit_expr
+  die_statement : DIE exit_expr
     | DIE
   '''
 
@@ -156,11 +150,15 @@ def p_statement(p):
     | break_statement
     | continue_statement 
     | return_statement
+    | exit_statement SEMICOLON
+    | die_statement SEMICOLON
     | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
     | GLOBAL global_var SEMICOLON
   '''
   if isinstance(p[1], sa.Expr): 
     p[0] = sa.Statement_Expr(p[1], p[2])
+  elif isinstance(p[1], sa.Exit):
+    p[0] = sa.Statement_Exit(p[1])
   
 def p_if_statement(p):
   '''
