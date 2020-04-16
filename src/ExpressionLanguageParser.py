@@ -3,12 +3,12 @@ import ply.lex as lex
 import Visitor as vis
 from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
+# variable -  reference_variable - simple_indirect_reference_DOLAR
 
 precedence = (
   ('left', 'PLUS', 'MINUS'),
   ('left', 'TIMES', 'DIVIDE'),
-  #('right', 'UMINUS'),
- )
+)
 
 def p_main(p):
   '''
@@ -34,31 +34,49 @@ def p_inner_statement(p):
   '''
   inner_statement : function_declaration_statement
     | statement
-  '''
-  if isinstance(p[1], sa.Statement):
-    p[0] = sa.InnerStatement_Statement(p[1])
-  else:
+  ''' 
+  if isinstance(p[1], sa.FuncDecStatement):
     p[0] = sa.InnerStatement_FuncDecStatement(p[1])
+  elif isinstance(p[1], sa.Statement):
+    p[0] = sa.InnerStatement_Statement(p[1])
     
+def p_inner_statement_MUL(p):
+  '''
+  inner_statement_MUL : inner_statement inner_statement_MUL
+    | inner_statement
+  '''
+  if len(p) == 3:
+    p[0] = sa.InnerStatementMul_Mul(p[1], p[2])
+  else:
+    p[0] = sa.InnerStatementMul_Single(p[1])
+  
+  #MINUS expr1 expr2
+  #  | MINUS expr1
 def p_expr(p):
   '''
   expr : expr1 expr2
-    | expr1
     | expr3 
+    | expr1
   '''
+  if len(p) == 3:
+    p[0] = sa.Expr_Expr1_Expr2(p[1], p[2])
+  elif isinstance(p[1], sa.Expr1):
+    p[0] = sa.Expr_Expr1(p[1])
+    
 def p_expr2(p): 
   '''
   expr2 : INTE_DOT expr DDOT expr 
     | comparission_operator expr 
     | arithmetic_operator expr
   '''
+  
 def p_expr3(p): 
   '''
   expr3 : variable assign_operator expr
     | variable assign_operator AMPERSAND expr
     | LPAREN type_cast_operator RPAREN expr
   '''
-  
+
 def p_expr1(p): 
   ''' 
   expr1 : INCREMENT variable
@@ -67,35 +85,83 @@ def p_expr1(p):
     | variable DECREMENT
     | variable
     | LPAREN expr RPAREN
-    | EXIT exit_expr
-    | EXIT
-    | DIE exit_expr
-    | DIE
-    | ARRAY_TYPE LPAREN array_pair_list RPAREN
-    | ARRAY_TYPE LPAREN RPAREN
+    | exit
+    | die
+    | ARRAY_TYPE array_declaration
     | function_call
     | scalar
     | TRUE
     | FALSE
   '''
+  print(p[1])
+  print('CHEGA AQUI')
+  if p[1] == 'true':
+    p[0] = sa.Expr1_True()
+  elif p[1] == 'false':
+    p[0] = sa.Expr1_False()
+  elif isinstance(p[1], sa.Scalar):
+    p[0] = sa.Expr1_Scalar(p[1])
+  elif isinstance(p[1], sa.FunctionCall):
+    p[0] = sa.Expr1_FunctionCall(p[1])
+  #elif isinstance(p[2], sa.ArrayDeclaration):
+  #  p[0] = sa.Expr1_ArrayDeclaration(p[2])
+  elif isinstance(p[1], sa.Exit):
+    p[0] = sa.Expr1_Exit(p[1])
+    
+def p_exit(p):
+  '''
+  exit : EXIT exit_expr
+    | EXIT
+  '''  
+  if len(p) == 3:
+    p[0] = sa.Exit_ExitExpr(p[2])
+  else: 
+    p[0] = sa.Exit_Empty()
   
+def p_die(p):
+  '''
+  die : DIE exit_expr
+    | DIE
+  '''
+
+def p_exit_expr(p):
+  '''
+  exit_expr : LPAREN expr RPAREN
+    | LPAREN RPAREN
+  '''
+  if len(p) == 4:
+    p[0] = sa.ExitExpr_Expr(p[2])
+  else:
+    p[0] = sa.ExitExpr_Empty()
+
+def p_array_declaration(p):
+  '''
+  array_declaration : LPAREN array_pair_list RPAREN
+    | LPAREN RPAREN
+  '''
+  if isinstance(p[2], sa.ArrayPairList):
+    p[0] = sa.ArrayDec_WithPairList(p[2])
+  else:
+    p[0] = sa.ArrayDec_NoPairList()
+
+
 def p_statement(p):
   '''
   statement : expr SEMICOLON
-    | if_statement
+    | if_statement 
     | while_statement
     | do_statement
     | for_statement
     | foreach_statement
     | break_statement
-    | continue_statement
+    | continue_statement 
     | return_statement
     | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
     | GLOBAL global_var SEMICOLON
   '''
-  if isinstance(p[1], sa.Expr):
+  if isinstance(p[1], sa.Expr): 
     p[0] = sa.Statement_Expr(p[1], p[2])
-    
+  
 def p_if_statement(p):
   '''
   if_statement : statement_if if_statement_complement
@@ -107,7 +173,21 @@ def p_if_statement_complement(p):
   if_statement_complement : statement_elseif
     | statement_else
   '''
-    
+def p_statement_if(p):
+  ''' 
+  statement_if : IF expr_parentheses statement_BLOCK_OPT 
+  '''
+
+def p_statement_elseif(p):
+  '''
+  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT
+  '''
+
+def p_statement_else(p):
+  '''
+  statement_else : ELSE statement_BLOCK_OPT
+  '''
+
 def p_while_statement(p):
   '''
   while_statement : WHILE expr_parentheses statement_BLOCK_OPT
@@ -133,7 +213,7 @@ def p_continue_statement(p):
 def p_return_statement(p):
   '''
   return_statement : RETURN expr SEMICOLON 
-    | RETURN SEMICOLON
+    | RETURN SEMICOLON 
   '''
   
 def p_for_statement(p):
@@ -165,7 +245,7 @@ def p_statement_COLON_GLOBAL(p):
   statement_COLON_GLOBAL : COLON global_var statement_COLON_GLOBAL
     | COLON global_var
   '''
-  
+
 def p_ampersand_variable(p):
   '''
   ampersand_variable : AMPERSAND VARIABLE
@@ -175,21 +255,6 @@ def p_ampersand_variable(p):
 def p_expr_parentheses(p):
   '''
   expr_parentheses : LPAREN expr RPAREN
-  '''
-
-def p_statement_if(p):
-  '''
-  statement_if : IF expr_parentheses statement_BLOCK_OPT
-  '''
-
-def p_statement_elseif(p):
-  '''
-  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT
-  '''
-
-def p_statement_else(p):
-  '''
-  statement_else : ELSE statement_BLOCK_OPT
   '''
 
 def p_foreach_statement(p):
@@ -203,32 +268,46 @@ def p_for_expr_OPT(p):
   for_expr_OPT : expr for_expr_COLON_EXPR
   | expr
   '''
-  
-#porq function_call deriva para base_variable?
+
 def p_function_call(p):
   '''
   function_call : ID LPAREN function_call_parameter_list RPAREN
     | ID LPAREN RPAREN
   '''
+  if len(p) == 4:
+    p[0] = sa.FunctionCall_NoParameter(p[1])
+  else:
+    p[0] = sa.FunctionCall_WithParameter(p[1], p[3])
 
 def p_function_call_parameter_list(p):
   '''
-  function_call_parameter_list : function_call_parameter function_call_list_COLON_FUNCTION
+  function_call_parameter_list : function_call_parameter fc_parameter_list_COLON_PARAMETER
     |  function_call_parameter
   '''
+  if len(p) == 2:
+    p[0] = sa.FCParameterList_Single(p[1])
+  else:
+    p[0] = sa.FCParameterList_Mul(p[1], p[2])
 
+def p_fc_parameter_list_COLON_PARAMETER(p):
+  '''
+  fc_parameter_list_COLON_PARAMETER : COLON function_call_parameter fc_parameter_list_COLON_PARAMETER
+    | COLON function_call_parameter
+  '''
+  if len(p) == 4:
+    p[0] = sa.FCParameterListColonParameter_Mul(p[2], p[3])
+  else:
+    p[0] = sa.FCParameterListColonParameter_Single(p[2])
 
 def p_function_call_parameter(p):
   '''
   function_call_parameter : expr
     | AMPERSAND VARIABLE
   '''
-
-def p_assignment_list_element(p):
-  '''
-  assignment_list_element : variable
-    | LIST LPAREN assignment_list_element assignment_list_element_COLON_ASSIGNMENT  RPAREN
-  '''
+  if len(p) == 2:
+    p[0] = sa.FunctionCallParameter_Expr(p[1])
+  else:
+    p[0] = sa.FunctionCallParameter_AmpersandVariable(p[2])
   
 def p_unary_operator(p):
   '''
@@ -289,25 +368,27 @@ def p_scalar(p):
     | NUMBER_INTEGER
     | CONSTANT_ENCAPSED_STRING
   '''
+  p[0] = sa.Scalar_Token(p[1])
   
-def p_exit_expr(p):
-  '''
-  exit_expr : LPAREN expr RPAREN
-    | LPAREN RPAREN
-  '''
-
-# Removido chamada a function_call
 def p_variable(p):
   '''
   variable : reference_variable
     | simple_indirect_reference_DOLAR reference_variable
   '''
+  if len(p) == 2:
+    p[0] = sa.Variable_Reference_Variable(p[1])
+  else :
+    p[0] = sa.Variable_Simple_Indirect(p[1], p[2])
   
 def p_reference_variable(p):
   '''
   reference_variable : compound_variable reference_variable_SELECTOR
   | compound_variable
-  '''
+  ''' 
+  if len(p) == 2:
+    p[0] = sa.ReferenceVariable_Compound_Reference(p[1], p[2])
+  else :
+    p[0] = sa.ReferenceVariable_Compound(p[1])
   
 def p_compound_variable(p):
   '''
@@ -412,7 +493,7 @@ def p_parameter_type(p):
 #VERIFICAR SYNTAX
 def p_static_scalar(p):
   '''
-  static_scalar : common_scalar
+  static_scalar : common_scalar 
     | PLUS static_scalar
     | MINUS static_scalar
   '''
@@ -436,28 +517,27 @@ def p_array_pair_list(p):
   array_pair_list : array_pair array_pair_list_ARR_PAIR 
     | array_pair
   '''
-
+  if len(p)==3:
+    p[0] = sa.ArrayPairList_ArrayPair_Mul(p[1],p[2])
+  else:
+    p[0] = sa.ArrayPairList_ArrayPair_Single(p[1])
+ 
 def p_array_pair(p):
   ''' 
   array_pair : expr
+    | AMPERSAND variable
     | expr ATTR_ASSOC expr
     | expr ATTR_ASSOC AMPERSAND variable
-    | AMPERSAND variable
   '''
+  if len(p) == 2:
+    p[0] = sa.ArrayPair_Expr(p[1])
+  elif len(p)==3:
+    p[0] = sa.ArrayPair_Variable(p[2])
+  elif len(p)==4:
+    p[0] = sa.ArrayPair_Attr_Expr(p[1],p[3])
 
 # Expressões regulares transformadas em regras.
 # ======================================================================
-
-def p_inner_statement_MUL(p):
-  '''
-  inner_statement_MUL : inner_statement inner_statement_MUL
-    | inner_statement
-  '''
-  if len(p) == 3:
-    p[0] = sa.InnerStatementMul_Mul(p[1], p[2])
-  else:
-    p[0] = sa.InnerStatementMul_Single(p[1])
-  
 def p_statement_MUL(p):
   '''
   statement_MUL : statement statement_MUL
@@ -477,18 +557,6 @@ def p_statement_BLOCK_OPT(p):
     | LKEY RKEY
   ''' 
 
-def p_function_call_list_COLON_FUNCTION(p):
-  '''
-  function_call_list_COLON_FUNCTION : COLON function_call_parameter function_call_list_COLON_FUNCTION
-    | COLON function_call_parameter
-  '''
-  
-def p_assignment_list_element_COLON_ASSIGNMENT(p):
-  '''
-  assignment_list_element_COLON_ASSIGNMENT : COLON assignment_list_element assignment_list_element_COLON_ASSIGNMENT
-    | 
-  '''
-  
 def p_parameter_list_COLON_PARAMETER(p):
   '''
   parameter_list_COLON_PARAMETER : COLON parameter parameter_list_COLON_PARAMETER
@@ -510,6 +578,11 @@ def p_simple_indirect_reference_DOLAR(p):
   simple_indirect_reference_DOLAR : DOLAR simple_indirect_reference_DOLAR
     | DOLAR
   '''
+  if len(p) == 3:
+    p[0] = sa.SimpleIndirectReference_Mul(p[2])
+  else:
+    p[0] = sa.SimpleIndirectReference_Single()
+  
 
 def p_array_pair_list_ARR_PAIR(p):
   '''
@@ -525,8 +598,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  function add(&$valor = 10,int &$valor2 = -25){
-  }
+    exit(1);
 ?>
 '''
 

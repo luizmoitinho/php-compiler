@@ -26,8 +26,8 @@ class Visitor():
     innerStatementMul.innerStatement.accept(self)
     innerStatementMul.innerStatementMul.accept(self)
     
-  def visitInnerStatementMul_Single(self, innerstatementMul):
-    innerstatementMul.innerStatement.accept(self)
+  def visitInnerStatementMul_Single(self, innerStatementMul):
+    innerStatementMul.innerStatement.accept(self)
     
   def visitFuncDecStatement_Function(self, funcDecStatement):
     print('function', end=' ')
@@ -120,13 +120,133 @@ class Visitor():
     
   def visitCommonScalar_Token(self, commonScalar):
     print(commonScalar.token, end='')
-  
-  def visitStatement_Expr(self, statement_expr):
-    statement_expr.expr.accept(self)
-    print(';')
-
-  def visitExpr_True(self, expr):
-    print('true', end=' ')
     
-  def visitExpr_False(self, expr):
-    print('false', end=' ')
+  def visitScalar_Token(self, scalar):
+    print(scalar.token, end='')
+  
+  def visitStatement_Expr(self, statement):
+    statement.expr.accept(self)
+    print(';')
+    
+  def visitExpr_Expr1_Expr2(self, expr):
+    expr.expr1.accept(self)
+    expr.expr2.accept(self)
+
+  def visitExpr_Expr1(self, expr):
+    expr.expr1.accept(self)
+    
+  def visitExpr_Expr3(self, expr):
+    expr.expr3.accept(self)
+
+  def visitExpr1_FunctionCall(self, expr1):
+    expr1.functionCall.accept(self)
+
+  def visitExpr1_ArrayDeclaration(self, expr1):
+    print('array', end='')
+    expr1.arrayDeclaration.accept(self)
+
+  def visitArrayDec_WithPairList(self, arrayDec):
+    print('(',end='')
+    arrayDec.visitArrayDec_WithPairList.accept(self)
+    print(')',end='')
+
+  def visitArrayDec_NoPairList(self, ArrayDec):
+    print('( )',end='')
+  
+  def visitArrayPairList_ArrayPair_Mul(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    arrayPairList.arrayPairListArrPair.accept(self)
+  
+  def arrayPairList_ArrayPair_Single(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+
+  def arrayPair_Expr(self, arrayPair):
+    arrayPair.expr.accept(self)
+
+  def arrayPair_Variable(self, arrayPair):
+    print('&', end='')
+    arrayPair.variable.accept(self)
+  
+  def arrayPair_Attr_Expr(self, arrayPair):
+    arrayPair.expr1.accept(self)
+    print('=', end='')
+    arrayPair.expr2.accept(self)
+    
+  def visitExpr1_Exit(self, expr1):
+    expr1.exit.accept(self)
+
+  def visitExpr1_Scalar(self, expr1):
+    expr1.scalar.accept(self)
+  
+  def visitExpr1_True(self, expr1):
+    print('true', end='')
+    
+  def visitExpr1_False(self, expr1):
+    print('false', end='')
+    
+  def visitFunctionCall_NoParameter(self, functionCall):
+    print(functionCall.id, '()')
+    
+  def visitFunctionCall_WithParameter(self, functionCall):
+    print(functionCall.id, '(')
+    functionCall.parameterList.accept(self)
+    print(')', end='')
+    
+  def visitFCParameterList_Single(self, fcParameterList):
+    fcParameterList.fcParameter.accept(self) 
+
+  def visitFCParameterList_Mul(self, fcParameterList):
+    fcParameterList.fcParameter.accept(self)
+    fcParameterList.fcColonParameter.accept(self)
+    
+  def visitFCParameterListColonParameter_Single(self, fcParameterListColonParameter):
+    print(',', end='')
+    fcParameterListColonParameter.fcParameter.accept(self)
+    
+  def visitFCParameterListColonParameter_Mul(self, fcParameterListColonParameter):
+    print(',', end='')
+    fcParameterListColonParameter.fcParameter.accept(self)
+    fcParameterListColonParameter.fcplColonParameter.accept(self)
+    
+  def visitFunctionCallParameter_Expr(self, functionCallParameter):
+    functionCallParameter.expr.accept(self)
+    
+  def visitFunctionCallParameter_AmpersandVariable(self, functionCallParameter):
+    print('&', end='')
+    print(functionCallParameter.variable)
+  
+  def visitVariable_Reference_Variable(self, variable):
+    variable.reference_variable.accept(self)
+
+  def visitVariable_Simple_Indirect(self, variable):
+    variable.simple_indirect.accept(self)
+    variable.reference_variable.accept(self)
+
+  def visitReferenceVariable_Compound_Reference(self, referenceVariable):
+    referenceVariable.compoundvariable.accept(self)
+    referenceVariable.referencevariableSELECTOR.accept(self)
+  
+  def visitReferenceVariable_Compound(self, referenceVariable):
+    referenceVariable.compoundvariable.accept(self)
+  
+  def visitSimpleIndirectReference_Mul(self, simpleIndirectReference):
+    print('$', end='')
+    simpleIndirectReference.simpleindirect.accept(self)
+  
+  def SimpleIndirectReference_Single(self, simpleIndirectReference):
+    print('$', end='')
+    
+  def visitExit_ExitExpr(self, _exit):
+    print('exit', end='')
+    _exit.exitExpr.accept(self)
+    
+  def visitExit_Empty(self, _exit):
+    print('exit', end='')
+    
+  def visitExitExpr_Expr(self, exitExpr):
+    print('(', end='')
+    exitExpr.expr.accept(self)
+    print(')', end='')
+    
+  def visitExitExpr_Empty(self, exitExpr):
+    print('()', end='')

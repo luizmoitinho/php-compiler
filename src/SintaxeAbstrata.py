@@ -281,127 +281,283 @@ class CommonScalar_Token(CommonScalar):
   def accept(self, Visitor):
     Visitor.visitCommonScalar_Token(self)
     
-class AmpersandVariable(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class GlobalVar(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class ExprParen(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass    
-
-class StatementIf(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class StatementElseIf(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class StatementElse(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class StatementForeach(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class StatementForeachFirst(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class FunctionCall(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class FuncCallParamList(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass  
-
-class FuncCallParam(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class TypeCastOperator(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class ArithmeticOperator(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class AssignOperator(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
-class ComparissonOperator(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass 
-
 class Expr(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
+  @abstractmethod 
+  def accept(self, Visitor):
+    pass
 
-class exprExitExpr(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
+class Expr_Expr1_Expr2(Expr):
+  def __init__(self, expr1, expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    Visitor.visitExpr_Expr1_Expr2(self)
+    
+class Expr_Expr1(Expr):
+  def __init__(self, expr1):
+    self.expr1 = expr1
+  def accept(self, Visitor):
+    Visitor.visitExpr_Expr1(self)
+    
+class Expr_Expr3(Expr):
+  def __init__(self, expr3):
+    self.expr3 = expr3
+  def accept(self, Visitor):
+    Visitor.visitExpr_Expr3(self)
+    
+class Expr1(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
 
-class Variable(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class BaseVariable(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class ReferenceVariable(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class Selector(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class StaticArrPairList(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-
-class StaticArrayPair(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
+class ArrayDeclaration(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
 
 class ArrayPairList(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
 
+class ArrayPairList_ArrayPair_Mul(ArrayPairList):
+  def __init__(self, arrayPair, arrayPairListArrPair):
+    self.arrayPair = arrayPair
+    self.arrayPairListArrPair = arrayPairListArrPair
+  def accept(self, Visitor):
+    Visitor.visitArrayPairList_ArrayPair_Mul(self)
+
+class ArrayPairList_ArrayPair_Single(ArrayPairList):
+  def __init__(self,arrayPair):
+    self.arrayPair = arrayPair
+  def accept(self, Visitor):
+    Visitor.arrayPairList_ArrayPair_Single(self)
+
+class ArrayDec_WithPairList(ArrayDeclaration):
+  def __init__(self, arrayPairList):
+    self.arrayPairList = arrayPairList
+  def accept(self, Visitor):
+    Visitor.visitArrayDec_WithPairList(self)
+    
+class ArrayDec_NoPairList(ArrayDeclaration):
+  def accept(self, Visitor):
+    Visitor.visitArrayDec_NoPairList(self)
+  
 class ArrayPair(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ArrayPair_Expr(ArrayPair):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitArrayPair_Expr(self)
+
+class ArrayPair_Variable(ArrayPair):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitArrayPair_Variable(self)
+
+class ArrayPair_Attr_Expr(ArrayPair):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1 
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    Visitor.visitArrayPair_Attr_Expr(self) 
+
+class Expr1_Exit(Expr1):
+  def __init__(self, exit):
+    self.exit = exit
+  def accept(self, Visitor):
+    Visitor.visitExpr1_Exit(self)
+
+class Expr1_FunctionCall(Expr1):
+  def __init__(self, functionCall):
+    self.functionCall = functionCall
+  def accept(self, Visitor):
+    Visitor.visitExpr1_FunctionCall(self)
+
+class Expr1_ArrayDeclaration(Expr1):
+  def __init__(self, ArrayDeclaration):
+    self.arrayDeclaration = arrayDeclaration
+  def accecpt(self, Visitor):
+    Visitor.visitExpr1_ArrayDeclaration(self)
+
+class Expr1_Scalar(Expr1):
+  def __init__(self, scalar):
+    self.scalar = scalar
+  def accept(self, Visitor):
+    Visitor.visitExpr1_Scalar(self)
+  
+class Expr1_True(Expr1):
+  def accept(self, Visitor):
+    Visitor.visitExpr1_True(self)
+    
+class Expr1_False(Expr1):
+  def accept(self, Visitor):
+    Visitor.visitExpr1_False(self)
+  
+class Scalar(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Scalar_Token(Scalar):
+  def __init__(self, token):
+    self.token = token
+  def accept(self, Visitor):
+    Visitor.visitScalar_Token(self)
+    
+class FunctionCall(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class FunctionCall_NoParameter(FunctionCall):
+  def __init__(self, id):
+    self.id = id
+  def accept(self, Visitor):
+    Visitor.visitFunctionCall_NoParameter(self)
+    
+class FunctionCall_WithParameter(FunctionCall):
+  def __init__(self, id, parameterList):
+    self.id = id
+    self.parameterList = parameterList
+  def accept(self, Visitor):
+    Visitor.visitFunctionCall_WithParameter(self)
+    
+class FCParameterList(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class FCParameterList_Single(FCParameterList):
+  def __init__(self, fcParameter):
+    self.fcParameter = fcParameter
+  def accept(self, Visitor):
+    Visitor.visitFCParameterList_Single(self)
+
+class FCParameterList_Mul(FCParameterList):
+  def __init__(self, fcParameter, fcColonParameter):
+    self.fcParameter = fcParameter
+    self.fcColonParameter = fcColonParameter
+  def accept(self, Visitor):
+    Visitor.visitFCParameterList_Mul(self)
+    
+class FCParameterListColonParameter(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class FCParameterListColonParameter_Single(FCParameterListColonParameter):
+  def __init__(self, fcParameter):
+    self.fcParameter = fcParameter
+  def accept(self, Visitor):
+    Visitor.visitFCParameterListColonParameter_Single(self)
+    
+class FCParameterListColonParameter_Mul(FCParameterListColonParameter):
+  def __init__(self, fcParameter, fcplColonParameter):
+    self.fcParameter = fcParameter
+    self.fcplColonParameter = fcplColonParameter
+  def accept(self, Visitor):
+    Visitor.visitFCParameterListColonParameter_Mul(self)
+
+class FunctionCallParameter(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class FunctionCallParameter_Expr(FunctionCallParameter):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitFunctionCallParameter_Expr(self)
+    
+class FunctionCallParameter_AmpersandVariable(FunctionCallParameter):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitFunctionCallParameter_AmpersandVariable(self)
+
+class Variable(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Variable_Reference_Variable(Variable):
+  def __init__(self, reference_variable):
+    self.reference_variable = reference_variable
+  def accept(self, Visitor):
+    Visitor.visitVariable_Reference_Variable(self)
+    
+class Variable_Simple_Indirect(Variable):
+  def __init__(self, simple_indirect, reference_variable):
+    self.simple_indirect = simple_indirect
+    self.reference_variable = reference_variable
+  def accept(self, Visitor):
+    Visitor.visitVariable_Simple_Indirect(self)
+
+class ReferenceVariable(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class ReferenceVariable_Compound_Reference(ReferenceVariable):
+  def __init__(self, compoundvariable, referencevariableSELECTOR):
+    self.compoundvariable = compoundvariable
+    self.referencevariableSELECTOR = referencevariableSELECTOR
+  def accept(self, Visitor):
+    Visitor.visitReferenceVariable_Compound_Reference(self)
+    
+class ReferenceVariable_Compound(ReferenceVariable):
+  def __init__(self, compoundvariable):
+    self.compoundvariable = compoundvariable
+  def accept(self, Visitor):
+    Visitor.visitReferenceVariable_Compound(self)
+
+class SimpleIndirectReference(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class SimpleIndirectReference_Mul(SimpleIndirectReference):
+  def __init__(self, simpleindirect):
+    self.simpleindirect = simpleindirect
+  def accept(self, Visitor):
+    Visitor.visitSimpleIndirectReference_Mul(self)
+
+class SimpleIndirectReference_Single(SimpleIndirectReference):
+  def accept(self, Visitor):
+    Visitor.visitSimpleIndirectReference_Single(self)
+    
+class Exit(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class Exit_ExitExpr(Exit):
+  def __init__(self, exitExpr):
+    self.exitExpr = exitExpr
+  def accept(self, Visitor):
+    Visitor.visitExit_ExitExpr(self)
+    
+class Exit_Empty(Exit):
+  def accept(self, Visitor):
+    Visitor.visitExit_Empty(self)
+    
+class ExitExpr(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ExitExpr_Expr(ExitExpr):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExitExpr_Expr(self)
+    
+class ExitExpr_Empty(ExitExpr):
+  def accept(self, Visitor):
+    Visitor.visitExitExpr_Empty(self)
