@@ -166,6 +166,9 @@ def p_statement(p):
     p[0] = sa.Statement_Exit(p[1])
   elif isinstance(p[1], sa.Die):
     p[0] = sa.Statement_Die(p[1])
+  elif isinstance(p[1], sa.Break):
+    p[0] = sa.Statement_Break(p[1])
+  
   
 def p_if_statement(p):
   '''
@@ -208,6 +211,10 @@ def p_break_statement(p):
   break_statement : BREAK expr SEMICOLON
     | BREAK SEMICOLON
   '''
+  if len(p) == 4:
+    p[0] = sa.Break_Expr(p[2])
+  else:
+    p[0] = sa.Break_Empty()
 
 def p_continue_statement(p):
   '''
@@ -609,6 +616,7 @@ arquivo = '''
       die();
       exit;
       add(1, &$valor, 3); 
+      break 1;
     }
 ?>
 '''

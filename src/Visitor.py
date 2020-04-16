@@ -128,6 +128,9 @@ class Visitor():
     statement.expr.accept(self)
     print(';')
     
+  def visitStatement_Break(self, statement):
+    statement._break.accept(self)
+    
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
     print(';')
@@ -263,3 +266,12 @@ class Visitor():
     
   def visitExitExpr_Empty(self):
     print('()', end='')
+
+  def visitBreak_Expr(self, _break):
+    print('break', end=' ')
+    _break.expr.accept(self)
+    print(';')
+    
+  def visitBreak_Empty(self):
+    print('break', end='')
+    print(';')

@@ -86,6 +86,12 @@ class Statement_Expr(Statement):
   def accept(self, Visitor):
     Visitor.visitStatement_Expr(self)
     
+class Statement_Break(Statement):
+  def __init__(self, _break):
+    self._break = _break
+  def accept(self, Visitor):
+    Visitor.visitStatement_Break(self)
+  
 class Statement_Exit(Statement):
   def __init__(self, exit):
     self.exit = exit
@@ -582,3 +588,18 @@ class ExitExpr_Expr(ExitExpr):
 class ExitExpr_Empty(ExitExpr):
   def accept(self, Visitor):
     Visitor.visitExitExpr_Empty()
+    
+class Break(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Break_Expr(Break):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitBreak_Expr(self)
+    
+class Break_Empty(Break):
+  def accept(self, Visitor):
+    Visitor.visitBreak_Empty()
