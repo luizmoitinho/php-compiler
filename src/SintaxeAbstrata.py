@@ -91,6 +91,18 @@ class Statement_Break(Statement):
     self._break = _break
   def accept(self, Visitor):
     Visitor.visitStatement_Break(self)
+    
+class Statement_Continue(Statement):
+  def __init__(self, _continue):
+    self._continue = _continue
+  def accept(self, Visitor):
+    Visitor.visitStatement_Continue(self)
+    
+class Statement_Return(Statement):
+  def __init__(self, _return):
+    self._return = _return
+  def accept(self, Visitor):
+    Visitor.visitStatement_Return(self)
   
 class Statement_Exit(Statement):
   def __init__(self, exit):
@@ -603,3 +615,33 @@ class Break_Expr(Break):
 class Break_Empty(Break):
   def accept(self, Visitor):
     Visitor.visitBreak_Empty()
+    
+class Continue(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Continue_Expr(Continue):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitContinue_Expr(self)
+    
+class Continue_Empty(Continue):
+  def accept(self, Visitor):
+    Visitor.visitContinue_Empty()
+    
+class Return(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Return_Expr(Return):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitReturn_Expr(self)
+    
+class Return_Empty(Return):
+  def accept(self, Visitor):
+    Visitor.visitReturn_Empty()

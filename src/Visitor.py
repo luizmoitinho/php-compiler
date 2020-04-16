@@ -131,6 +131,12 @@ class Visitor():
   def visitStatement_Break(self, statement):
     statement._break.accept(self)
     
+  def visitStatement_Continue(self, statement):
+    statement._continue.accept(self)
+    
+  def visitStatement_Return(self, statement):
+    statement._return.accept(self)
+    
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
     print(';')
@@ -255,15 +261,15 @@ class Visitor():
   def visitDie_ExitExpr(self, die):
     print('die', end='')
     die.exitExpr.accept(self)
-    
+  
   def visitDie_Empty(self):
     print('die', end='')
-    
+
   def visitExitExpr_Expr(self, exitExpr):
     print('(', end='')
     exitExpr.expr.accept(self)
     print(')', end='')
-    
+
   def visitExitExpr_Empty(self):
     print('()', end='')
 
@@ -271,7 +277,25 @@ class Visitor():
     print('break', end=' ')
     _break.expr.accept(self)
     print(';')
-    
+
   def visitBreak_Empty(self):
     print('break', end='')
+    print(';')
+
+  def visitContinue_Expr(self, _continue):
+    print('continue', end=' ')
+    _continue.expr.accept(self)
+    print(';')
+    
+  def visitContinue_Empty(self):
+    print('continue', end='')
+    print(';')
+    
+  def visitReturn_Expr(self, _return):
+    print('return', end=' ')
+    _return.expr.accept(self)
+    print(';')
+    
+  def visitReturn_Empty(self):
+    print('return', end='')
     print(';')

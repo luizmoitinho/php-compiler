@@ -168,6 +168,10 @@ def p_statement(p):
     p[0] = sa.Statement_Die(p[1])
   elif isinstance(p[1], sa.Break):
     p[0] = sa.Statement_Break(p[1])
+  elif isinstance(p[1], sa.Continue):
+    p[0] = sa.Statement_Continue(p[1])
+  elif isinstance(p[1], sa.Return):
+    p[0] = sa.Statement_Return(p[1])
   
   
 def p_if_statement(p):
@@ -221,12 +225,20 @@ def p_continue_statement(p):
   continue_statement : CONTINUE expr SEMICOLON
     | CONTINUE SEMICOLON
   '''
+  if len(p) == 4:
+    p[0] = sa.Continue_Expr(p[2])
+  else:
+    p[0] = sa.Continue_Empty()
   
 def p_return_statement(p):
   '''
   return_statement : RETURN expr SEMICOLON 
     | RETURN SEMICOLON 
   '''
+  if len(p) == 4:
+    p[0] = sa.Return_Expr(p[2])
+  else:
+    p[0] = sa.Return_Empty()
   
 def p_for_statement(p):
   '''
@@ -611,12 +623,7 @@ lex.lex()
 arquivo = '''
 <?php
     function add($valor1, $valor2){
-      die(1);
-      die;
-      die();
-      exit;
-      add(1, &$valor, 3); 
-      break 1;
+      return 1;
     }
 ?>
 '''
