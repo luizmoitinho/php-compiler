@@ -62,6 +62,8 @@ def p_expr(p):
     p[0] = sa.Expr_Expr1_Expr2(p[1], p[2])
   elif isinstance(p[1], sa.Expr1):
     p[0] = sa.Expr_Expr1(p[1])
+  elif isinstance(p[1], sa.Expr3):
+    p[0] = sa.Expr_Expr3(p[1])
     
 def p_expr2(p): 
   '''
@@ -76,6 +78,8 @@ def p_expr3(p):
     | variable assign_operator AMPERSAND expr
     | LPAREN type_cast_operator RPAREN expr
   '''
+  if isinstance(p[2], sa.TypeCastOp):
+    p[0] = sa.Expr3_TypeCast(p[2], p[4])
 
 def p_expr1(p): 
   ''' 
@@ -99,8 +103,10 @@ def p_expr1(p):
     p[0] = sa.Expr1_Scalar(p[1])
   elif isinstance(p[1], sa.FunctionCall):
     p[0] = sa.Expr1_FunctionCall(p[1])
-  elif isinstance(p[2], sa.ArrayDeclaration):
-    p[0] = sa.Expr1_ArrayDeclaration(p[2])
+  #elif isinstance(p[2], sa.ArrayDeclaration):
+  #  p[0] = sa.Expr1_ArrayDeclaration(p[2])
+  elif isinstance(p[2], sa.Expr):
+    p[0] = sa.Expr1_ExprPar(p[2])
     
 def p_exit_statement(p):
   '''
@@ -352,6 +358,7 @@ def p_type_cast_operator(p):
       | BOOL_TYPE
       | UNSET
   '''
+  p[0] = sa.TypeCastOp_Token(p[1])
   
 def p_assign_operator(p):
   '''
@@ -409,7 +416,7 @@ def p_reference_variable(p):
   reference_variable : compound_variable reference_variable_SELECTOR
   | compound_variable
   ''' 
-  if len(p) == 2:
+  if len(p) == 3:
     p[0] = sa.ReferenceVariable_Compound_Reference(p[1], p[2])
   else :
     p[0] = sa.ReferenceVariable_Compound(p[1])
@@ -627,7 +634,9 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    array($x,$y);
+    function add($valor) {
+      return (int) 1;
+    }
 ?>
 '''
 

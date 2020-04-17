@@ -355,10 +355,28 @@ class Expr_Expr3(Expr):
   def accept(self, Visitor):
     Visitor.visitExpr_Expr3(self)
     
-class Expr1(metaclass = ABCMeta):
+class Expr3(metaclass=ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
+  
+class Expr3_TypeCast(Expr3):
+  def __init__(self, typeCast, expr):
+    self.typeCast = typeCast
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExpr3_TypeCast(self)
+    
+class TypeCastOp(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class TypeCastOp_Token(TypeCastOp):
+  def __init__(self, token):
+    self.token = token
+  def accept(self, Visitor):
+    Visitor.visitTypeCastOp_Token(self)
 
 class ArrayDeclaration(metaclass = ABCMeta):
   @abstractmethod
@@ -416,6 +434,17 @@ class ArrayPair_Attr_Expr(ArrayPair):
     self.expr2 = expr2
   def accept(self, Visitor):
     Visitor.visitArrayPair_Attr_Expr(self) 
+    
+class Expr1(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+    
+class Expr1_ExprPar(Expr1):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExpr1_ExprPar(self)
 
 class Expr1_FunctionCall(Expr1):
   def __init__(self, functionCall):

@@ -155,8 +155,22 @@ class Visitor():
   def visitExpr_Expr3(self, expr):
     expr.expr3.accept(self)
 
+  def visitExpr3_TypeCast(self, expr3):
+    print('(', end='')
+    expr3.typeCast.accept(self)
+    print(')', end=' ')
+    expr3.expr.accept(self)
+    
+  def visitTypeCastOp_Token(self, typeCastOp):
+    print(typeCastOp.token, end='')
+
   def visitExpr1_FunctionCall(self, expr1):
     expr1.functionCall.accept(self)
+    
+  def visitExpr1_ExprPar(self, expr1):
+    print('(', end='')
+    expr1.expr.accept(self)
+    print(')', end='')
 
   def visitExpr1_ArrayDeclaration(self, expr1):
     print('array', end='')
@@ -182,7 +196,6 @@ class Visitor():
   def visitArrayPairList_ArrayPair_Mul(self, arrayPairList):
     arrayPairList.arrayPair.accept(self)
     arrayPairList.arrayPairListArrPair.accept(self)
-  
   
   def arrayPairList_ArrayPair_Single(self, arrayPairList):
     arrayPairList.arrayPair.accept(self)
