@@ -325,3 +325,28 @@ class Visitor():
   def visitReturn_Empty(self):
     print('return', end='')
     print(';')
+
+def visitCompoundVariableSingle(self, compoundVariable):
+    print(compoundVariable.variable, end='')
+
+def visitCompoundVariableSingle(self, compoundVariable):
+    print('$', end='')
+    print('{', end='')
+    compoundVariable.expr.accept(self)
+    print('}', end='')
+
+def visitReferenceVariableSelectorSingle(self, referenceVariableSelector):
+    referenceVariableSelector.selector.accept(self)
+
+def visitReferenceVariableSelectorMul(self, referenceVariableSelector):
+    referenceVariableSelector.selector.accept(self)
+    referenceVariableSelector.referencevariableselector.accept(self)
+
+def visitSelectorWithExpr(self, selector):
+    print('[', end='')
+    selector.expr.accept(self)
+    print(']', end='')
+
+def SelectorWithoutExpr(self, selector):
+    print('[', end='')
+    print(']', end='')

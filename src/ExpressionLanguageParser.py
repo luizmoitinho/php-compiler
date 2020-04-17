@@ -426,12 +426,20 @@ def p_compound_variable(p):
   compound_variable : VARIABLE 
     | DOLAR LKEY expr RKEY 
   '''
+  if len(p) == 5:
+    p[0] = sa.CompoundVariableMul(p[3])
+  else :
+    p[0] = sa.CompoundVariableSingle(p[1])
 
 def p_selector(p):
   '''
   selector : LBRACKET expr RBRACKET 
     | LBRACKET RBRACKET
   '''
+  if len(p) == 4:
+    p[0] = sa.SelectorWithExpr(p[2])
+  else :
+    p[0] = sa.SelectorWithoutExpr()
 
 def p_function_declaration_statement(p):
   '''
@@ -603,6 +611,10 @@ def p_reference_variable_SELECTOR(p):
   reference_variable_SELECTOR : selector reference_variable_SELECTOR
     | selector
   '''
+  if len(p) == 3:
+    p[0] = sa.ReferenceVariableSelectorMul(p[1], p[2])
+  else :
+    p[0] = sa.ReferenceVariableSelectorSingle(p[1])
 
 def p_simple_indirect_reference_DOLAR(p):
   '''
@@ -634,9 +646,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  
-      array(1, 2);
-    
+  $valor;
 ?>
 '''
 

@@ -694,3 +694,53 @@ class Return_Expr(Return):
 class Return_Empty(Return):
   def accept(self, Visitor):
     Visitor.visitReturn_Empty()
+
+class CompoundVariable(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class CompoundVariableSingle(CompoundVariable):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitCompoundVariableSingle(self)
+
+class CompoundVariableMul(CompoundVariable):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitCompoundVariableMul(self)
+
+class ReferenceVariableSelector(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class ReferenceVariableSelectorSingle(ReferenceVariableSelector):
+  def __init__(self, selector):
+    self.selector = selector
+  def accept(self, Visitor):
+    Visitor.visitReferenceVariableSelectorSingle(self)
+
+class ReferenceVariableSelectorMul(ReferenceVariableSelector):
+  def __init__(self, selector, referencevariableselector):
+    self.selector = selector
+    self.selector = referencevariableselector
+  def accept(self, Visitor):
+    Visitor.visitReferenceVariableSelectorMul(self)
+
+class Selector(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class SelectorWithExpr(Selector):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitSelectorWithExpr(self)
+
+class SelectorWithoutExpr(Selector):
+  def accept(self, Visitor):
+    Visitor.visitSelectorWithoutExpr(self)
