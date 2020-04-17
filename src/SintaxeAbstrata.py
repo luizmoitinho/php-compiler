@@ -311,6 +311,26 @@ class CommonScalar_Token(CommonScalar):
   def accept(self, Visitor):
     Visitor.visitCommonScalar_Token(self)
     
+
+class ArrayPairListArrPair(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class ArrayPairList_Mul(ArrayPairListArrPair):
+  def __init__(self, arrayPair, arrayPairListArr):
+    self.arrayPair = arrayPair
+    self.arrayPairListArr = arrayPairListArr
+  def accept(self, Visitor):
+    Visitor.visitArrayPairList_Mul(self)
+
+class ArrayPairList_Single(ArrayPairListArrPair):
+  def __init__(self,arrayPair):
+    self.arrayPair = arrayPair
+  def accept(self, Visitor):
+    Visitor.visitArrayPairListArr_Single(self)
+
+
 class Expr(metaclass = ABCMeta):
   @abstractmethod 
   def accept(self, Visitor):
@@ -404,9 +424,9 @@ class Expr1_FunctionCall(Expr1):
     Visitor.visitExpr1_FunctionCall(self)
 
 class Expr1_ArrayDeclaration(Expr1):
-  def __init__(self, ArrayDeclaration):
+  def __init__(self, arrayDeclaration):
     self.arrayDeclaration = arrayDeclaration
-  def accecpt(self, Visitor):
+  def accept(self, Visitor):
     Visitor.visitExpr1_ArrayDeclaration(self)
 
 class Expr1_Scalar(Expr1):

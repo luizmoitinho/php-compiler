@@ -170,9 +170,19 @@ class Visitor():
   def visitArrayDec_NoPairList(self, ArrayDec):
     print('( )',end='')
   
+  def visitArrayPairList_Mul(self,arrayPairListArr):
+    print(',',end='')
+    arrayPairListArr.arrayPair.accept(self)
+    arrayPairListArr.arrayPairListArr.accept(self)
+  
+  def visitArrayPairListArr_Single(self,ArrayPairListArr):
+    print(',',end='')
+    ArrayPairListArr.arrayPair.accept(self)
+
   def visitArrayPairList_ArrayPair_Mul(self, arrayPairList):
     arrayPairList.arrayPair.accept(self)
     arrayPairList.arrayPairListArrPair.accept(self)
+  
   
   def arrayPairList_ArrayPair_Single(self, arrayPairList):
     arrayPairList.arrayPair.accept(self)

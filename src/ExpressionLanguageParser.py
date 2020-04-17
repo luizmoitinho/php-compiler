@@ -99,8 +99,8 @@ def p_expr1(p):
     p[0] = sa.Expr1_Scalar(p[1])
   elif isinstance(p[1], sa.FunctionCall):
     p[0] = sa.Expr1_FunctionCall(p[1])
-  #elif isinstance(p[2], sa.ArrayDeclaration):
-  #  p[0] = sa.Expr1_ArrayDeclaration(p[2])
+  elif isinstance(p[2], sa.ArrayDeclaration):
+    p[0] = sa.Expr1_ArrayDeclaration(p[2])
     
 def p_exit_statement(p):
   '''
@@ -613,6 +613,11 @@ def p_array_pair_list_ARR_PAIR(p):
   array_pair_list_ARR_PAIR : COLON array_pair array_pair_list_ARR_PAIR
     | COLON array_pair
   '''
+  if len(p)==4:
+    p[0] = sa.ArrayPairList_Mul(p[2],p[3])
+  elif len(p)==2:
+    p[0] = sa.ArrayPairList_Single(p[2])
+
 
 def p_error(p):
     print(p)
@@ -622,9 +627,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    function add($valor1, $valor2){
-      return 1;
-    }
+    array($x,$y);
 ?>
 '''
 
