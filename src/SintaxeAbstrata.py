@@ -383,6 +383,16 @@ class ArrayDeclaration(metaclass = ABCMeta):
   def accept(self, Visitor):
     pass
 
+class ArrayDec_WithPairList(ArrayDeclaration):
+  def __init__(self, arrayPairList):
+    self.arrayPairList = arrayPairList
+  def accept(self, Visitor):
+    Visitor.visitArrayDec_WithPairList(self)
+    
+class ArrayDec_NoPairList(ArrayDeclaration):
+  def accept(self, Visitor):
+    Visitor.visitArrayDec_NoPairList(self)
+
 class ArrayPairList(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
@@ -399,17 +409,7 @@ class ArrayPairList_ArrayPair_Single(ArrayPairList):
   def __init__(self,arrayPair):
     self.arrayPair = arrayPair
   def accept(self, Visitor):
-    Visitor.arrayPairList_ArrayPair_Single(self)
-
-class ArrayDec_WithPairList(ArrayDeclaration):
-  def __init__(self, arrayPairList):
-    self.arrayPairList = arrayPairList
-  def accept(self, Visitor):
-    Visitor.visitArrayDec_WithPairList(self)
-    
-class ArrayDec_NoPairList(ArrayDeclaration):
-  def accept(self, Visitor):
-    Visitor.visitArrayDec_NoPairList(self)
+    Visitor.visitArrayPairList_ArrayPair_Single(self)
   
 class ArrayPair(metaclass = ABCMeta):
   @abstractmethod

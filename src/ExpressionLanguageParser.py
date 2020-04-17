@@ -103,8 +103,8 @@ def p_expr1(p):
     p[0] = sa.Expr1_Scalar(p[1])
   elif isinstance(p[1], sa.FunctionCall):
     p[0] = sa.Expr1_FunctionCall(p[1])
-  #elif isinstance(p[2], sa.ArrayDeclaration):
-  #  p[0] = sa.Expr1_ArrayDeclaration(p[2])
+  elif isinstance(p[2], sa.ArrayDeclaration):
+    p[0] = sa.Expr1_ArrayDeclaration(p[2])
   elif isinstance(p[2], sa.Expr):
     p[0] = sa.Expr1_ExprPar(p[2])
     
@@ -634,9 +634,9 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    function add($valor) {
-      return (int) 1;
-    }
+  
+      array(1, 2);
+    
 ?>
 '''
 
