@@ -155,8 +155,22 @@ class Visitor():
   def visitExpr_Expr3(self, expr):
     expr.expr3.accept(self)
 
+  def visitExpr3_TypeCast(self, expr3):
+    print('(', end='')
+    expr3.typeCast.accept(self)
+    print(')', end=' ')
+    expr3.expr.accept(self)
+    
+  def visitTypeCastOp_Token(self, typeCastOp):
+    print(typeCastOp.token, end='')
+
   def visitExpr1_FunctionCall(self, expr1):
     expr1.functionCall.accept(self)
+    
+  def visitExpr1_ExprPar(self, expr1):
+    print('(', end='')
+    expr1.expr.accept(self)
+    print(')', end='')
 
   def visitExpr1_ArrayDeclaration(self, expr1):
     print('array', end='')
@@ -169,11 +183,14 @@ class Visitor():
 
   def visitArrayDec_NoPairList(self, ArrayDec):
     print('( )',end='')
+    
+  def visitArrayPair_Expr(self, arrayPair):
+    arrayPair.expr.accept(self)
   
-  def visitArrayPairList_Mul(self,arrayPairListArr):
+  def visitArrayPairList_Mul(self, arrayPairList):
     print(',',end='')
-    arrayPairListArr.arrayPair.accept(self)
-    arrayPairListArr.arrayPairListArr.accept(self)
+    arrayPairList.arrayPair.accept(self)
+    arrayPairList.arrayPairListArr.accept(self)
   
   def visitArrayPairListArr_Single(self,ArrayPairListArr):
     print(',',end='')
@@ -185,9 +202,6 @@ class Visitor():
   
   def visitArrayPairList_ArrayPair_Single(self, arrayPairList):
     arrayPairList.arrayPair.accept(self)
-
-  def visitArrayPair_Expr(self, arrayPair):
-    arrayPair.expr.accept(self)
 
   def visitArrayPair_Variable(self, arrayPair):
     print('&', end='')
@@ -314,3 +328,25 @@ class Visitor():
   def visitReturn_Empty(self):
     print('return', end='')
     print(';')
+
+def visitCompoundVariableSingle(self, compoundVariable):
+    print('$', end='')
+    print('{', end='')
+    compoundVariable.expr.accept(self)
+    print('}', end='')
+
+def visitReferenceVariableSelectorSingle(self, referenceVariableSelector):
+    referenceVariableSelector.selector.accept(self)
+
+def visitReferenceVariableSelectorMul(self, referenceVariableSelector):
+    referenceVariableSelector.selector.accept(self)
+    referenceVariableSelector.referencevariableselector.accept(self)
+
+def visitSelectorWithExpr(self, selector):
+    print('[', end='')
+    selector.expr.accept(self)
+    print(']', end='')
+
+def SelectorWithoutExpr(self, selector):
+    print('[', end='')
+    print(']', end='')

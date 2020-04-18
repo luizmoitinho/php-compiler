@@ -355,20 +355,50 @@ class Expr_Expr3(Expr):
   def accept(self, Visitor):
     Visitor.visitExpr_Expr3(self)
     
-class Expr1(metaclass = ABCMeta):
+class Expr3(metaclass=ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
+  
+class Expr3_TypeCast(Expr3):
+  def __init__(self, typeCast, expr):
+    self.typeCast = typeCast
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExpr3_TypeCast(self)
+    
+class TypeCastOp(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class TypeCastOp_Token(TypeCastOp):
+  def __init__(self, token):
+    self.token = token
+  def accept(self, Visitor):
+    Visitor.visitTypeCastOp_Token(self)
 
 class ArrayDeclaration(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
 
+class ArrayDec_WithPairList(ArrayDeclaration):
+  def __init__(self, arrayPairList):
+    self.arrayPairList = arrayPairList
+  def accept(self, Visitor):
+    Visitor.visitArrayDec_WithPairList(self)
+    
+class ArrayDec_NoPairList(ArrayDeclaration):
+  def accept(self, Visitor):
+    Visitor.visitArrayDec_NoPairList(self)
+
 class ArrayPairList(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
+  
+
 
 class ArrayPairList_ArrayPair_Mul(ArrayPairList):
   def __init__(self, arrayPair, arrayPairListArrPair):
@@ -383,16 +413,8 @@ class ArrayPairList_ArrayPair_Single(ArrayPairList):
   def accept(self, Visitor):
     Visitor.visitArrayPairList_ArrayPair_Single(self)
 
-class ArrayDec_WithPairList(ArrayDeclaration):
-  def __init__(self, arrayPairList):
-    self.arrayPairList = arrayPairList
-  def accept(self, Visitor):
-    Visitor.visitArrayDec_WithPairList(self)
-    
-class ArrayDec_NoPairList(ArrayDeclaration):
-  def accept(self, Visitor):
-    Visitor.visitArrayDec_NoPairList(self)
-  
+
+
 class ArrayPair(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
@@ -423,6 +445,17 @@ class ArrayPair_Attr_Expr(ArrayPair):
     self.expr2 = expr2
   def accept(self, Visitor):
     Visitor.visitArrayPair_Attr_Expr(self) 
+    
+class Expr1(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+    
+class Expr1_ExprPar(Expr1):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExpr1_ExprPar(self)
 
 class Expr1_FunctionCall(Expr1):
   def __init__(self, functionCall):
@@ -672,3 +705,53 @@ class Return_Expr(Return):
 class Return_Empty(Return):
   def accept(self, Visitor):
     Visitor.visitReturn_Empty()
+
+class CompoundVariable(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class CompoundVariableSingle(CompoundVariable):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitCompoundVariableSingle(self)
+
+class CompoundVariableMul(CompoundVariable):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitCompoundVariableMul(self)
+
+class ReferenceVariableSelector(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class ReferenceVariableSelectorSingle(ReferenceVariableSelector):
+  def __init__(self, selector):
+    self.selector = selector
+  def accept(self, Visitor):
+    Visitor.visitReferenceVariableSelectorSingle(self)
+
+class ReferenceVariableSelectorMul(ReferenceVariableSelector):
+  def __init__(self, selector, referencevariableselector):
+    self.selector = selector
+    self.selector = referencevariableselector
+  def accept(self, Visitor):
+    Visitor.visitReferenceVariableSelectorMul(self)
+
+class Selector(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class SelectorWithExpr(Selector):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitSelectorWithExpr(self)
+
+class SelectorWithoutExpr(Selector):
+  def accept(self, Visitor):
+    Visitor.visitSelectorWithoutExpr(self)
