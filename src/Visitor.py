@@ -164,7 +164,7 @@ class Visitor():
 
   def visitArrayDec_WithPairList(self, arrayDec):
     print('(',end='')
-    arrayDec.visitArrayDec_WithPairList.accept(self)
+    arrayDec.arrayPairList.accept(self)
     print(')',end='')
 
   def visitArrayDec_NoPairList(self, ArrayDec):
@@ -183,18 +183,23 @@ class Visitor():
     arrayPairList.arrayPair.accept(self)
     arrayPairList.arrayPairListArrPair.accept(self)
   
-  
-  def arrayPairList_ArrayPair_Single(self, arrayPairList):
+  def visitArrayPairList_ArrayPair_Single(self, arrayPairList):
     arrayPairList.arrayPair.accept(self)
 
-  def arrayPair_Expr(self, arrayPair):
+  def visitArrayPair_Expr(self, arrayPair):
     arrayPair.expr.accept(self)
 
-  def arrayPair_Variable(self, arrayPair):
+  def visitArrayPair_Variable(self, arrayPair):
     print('&', end='')
     arrayPair.variable.accept(self)
-  
-  def arrayPair_Attr_Expr(self, arrayPair):
+
+  def visitArrayPair_Attr_AmpersandVariable(self, arrayPair):
+    arrayPair.expr1.accept(self)
+    print('=',end='')
+    print('&',end='')
+    arrayPair.expr2.accept(self)
+
+  def visitArrayPair_Attr_Expr(self, arrayPair):
     arrayPair.expr1.accept(self)
     print('=', end='')
     arrayPair.expr2.accept(self)

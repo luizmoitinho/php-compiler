@@ -381,7 +381,7 @@ class ArrayPairList_ArrayPair_Single(ArrayPairList):
   def __init__(self,arrayPair):
     self.arrayPair = arrayPair
   def accept(self, Visitor):
-    Visitor.arrayPairList_ArrayPair_Single(self)
+    Visitor.visitArrayPairList_ArrayPair_Single(self)
 
 class ArrayDec_WithPairList(ArrayDeclaration):
   def __init__(self, arrayPairList):
@@ -409,6 +409,13 @@ class ArrayPair_Variable(ArrayPair):
     self.variable = variable
   def accept(self, Visitor):
     Visitor.visitArrayPair_Variable(self)
+
+class ArrayPair_Attr_AmpersandVariable(ArrayPair):
+  def __init__(self,expr1,expr2):
+    self.expr1 =  expr1
+    self.expr2 =  expr2
+  def accept(self,Visitor):
+    Visitor.visitArrayPair_Attr_AmpersandVariable(self)
 
 class ArrayPair_Attr_Expr(ArrayPair):
   def __init__(self, expr1,expr2):

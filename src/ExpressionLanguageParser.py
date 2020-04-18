@@ -555,10 +555,12 @@ def p_array_pair(p):
   '''
   if len(p) == 2:
     p[0] = sa.ArrayPair_Expr(p[1])
-  elif len(p)==3:
+  elif len(p) == 3:
     p[0] = sa.ArrayPair_Variable(p[2])
-  elif len(p)==4:
+  elif len(p) == 4:
     p[0] = sa.ArrayPair_Attr_Expr(p[1],p[3])
+  elif len(p) == 5:
+    p[0] =  sa.ArrayPair_Attr_AmpersandVariable(p[1],p[4])
 
 # Expressões regulares transformadas em regras.
 # ======================================================================
@@ -615,7 +617,7 @@ def p_array_pair_list_ARR_PAIR(p):
   '''
   if len(p)==4:
     p[0] = sa.ArrayPairList_Mul(p[2],p[3])
-  elif len(p)==2:
+  elif len(p)==3:
     p[0] = sa.ArrayPairList_Single(p[2])
 
 
@@ -627,7 +629,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    array($x,$y);
+    array(10,20,10,10);
 ?>
 '''
 
