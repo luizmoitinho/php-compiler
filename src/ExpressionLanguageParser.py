@@ -95,6 +95,14 @@ def p_expr1(p):
   '''
   if isinstance(p[1], sa.Variable) and len(p) == 2:
     p[0] = sa.Expr1_Variable(p[1])
+  elif p[2] == '++':
+    p[0] = sa.Expr1_Variable_Increment(p[1])
+  elif p[2] == '--':
+    p[0] = sa.Expr1_Variable_Decrement(p[1])
+  elif p[1] == '++':
+    p[0] = sa.Expr1_Increment_Variable(p[2])
+  elif p[1] == '--':
+    p[0] = sa.Expr1_Decrement_Variable(p[2])
   elif p[1] == 'true':
     p[0] = sa.Expr1_True()
   elif p[1] == 'false':
@@ -185,7 +193,6 @@ def p_if_statement(p):
   if_statement : statement_if if_statement_complement
     | statement_if 
   '''
-  if(i)
   
 def p_if_statement_complement(p):
   '''
@@ -370,7 +377,7 @@ def p_assign_operator(p):
     | DIVIDE_ASSIGN
     | ASSIGN
   '''
-   p[0] = sa.  assignOperator(p[1]) 
+  p[0] = sa.assignOperator(p[1]) 
 
 def p_arithmetic_operator(p):
   '''
@@ -650,7 +657,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  $valor1; 
+  $valor++; 
 ?>
 '''
 

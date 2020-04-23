@@ -467,6 +467,24 @@ class Expr1_Variable_Increment(Expr1):
   def accept(self, Visitor):
     Visitor.visitExpr1_Variable_Increment(self)
     
+class Expr1_Variable_Decrement(Expr1):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitExpr1_Variable_Decrement(self)
+    
+class Expr1_Increment_Variable(Expr1):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitExpr1_Increment_Variable(self)
+    
+class Expr1_Decrement_Variable(Expr1):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitExpr1_Decrement_Variable(self)
+    
 class Expr1_Variable(Expr1):
   def __init__(self, variable):
     self.variable = variable

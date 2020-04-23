@@ -176,6 +176,18 @@ class Visitor():
     expr1.variable.accept(self)
     print('++', end='')
     
+  def visitExpr1_Variable_Decrement(self, expr1):
+    expr1.variable.accept(self)
+    print('--', end='')
+    
+  def visitExpr1_Increment_Variable(self, expr1):
+    print('++', end='')
+    expr1.variable.accept(self)
+    
+  def visitExpr1_Decrement_Variable(self, expr1):
+    print('--', end='')
+    expr1.variable.accept(self)
+    
   def visitExpr1_Variable(self, expr1):
     expr1.variable.accept(self)
 
