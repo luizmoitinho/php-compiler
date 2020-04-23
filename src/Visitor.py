@@ -171,6 +171,13 @@ class Visitor():
     print('(', end='')
     expr1.expr.accept(self)
     print(')', end='')
+    
+  def visitExpr1_Variable_Increment(self, expr1):
+    expr1.variable.accept(self)
+    print('++', end='')
+    
+  def visitExpr1_Variable(self, expr1):
+    expr1.variable.accept(self)
 
   def visitExpr1_ArrayDeclaration(self, expr1):
     print('array', end='')
@@ -277,7 +284,7 @@ class Visitor():
     print('$', end='')
     simpleIndirectReference.simpleindirect.accept(self)
   
-  def SimpleIndirectReference_Single(self, simpleIndirectReference):
+  def visitSimpleIndirectReference_Single(self, simpleIndirectReference):
     print('$', end='')
     
   def visitExit_ExitExpr(self, _exit):
@@ -329,24 +336,27 @@ class Visitor():
     print('return', end='')
     print(';')
 
-def visitCompoundVariableSingle(self, compoundVariable):
-    print('$', end='')
-    print('{', end='')
-    compoundVariable.expr.accept(self)
-    print('}', end='')
+  def visitCompoundVariableSingle(self, singleVariable):
+    print(singleVariable.variable, end='')
+    
+  def visitCompoundVariableMul(self, compoundVariable):
+      print('$', end='')
+      print('{', end='')
+      compoundVariable.expr.accept(self)
+      print('}', end='')
 
-def visitReferenceVariableSelectorSingle(self, referenceVariableSelector):
-    referenceVariableSelector.selector.accept(self)
+  def visitReferenceVariableSelectorSingle(self, referenceVariableSelector):
+      referenceVariableSelector.selector.accept(self)
 
-def visitReferenceVariableSelectorMul(self, referenceVariableSelector):
-    referenceVariableSelector.selector.accept(self)
-    referenceVariableSelector.referencevariableselector.accept(self)
+  def visitReferenceVariableSelectorMul(self, referenceVariableSelector):
+      referenceVariableSelector.selector.accept(self)
+      referenceVariableSelector.referencevariableselector.accept(self)
 
-def visitSelectorWithExpr(self, selector):
-    print('[', end='')
-    selector.expr.accept(self)
-    print(']', end='')
+  def visitSelectorWithExpr(self, selector):
+      print('[', end='')
+      selector.expr.accept(self)
+      print(']', end='')
 
-def SelectorWithoutExpr(self, selector):
-    print('[', end='')
-    print(']', end='')
+  def SelectorWithoutExpr(self, selector):
+      print('[', end='')
+      print(']', end='')

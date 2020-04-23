@@ -397,8 +397,6 @@ class ArrayPairList(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
-  
-
 
 class ArrayPairList_ArrayPair_Mul(ArrayPairList):
   def __init__(self, arrayPair, arrayPairListArrPair):
@@ -462,6 +460,18 @@ class Expr1_FunctionCall(Expr1):
     self.functionCall = functionCall
   def accept(self, Visitor):
     Visitor.visitExpr1_FunctionCall(self)
+    
+class Expr1_Variable_Increment(Expr1):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitExpr1_Variable_Increment(self)
+    
+class Expr1_Variable(Expr1):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitExpr1_Variable(self)
 
 class Expr1_ArrayDeclaration(Expr1):
   def __init__(self, arrayDeclaration):

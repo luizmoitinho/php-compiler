@@ -50,8 +50,6 @@ def p_inner_statement_MUL(p):
   else:
     p[0] = sa.InnerStatementMul_Single(p[1])
   
-  #MINUS expr1 expr2
-  #  | MINUS expr1
 def p_expr(p):
   '''
   expr : expr1 expr2
@@ -95,7 +93,9 @@ def p_expr1(p):
     | TRUE
     | FALSE
   '''
-  if p[1] == 'true':
+  if isinstance(p[1], sa.Variable) and len(p) == 2:
+    p[0] = sa.Expr1_Variable(p[1])
+  elif p[1] == 'true':
     p[0] = sa.Expr1_True()
   elif p[1] == 'false':
     p[0] = sa.Expr1_False()
@@ -107,6 +107,7 @@ def p_expr1(p):
     p[0] = sa.Expr1_ArrayDeclaration(p[2])
   elif isinstance(p[2], sa.Expr):
     p[0] = sa.Expr1_ExprPar(p[2])
+  
     
 def p_exit_statement(p):
   '''
@@ -165,7 +166,6 @@ def p_statement(p):
     | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
     | GLOBAL global_var SEMICOLON
   '''
-  print(p[1])
   if isinstance(p[1], sa.Expr): 
     p[0] = sa.Statement_Expr(p[1], p[2])
   elif isinstance(p[1], sa.Exit):
@@ -185,6 +185,7 @@ def p_if_statement(p):
   if_statement : statement_if if_statement_complement
     | statement_if 
   '''
+  if(i)
   
 def p_if_statement_complement(p):
   '''
@@ -369,7 +370,8 @@ def p_assign_operator(p):
     | DIVIDE_ASSIGN
     | ASSIGN
   '''
-  
+   p[0] = sa.  assignOperator(p[1]) 
+
 def p_arithmetic_operator(p):
   '''
   arithmetic_operator : PLUS
@@ -428,7 +430,7 @@ def p_compound_variable(p):
   '''
   if len(p) == 5:
     p[0] = sa.CompoundVariableMul(p[3])
-  else :
+  else:
     p[0] = sa.CompoundVariableSingle(p[1])
 
 def p_selector(p):
@@ -648,7 +650,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    array(&$x);
+  $valor1; 
 ?>
 '''
 
