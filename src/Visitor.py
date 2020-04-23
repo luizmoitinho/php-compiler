@@ -161,8 +161,22 @@ class Visitor():
     print(')', end=' ')
     expr3.expr.accept(self)
     
+  def visitExpr3_Var_Assign_Expr(self, expr3):
+    expr3.variable.accept(self)
+    expr3.assignOp.accept(self)
+    expr3.expr.accept(self)
+    
+  def visitExpr3_Var_Assign_Amp_Expr(self, expr3):
+    expr3.variable.accept(self)
+    expr3.assignOp.accept(self)
+    print('&', end='')
+    expr3.expr.accept(self)
+    
   def visitTypeCastOp_Token(self, typeCastOp):
     print(typeCastOp.token, end='')
+    
+  def visitAssignOperator_Token(self, assignOp):
+    print('',assignOp.token, end=' ')
 
   def visitExpr1_FunctionCall(self, expr1):
     expr1.functionCall.accept(self)

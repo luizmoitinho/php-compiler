@@ -360,6 +360,22 @@ class Expr3(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
   
+class Expr3_Var_Assign_Expr(Expr3):
+  def __init__(self, variable, assignOp, expr):
+    self.variable = variable
+    self.assignOp = assignOp
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExpr3_Var_Assign_Expr(self)
+    
+class Expr3_Var_Assign_Amp_Expr(Expr3):
+  def __init__(self, variable, assignOp, expr):
+    self.variable = variable
+    self.assignOp = assignOp
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExpr3_Var_Assign_Amp_Expr(self)
+  
 class Expr3_TypeCast(Expr3):
   def __init__(self, typeCast, expr):
     self.typeCast = typeCast
@@ -377,6 +393,17 @@ class TypeCastOp_Token(TypeCastOp):
     self.token = token
   def accept(self, Visitor):
     Visitor.visitTypeCastOp_Token(self)
+    
+class AssignOperator(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class AssignOperator_Token(AssignOperator):
+  def __init__(self, token):
+    self.token = token
+  def accept(self, Visitor):
+    Visitor.visitAssignOperator_Token(self)
 
 class ArrayDeclaration(metaclass = ABCMeta):
   @abstractmethod

@@ -78,6 +78,10 @@ def p_expr3(p):
   '''
   if isinstance(p[2], sa.TypeCastOp):
     p[0] = sa.Expr3_TypeCast(p[2], p[4])
+  elif isinstance(p[1], sa.Variable) and len(p) == 4:
+    p[0] = sa.Expr3_Var_Assign_Expr(p[1], p[2], p[3])
+  else:
+    p[0] = sa.Expr3_Var_Assign_Amp_Expr(p[1], p[2], p[4])
 
 def p_expr1(p): 
   ''' 
@@ -95,14 +99,6 @@ def p_expr1(p):
   '''
   if isinstance(p[1], sa.Variable) and len(p) == 2:
     p[0] = sa.Expr1_Variable(p[1])
-  elif p[2] == '++':
-    p[0] = sa.Expr1_Variable_Increment(p[1])
-  elif p[2] == '--':
-    p[0] = sa.Expr1_Variable_Decrement(p[1])
-  elif p[1] == '++':
-    p[0] = sa.Expr1_Increment_Variable(p[2])
-  elif p[1] == '--':
-    p[0] = sa.Expr1_Decrement_Variable(p[2])
   elif p[1] == 'true':
     p[0] = sa.Expr1_True()
   elif p[1] == 'false':
@@ -115,8 +111,15 @@ def p_expr1(p):
     p[0] = sa.Expr1_ArrayDeclaration(p[2])
   elif isinstance(p[2], sa.Expr):
     p[0] = sa.Expr1_ExprPar(p[2])
+  elif p[2] == '++':
+    p[0] = sa.Expr1_Variable_Increment(p[1])
+  elif p[2] == '--':
+    p[0] = sa.Expr1_Variable_Decrement(p[1])
+  elif p[1] == '++':
+    p[0] = sa.Expr1_Increment_Variable(p[2])
+  elif p[1] == '--':
+    p[0] = sa.Expr1_Decrement_Variable(p[2])
   
-    
 def p_exit_statement(p):
   '''
   exit_statement : EXIT exit_expr
@@ -377,7 +380,7 @@ def p_assign_operator(p):
     | DIVIDE_ASSIGN
     | ASSIGN
   '''
-  p[0] = sa.assignOperator(p[1]) 
+  p[0] = sa.AssignOperator_Token(p[1]) 
 
 def p_arithmetic_operator(p):
   '''
@@ -657,12 +660,12 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  $valor++; 
+  $valor = &1;
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=True)
+result = parser.parse(debug=False)
 v = vis.Visitor()
 result.accept(v)
