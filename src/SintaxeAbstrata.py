@@ -109,6 +109,12 @@ class Statement_Exit(Statement):
     self.exit = exit
   def accept(self, Visitor):
     Visitor.visitStatement_Exit(self)
+
+class Statement_While(Statement):
+  def __init__(self, whilee):
+    self.whilee = whilee
+  def accept(self, Visitor):
+    Visitor.visitStatement_While(self)
     
 class Statement_Die(Statement):
   def __init__(self, die):
@@ -335,6 +341,19 @@ class Expr(metaclass = ABCMeta):
   @abstractmethod 
   def accept(self, Visitor):
     pass
+  
+class Expr_Minus_Expr1_Expr2(Expr):
+  def __init__(self, expr1, expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    Visitor.visitExpr_Minus_Expr1_Expr2(self)
+  
+class Expr_Minus_Expr1(Expr):
+  def __init__(self, expr1):
+    self.expr1 = expr1
+  def accept(self, Visitor):
+    Visitor.visitExpr_Minus_Expr1(self)
 
 class Expr_Expr1_Expr2(Expr):
   def __init__(self, expr1, expr2):
@@ -354,6 +373,54 @@ class Expr_Expr3(Expr):
     self.expr3 = expr3
   def accept(self, Visitor):
     Visitor.visitExpr_Expr3(self)
+    
+class Expr2(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class Expr2_TernaryExpr(Expr2):
+  def __init__(self, expr1, expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    Visitor.visitExpr2_TernaryExpr(self)
+    
+class Expr2_ArithmeticOp(Expr2):
+  def __init__(self, arithmeticOp, expr):
+    self.arithmeticOp = arithmeticOp
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExpr2_ArithmeticOp(self)
+    
+class Expr2_ComparissionOp(Expr2):
+  def __init__(self, comparissionOp, expr):
+    self. comparissionOp = comparissionOp
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExpr2_ComparissionOp(self)
+    
+class ComparissionOperator(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ComparissionOperator_Token(ComparissionOperator):
+  def __init__(self, token):
+    self.token = token
+  def accept(self, Visitor):
+    Visitor.visitComparissionOperator_Token(self)
+    
+class ArithmeticOperator(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ArithmeticOperator_Token(ArithmeticOperator):
+  def __init__(self, token):
+    self.token = token
+  def accept(self, Visitor):
+    Visitor.visitArithmeticOperator_Token(self)
     
 class Expr3(metaclass=ABCMeta):
   @abstractmethod
@@ -810,3 +877,65 @@ class SelectorWithExpr(Selector):
 class SelectorWithoutExpr(Selector):
   def accept(self, Visitor):
     Visitor.visitSelectorWithoutExpr(self)
+
+class WhileStatement(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class WhileStatementSingle(WhileStatement):
+  def __init__(self, exprparentheses, statement):
+    self.exprparentheses = exprparentheses
+    self.statement = statement
+  def accept(self, Visitor):
+    Visitor.visitWhileStatementSingle(self)
+
+class ExprParentheses(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class ExprParenthesesSingle(ExprParentheses):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExprParenthesesSingle(self)
+
+class StatementBlockOpt(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class StatementBlockOpt_Statement(StatementBlockOpt):
+  def __init__(self, statement):
+    self.statement = statement
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_Statement(self)
+  
+class StatementBlockOpt_StatementMul(StatementBlockOpt):
+  def __init__(self, statementmul):
+    self.statementmul = statementmul
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_StatementMul(self)
+  
+class StatementBlockOpt_Empty(StatementBlockOpt):
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_Empty(self)
+
+class StatementMul(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class statementMulMul(StatementMul):
+  def __init__(self, statement, statementmul):
+    self.statement = statement
+    self.statementmul = statementmul
+  def accept(self, Visitor):
+    Visitor.visitstatementMulMul(self)
+  
+class statementMulSingle(StatementMul):
+  def __init__(self, statement):
+    self.statement = statement
+  def accept(self, Visitor):
+    Visitor.visitstatementMulSingle(self)

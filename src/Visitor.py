@@ -140,10 +140,23 @@ class Visitor():
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
     print(';')
-    
+  
+  def visitStatement_While(self, statement):
+    statement.whilee.accept(self)
+    print(';')
+
   def visitStatement_Die(self, statement):
     statement.die.accept(self)
     print(';')
+    
+  def visitExpr_Minus_Expr1(self, expr):
+    print('-', end='')
+    expr.expr1.accept(self)
+    
+  def visitExpr_Minus_Expr1_Expr2(self, expr):
+    print('-', end='')
+    expr.expr1.accept(self)
+    expr.expr2.accept(self)
     
   def visitExpr_Expr1_Expr2(self, expr):
     expr.expr1.accept(self)
@@ -154,6 +167,26 @@ class Visitor():
     
   def visitExpr_Expr3(self, expr):
     expr.expr3.accept(self)
+    
+  def visitExpr2_TernaryExpr(self, expr2):
+    print('', '?', end=' ')
+    expr2.expr1.accept(self)
+    print('', ':', end=' ')
+    expr2.expr2.accept(self)
+    
+  def visitExpr2_ArithmeticOp(self, expr2):
+    expr2.arithmeticOp.accept(self)
+    expr2.expr.accept(self)
+    
+  def visitExpr2_ComparissionOp(self, expr2):
+    expr2.comparissionOp.accept(self)
+    expr2.expr.accept(self)
+    
+  def visitArithmeticOperator_Token(self, arithmeticOp):
+    print('', arithmeticOp.token, end=' ')
+    
+  def visitComparissionOperator_Token(self, comparissionOp):
+    print('', comparissionOp.token, end=' ')
 
   def visitExpr3_TypeCast(self, expr3):
     print('(', end='')
@@ -261,7 +294,8 @@ class Visitor():
     print('false', end='')
     
   def visitFunctionCall_NoParameter(self, functionCall):
-    print(functionCall.id, '()')
+    print(functionCall.id, end='')
+    print('()', end='')
     
   def visitFunctionCall_WithParameter(self, functionCall):
     print(functionCall.id, end='')
@@ -386,3 +420,32 @@ class Visitor():
   def SelectorWithoutExpr(self, selector):
       print('[', end='')
       print(']', end='')
+
+  def visitWhileStatementSingle(self, whilestatement):
+      print('while', end='')
+      whilestatement.exprparentheses.accept(self)
+      whilestatement.statement.accept(self)
+
+  def visitExprParenthesesSingle(self, exprparentheses):
+      print('(', end='')
+      exprparentheses.expr.accept(self)
+      print(')', end='')
+  
+  def visitStatementBlockOpt_Statement(self, statementblockopt):
+      statementblockopt.statement.accept(self)
+  
+  def visitStatementBlockOpt_StatementMul(self, statementblockopt):
+      print('{', end='')
+      statementblockopt.statementmul.accept(self)
+      print('}', end='')
+  
+  def visitStatementBlockOpt_Empty(self, statementblockopt):
+      print('{', end='')
+      print('}', end='')
+  
+  def visitstatementMulSingle(self, statementMul):
+      statementMul.statement.accept(self)
+  
+  def visitstatementMulMul(self, statementMul):
+      statementMul.statement.accept(self)
+      statementMul.statementmul.accept(self)
