@@ -115,6 +115,12 @@ class Statement_While(Statement):
     self.whilee = whilee
   def accept(self, Visitor):
     Visitor.visitStatement_While(self)
+
+class Statement_Do_While(Statement):
+  def __init__(self, dowhilee):
+    self.dowhilee = dowhilee
+  def accept(self, Visitor):
+    Visitor.visitStatement_Do_While(self)
     
 class Statement_Die(Statement):
   def __init__(self, die):
@@ -939,3 +945,15 @@ class statementMulSingle(StatementMul):
     self.statement = statement
   def accept(self, Visitor):
     Visitor.visitstatementMulSingle(self)
+
+class DoWhileStatement(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class DoWhileStatementSingle(DoWhileStatement):
+  def __init__(self, statementblockopt, exprparentheses):
+    self.statementblockopt = statementblockopt
+    self.exprparentheses = exprparentheses
+  def accept(self, Visitor):
+    Visitor.visitDoWhileStatementSingle(self)
