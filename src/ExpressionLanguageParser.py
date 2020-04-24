@@ -3,7 +3,6 @@ import ply.lex as lex
 import Visitor as vis
 from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
-# variable -  reference_variable - simple_indirect_reference_DOLAR
 
 precedence = (
   ('left', 'PLUS', 'MINUS'),
@@ -203,6 +202,8 @@ def p_statement(p):
     p[0] = sa.Statement_Return(p[1])
   elif isinstance(p[1], sa.WhileStatement):
     p[0] = sa.Statement_While(p[1])
+  elif isinstance(p[1], sa.DoWhileStatement):
+    p[0] = sa.Statement_Do_While(p[1])
   
   
 def p_if_statement(p):
@@ -241,6 +242,7 @@ def p_do_statement(p):
   '''
   do_statement : DO statement_BLOCK_OPT WHILE expr_parentheses SEMICOLON
   '''
+  p[0] = sa.DoWhileStatementSingle(p[2], p[4])
 
 def p_break_statement(p):
   '''
@@ -688,11 +690,13 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  while(1 + 1){
+  do
+  {
     while(1+1){
-
+      $valor = $valor2;
     }
-  }
+
+  }while($a = 2);
 ?>
 '''
 
