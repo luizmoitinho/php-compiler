@@ -67,7 +67,21 @@ class Visitor():
     print('{')
     pp.printTab()
     print('}')
-    
+
+  def visitStatementBlockOpt_ParenEmpty(self, statementBlockOpt):
+    statementBlockOpt.statement.accept(self)
+  
+  def StatementBlockOpt_ParenEmpty(self, StatementBlockOpt):
+    print('(',end='')
+    print(')',end='')
+  
+  def visitStatementMul_Mul(self, StatementMul):
+    StatementMul.statement.accept(self)
+    StatementMul.statementMul.accept(self)
+
+  def visitStatementMul_Single(self, StatementMul):
+    StatementMul.statement.accept(self)
+
   def visitParameterList_Parameter_Mul(self, parameterList):
     parameterList.parameter.accept(self)
     parameterList.parameter_list_colon_parameter.accept(self)
@@ -148,12 +162,16 @@ class Visitor():
   def visitStatement_Return(self, statement):
     pp.printTab()
     statement._return.accept(self)
-    
+  
+  def visitStatement_If(self, statement):
+    statement._if.accept(self)
+
   def visitStatement_Exit(self, statement):
     pp.printTab()
     statement.exit.accept(self)
     print(';')
   
+
   def visitStatement_While(self, statement):
     pp.printTab()
     statement.whilee.accept(self)
@@ -163,11 +181,27 @@ class Visitor():
     statement.dowhilee.accept(self)
     print(';')
 
-
   def visitStatement_Die(self, statement):
     pp.printTab()
     statement.die.accept(self)
     print(';')
+
+  def visitIfStatement_Complement(self, ifStatement):
+    ifStatement.statement_if.accept(self) 
+    ifStatement.if_statement_complement(self)
+
+  def visitIfStatement_Single(self, ifStatement):
+    ifStatement.statementIf.accept(self)
+
+  def visitStatementIf_ExprParen(self, statement_if):
+    print('if',end='')
+    statement_if.expr_parentheses.accept(self)
+    statement_if.statement_BLOCK_OPT.accept(self)
+
+  def visitExprParentheses_Expr(self, exprParentheses_Expr):
+    print('(',end='')
+    exprParentheses_Expr.expr.accept(self)
+    print(')',end='')
     
   def visitExpr_Minus_Expr1(self, expr):
     print('-', end='')
@@ -445,19 +479,14 @@ class Visitor():
       print('while', end='')
       whilestatement.exprparentheses.accept(self)
       whilestatement.statement.accept(self)
-
-  def visitExprParenthesesSingle(self, exprparentheses):
-      print('(', end='')
-      exprparentheses.expr.accept(self)
-      print(')', end='')
   
   def visitStatementBlockOpt_Statement(self, statementblockopt):
       statementblockopt.statement.accept(self)
   
-  def visitStatementBlockOpt_StatementMul(self, statementblockopt):
+  def visitStatementBlockOpt_StatementMul(self, statementBlockOpt):
       print('{')
       pp.incrementTab()
-      statementblockopt.statementmul.accept(self)
+      statementBlockOpt.statementmul.accept(self)
       pp.decrementTab()
       pp.printTab()
       print('}')

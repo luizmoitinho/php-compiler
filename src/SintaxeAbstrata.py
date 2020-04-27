@@ -60,13 +60,6 @@ class InnerStatementMul(metaclass=ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
-
-class InnerStatementMul_Mul(InnerStatementMul):
-  def __init__(self, innerStatement, innerStatementMul):
-    self.innerStatement = innerStatement
-    self.innerStatementMul = innerStatementMul
-  def accept(self, Visitor):
-    Visitor.visitInnerStatementMul_Mul(self)
     
 class InnerStatementMul_Single(InnerStatementMul):
   def __init__(self, innerStatement):
@@ -78,7 +71,40 @@ class Statement(metaclass = ABCMeta):
     @abstractmethod
     def accept(self, Visitor):
       pass
-    
+
+class StatementBlockOpt(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class StatementBlockOpt_Statement(StatementBlockOpt):
+  def __init__(self, statement):
+    self.statement =  statement
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_Statement(self)
+
+class StatementBlockOpt_ParenEmpty(StatementBlockOpt):
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_ParenEmpty(self)
+
+class StatementBlockOpt_StatementMul(StatementBlockOpt):
+  def __init__(self, statementmul):
+    self.statementmul = statementmul
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_StatementMul(self)
+
+class StatementMul(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class StatementMul_Mul(StatementMul):
+  def __init__(self, statement,statementMul):
+    self.statement = statement
+    self.statementMul = statementMul
+  def accept(self, Visitor):
+    Visitor.visitStatementMul_Mul(self)
+
 class Statement_Expr(Statement):
   def __init__(self, expr, semiColon):
     self.expr = expr
@@ -110,6 +136,13 @@ class Statement_Exit(Statement):
   def accept(self, Visitor):
     Visitor.visitStatement_Exit(self)
 
+class Statement_If(Statement):
+  def __init__(self,_if):
+    self._if = _if
+  def accept(self, Visitor):
+    Visitor.visitStatement_If(self)
+
+
 class Statement_While(Statement):
   def __init__(self, whilee):
     self.whilee = whilee
@@ -133,6 +166,49 @@ class FuncDecStatement(metaclass = ABCMeta):
   def accept(self, Visitor):
     pass
   
+class ExprParentheses(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self,Visitor):
+    pass
+
+class ExprParentheses_Expr(ExprParentheses):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExprParentheses_Expr(self)
+
+class If(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class IfStatement_Complement(If):
+  def __init__(self,statement_if,if_statement_complement):
+    self.statement_if = statement_if
+    self.if_statement_complement = if_statement_complement
+  def accept(self,Visitor):
+    Visitor.visitIfStatement_Complement(self)
+
+class IfStatement_Single(If):
+  def __init__(self, statementIf):
+    self.statementIf = statementIf
+  def accept(self, Visitor):
+    Visitor.visitIfStatement_Single(self)
+
+
+class StatementIf(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class StatementIf_ExprParen(StatementIf):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT):
+    self.expr_parentheses = expr_parentheses
+    self.statement_BLOCK_OPT=statement_BLOCK_OPT
+  def accept(self,Visitor):
+    Visitor.visitStatementIf_ExprParen(self)
+
+
 class funcDecStatement_Function(FuncDecStatement):
   def __init__(self, fds_id, fds_parameter, fds_statements):
     self.fds_id = fds_id
@@ -896,42 +972,10 @@ class WhileStatementSingle(WhileStatement):
   def accept(self, Visitor):
     Visitor.visitWhileStatementSingle(self)
 
-class ExprParentheses(metaclass = ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    pass
 
-class ExprParenthesesSingle(ExprParentheses):
-  def __init__(self, expr):
-    self.expr = expr
-  def accept(self, Visitor):
-    Visitor.visitExprParenthesesSingle(self)
-
-class StatementBlockOpt(metaclass = ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    pass
-
-class StatementBlockOpt_Statement(StatementBlockOpt):
-  def __init__(self, statement):
-    self.statement = statement
-  def accept(self, Visitor):
-    Visitor.visitStatementBlockOpt_Statement(self)
-  
-class StatementBlockOpt_StatementMul(StatementBlockOpt):
-  def __init__(self, statementmul):
-    self.statementmul = statementmul
-  def accept(self, Visitor):
-    Visitor.visitStatementBlockOpt_StatementMul(self)
-  
 class StatementBlockOpt_Empty(StatementBlockOpt):
   def accept(self, Visitor):
     Visitor.visitStatementBlockOpt_Empty(self)
-
-class StatementMul(metaclass = ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    pass
 
 class statementMulMul(StatementMul):
   def __init__(self, statement, statementmul):
