@@ -3,7 +3,6 @@ import ply.lex as lex
 import Visitor as vis
 from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
-# variable -  reference_variable - simple_indirect_reference_DOLAR
 
 precedence = (
   ('left', 'PLUS', 'MINUS'),
@@ -50,20 +49,24 @@ def p_inner_statement_MUL(p):
   else:
     p[0] = sa.InnerStatementMul_Single(p[1])
   
-  #MINUS expr1 expr2
-  #  | MINUS expr1
 def p_expr(p):
   '''
-  expr : expr1 expr2
+  expr : MINUS expr1 expr2
+    | expr1 expr2
     | expr3 
+    | MINUS expr1
     | expr1
   '''
-  if len(p) == 3:
+  if isinstance(p[1], sa.Expr1) and len(p) == 3:
     p[0] = sa.Expr_Expr1_Expr2(p[1], p[2])
-  elif isinstance(p[1], sa.Expr1):
+  elif isinstance(p[1], sa.Expr1) and len(p) == 2:
     p[0] = sa.Expr_Expr1(p[1])
-  elif isinstance(p[1], sa.Expr3):
+  elif isinstance(p[1], sa.Expr3) and len(p) == 2:
     p[0] = sa.Expr_Expr3(p[1])
+  elif p[1] == '-' and len(p) == 3:
+    p[0] = sa.Expr_Minus_Expr1(p[2])
+  else: 
+    p[0] = sa.Expr_Minus_Expr1_Expr2(p[2], p[3])
     
 def p_expr2(p): 
   '''
@@ -71,8 +74,14 @@ def p_expr2(p):
     | comparission_operator expr 
     | arithmetic_operator expr
   '''
+  if isinstance(p[1], sa.ArithmeticOperator):
+    p[0] = sa.Expr2_ArithmeticOp(p[1], p[2])
+  elif isinstance(p[1], sa.ComparissionOperator):
+    p[0] = sa.Expr2_ComparissionOp(p[1], p[2])
+  else:
+    p[0] = sa.Expr2_TernaryExpr(p[2], p[4])
   
-def p_expr3(p): 
+def p_expr3(p):
   '''
   expr3 : variable assign_operator expr
     | variable assign_operator AMPERSAND expr
@@ -80,6 +89,10 @@ def p_expr3(p):
   '''
   if isinstance(p[2], sa.TypeCastOp):
     p[0] = sa.Expr3_TypeCast(p[2], p[4])
+  elif isinstance(p[1], sa.Variable) and len(p) == 4:
+    p[0] = sa.Expr3_Var_Assign_Expr(p[1], p[2], p[3])
+  else:
+    p[0] = sa.Expr3_Var_Assign_Amp_Expr(p[1], p[2], p[4])
 
 def p_expr1(p): 
   ''' 
@@ -95,7 +108,9 @@ def p_expr1(p):
     | TRUE
     | FALSE
   '''
-  if p[1] == 'true':
+  if isinstance(p[1], sa.Variable) and len(p) == 2:
+    p[0] = sa.Expr1_Variable(p[1])
+  elif p[1] == 'true':
     p[0] = sa.Expr1_True()
   elif p[1] == 'false':
     p[0] = sa.Expr1_False()
@@ -107,7 +122,15 @@ def p_expr1(p):
     p[0] = sa.Expr1_ArrayDeclaration(p[2])
   elif isinstance(p[2], sa.Expr):
     p[0] = sa.Expr1_ExprPar(p[2])
-    
+  elif p[2] == '++':
+    p[0] = sa.Expr1_Variable_Increment(p[1])
+  elif p[2] == '--':
+    p[0] = sa.Expr1_Variable_Decrement(p[1])
+  elif p[1] == '++':
+    p[0] = sa.Expr1_Increment_Variable(p[2])
+  elif p[1] == '--':
+    p[0] = sa.Expr1_Decrement_Variable(p[2])
+  
 def p_exit_statement(p):
   '''
   exit_statement : EXIT exit_expr
@@ -165,7 +188,6 @@ def p_statement(p):
     | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
     | GLOBAL global_var SEMICOLON
   '''
-  print(p[1])
   if isinstance(p[1], sa.Expr): 
     p[0] = sa.Statement_Expr(p[1], p[2])
   elif isinstance(p[1], sa.Exit):
@@ -180,7 +202,10 @@ def p_statement(p):
     p[0] = sa.Statement_Return(p[1])
   elif isinstance(p[1], sa.If):
     p[0] = sa.Statement_If(p[1])
-
+  elif isinstance(p[1], sa.WhileStatement):
+    p[0] = sa.Statement_While(p[1])
+  elif isinstance(p[1], sa.DoWhileStatement):
+    p[0] = sa.Statement_Do_While(p[1])
   
 def p_if_statement(p):
   '''
@@ -220,11 +245,14 @@ def p_while_statement(p):
   '''
   while_statement : WHILE expr_parentheses statement_BLOCK_OPT
   '''
-
+  if len(p)==4:
+    p[0] = sa.WhileStatementSingle(p[2], p[3])
+  
 def p_do_statement(p):
   '''
   do_statement : DO statement_BLOCK_OPT WHILE expr_parentheses SEMICOLON
   '''
+  p[0] = sa.DoWhileStatementSingle(p[2], p[4])
 
 def p_break_statement(p):
   '''
@@ -299,6 +327,7 @@ def p_expr_parentheses(p):
   if len(p)==4:
     p[0] = sa.ExprParentheses_Expr(p[2])
 
+
 def p_foreach_statement(p):
   '''
   foreach_statement : FOREACH LPAREN expr AS ampersand_variable RPAREN statement_BLOCK_OPT
@@ -364,7 +393,7 @@ def p_type_cast_operator(p):
       | DOUBLE_TYPE
       | FLOAT_TYPE
       | REAL_TYPE
-      | STRING_TYPE
+      | STRING_TYPE 
       | ARRAY_TYPE
       | BOOLEAN_TYPE
       | BOOL_TYPE
@@ -381,7 +410,8 @@ def p_assign_operator(p):
     | DIVIDE_ASSIGN
     | ASSIGN
   '''
-  
+  p[0] = sa.AssignOperator_Token(p[1]) 
+
 def p_arithmetic_operator(p):
   '''
   arithmetic_operator : PLUS
@@ -390,6 +420,7 @@ def p_arithmetic_operator(p):
     | TIMES
     | MINUS
   '''
+  p[0] = sa.ArithmeticOperator_Token(p[1])
 
 def p_comparission_operator(p): 
   '''
@@ -404,6 +435,7 @@ def p_comparission_operator(p):
     | AND
     | OR
   '''
+  p[0] = sa.ComparissionOperator_Token(p[1])
 
 def p_scalar(p):
   '''
@@ -440,7 +472,7 @@ def p_compound_variable(p):
   '''
   if len(p) == 5:
     p[0] = sa.CompoundVariableMul(p[3])
-  else :
+  else:
     p[0] = sa.CompoundVariableSingle(p[1])
 
 def p_selector(p):
@@ -596,10 +628,10 @@ def p_statement_MUL(p):
   statement_MUL : statement statement_MUL
     | statement
   '''
-  if len(p)==3:
-    sa.StatementMul_Mul(p[1],p[2])
+  if len(p) == 3:
+    p[0] = sa.statementMulMul(p[1], p[2])
   else:
-    sa.StatementMul_Single(p[1])
+    p[0] = sa.statementMulSingle(p[1])
   
 def p_for_expr_COLON_EXPR(p):
   '''
@@ -613,12 +645,12 @@ def p_statement_BLOCK_OPT(p):
     | LKEY statement_MUL RKEY 
     | LKEY RKEY
   '''
-  if isinstance(p[1],sa.Statement):
+  if len(p) == 2:
     p[0] = sa.StatementBlockOpt_Statement(p[1])
-  elif len(p)==3:
-    p[0] = sa.StatementBlockOpt_ParenEmpty()
-  elif len(p)==4:
+  elif len(p) == 4:
     p[0] = sa.StatementBlockOpt_StatementMul(p[2])
+  elif len(p) == 3:
+    p[0] = sa.StatementBlockOpt_Empty()
 
 def p_parameter_list_COLON_PARAMETER(p):
   '''
@@ -670,12 +702,15 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    if($x==10) true
+  if( $x == 10){
+    if( $valid)
+      $x++;
+  }
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=True)
+result = parser.parse(debug=False)
 v = vis.Visitor()
 result.accept(v)
