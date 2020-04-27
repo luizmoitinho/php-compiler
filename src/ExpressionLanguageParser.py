@@ -690,13 +690,11 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  do
-  {
-    while(1+1){
-      $valor = $valor2;
+  function add() {
+    while(true) {
+      return 1;
     }
-
-  }while($a = 2);
+  }
 ?>
 '''
 
