@@ -1,7 +1,11 @@
+from PrettyPrinter import PrettyPrinter as pp
+
 class Visitor():
 
   def visitMain_MainInner(self, main):
     print('<?php')
+    pp.incrementTab()
+    pp.printTab()
     main.mainInner.accept(self)
     print('?>')
   
@@ -53,7 +57,10 @@ class Visitor():
     
   def visitFds_statements_withStatements(self, fds_statements):
     print('{')
+    pp.incrementTab()
     fds_statements.inner_statement_MUL.accept(self)
+    pp.decrementTab()
+    pp.printTab()
     print('}')
     
   def visitFds_statements_noStatements(self, fds_statements):
@@ -125,27 +132,34 @@ class Visitor():
     print(scalar.token, end='')
   
   def visitStatement_Expr(self, statement):
+    pp.printTab()
     statement.expr.accept(self)
     print(';')
     
   def visitStatement_Break(self, statement):
+    pp.printTab()
     statement._break.accept(self)
     
   def visitStatement_Continue(self, statement):
+    pp.printTab()
     statement._continue.accept(self)
     
   def visitStatement_Return(self, statement):
+    pp.printTab()
     statement._return.accept(self)
     
   def visitStatement_Exit(self, statement):
+    pp.printTab()
     statement.exit.accept(self)
     print(';')
   
   def visitStatement_While(self, statement):
+    pp.printTab()
     statement.whilee.accept(self)
     print(';')
 
   def visitStatement_Die(self, statement):
+    pp.printTab()
     statement.die.accept(self)
     print(';')
     

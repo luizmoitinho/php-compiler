@@ -688,10 +688,10 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  while(1 + 1){
-    while(1+1){
-
-    }
+  function add($valor) {
+    exit (1);
+    return $valor;
+    add();
   }
 ?>
 '''
