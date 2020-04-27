@@ -164,6 +164,7 @@ class Visitor():
     statement._return.accept(self)
   
   def visitStatement_If(self, statement):
+    pp.printTab()
     statement._if.accept(self)
 
   def visitStatement_Exit(self, statement):
@@ -511,7 +512,10 @@ class Visitor():
       whilestatement.statement.accept(self)
   
   def visitStatementBlockOpt_Statement(self, statementblockopt):
+      print()
+      pp.incrementTab()
       statementblockopt.statement.accept(self)
+      pp.decrementTab()
   
   def visitStatementBlockOpt_StatementMul(self, statementBlockOpt):
       print('{')

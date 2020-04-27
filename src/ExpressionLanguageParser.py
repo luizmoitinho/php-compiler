@@ -713,10 +713,11 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  if( $x == 10){
-    if( $valid)
-      $x++;
-  }
+  foreach($arr as $valor)
+    while(true)
+      if(true)
+        $valor++;
+
 ?>
 '''
 
