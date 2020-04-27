@@ -171,7 +171,6 @@ class Visitor():
     statement.exit.accept(self)
     print(';')
   
-
   def visitStatement_While(self, statement):
     pp.printTab()
     statement.whilee.accept(self)
@@ -180,6 +179,10 @@ class Visitor():
     pp.printTab()
     statement.dowhilee.accept(self)
     print(';')
+
+  def visitStatement_Foreach(self, statement):
+    pp.printTab()
+    statement.foreach.accept(self)
 
   def visitStatement_Die(self, statement):
     pp.printTab()
@@ -401,6 +404,13 @@ class Visitor():
   def visitSimpleIndirectReference_Single(self, simpleIndirectReference):
     print('$', end='')
     
+  def visitAmpersandVariable_WithAmp(self, ampersandVariable):
+    print('&', end='')
+    print(ampersandVariable.variable_token, end='')
+    
+  def visitAmpersandVariable_NoAmp(self, ampersandVariable):
+    print(ampersandVariable.variable_token, end='')
+    
   def visitExit_ExitExpr(self, _exit):
     print('exit', end='')
     _exit.exitExpr.accept(self)
@@ -474,6 +484,26 @@ class Visitor():
   def SelectorWithoutExpr(self, selector):
       print('[', end='')
       print(']', end='')
+      
+  def visitForeachStatement_NoAssoc(self, foreachStatement):
+    print('foreach', end='')
+    print('(', end='')
+    foreachStatement.expr.accept(self)
+    print('', 'as', end=' ')
+    foreachStatement.ampVariable.accept(self)
+    print(')', end='')
+    foreachStatement.statementBlockOpt.accept(self)
+    
+  def visitForeachStatement_WithAssoc(self, foreachStatement):
+    print('foreach', end='')
+    print('(', end='')
+    foreachStatement.expr.accept(self)
+    print('', 'as', end=' ')
+    foreachStatement.ampVariableKey.accept(self)
+    print('', '=>', end=' ')
+    foreachStatement.ampVariableValue.accept(self)
+    print(')', end='')
+    foreachStatement.statementBlockOpt.accept(self)
 
   def visitWhileStatementSingle(self, whilestatement):
       print('while', end='')
