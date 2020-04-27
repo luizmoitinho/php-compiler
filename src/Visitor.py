@@ -156,7 +156,11 @@ class Visitor():
   def visitStatement_While(self, statement):
     pp.printTab()
     statement.whilee.accept(self)
+  
+  def visitStatement_Do_While(self, statement):
+    statement.dowhilee.accept(self)
     print(';')
+
 
   def visitStatement_Die(self, statement):
     pp.printTab()
@@ -463,3 +467,9 @@ class Visitor():
   def visitstatementMulMul(self, statementMul):
       statementMul.statement.accept(self)
       statementMul.statementmul.accept(self)
+  
+  def visitDoWhileStatementSingle(self, whilestatement):
+      print('do', end='')
+      whilestatement.statementblockopt.accept(self)
+      print('while', end='')
+      whilestatement.exprparentheses.accept(self)

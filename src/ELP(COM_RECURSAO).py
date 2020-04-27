@@ -11,6 +11,7 @@ def p_main(p):
   main : BEGIN_PROGRAM inner_statement END_PROGRAM
   '''
 
+
 def p_inner_statement(p):
   '''
   inner_statement : statement
