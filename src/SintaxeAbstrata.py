@@ -78,7 +78,46 @@ class Statement(metaclass = ABCMeta):
     @abstractmethod
     def accept(self, Visitor):
       pass
-    
+
+class StatementBlockOpt(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self,Visitor):
+    pass
+
+class StatementBlockOpt_Statement(StatementBlockOpt):
+  def __init__(self, statement):
+    self.statement =  statement
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_Statement(self)
+
+class StatementBlockOpt_ParenEmpty(StatementBlockOpt):
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_ParenEmpty(self)
+
+class StatementBlockOpt_StatementMul(StatementBlockOpt):
+  def __init__(self, statementMul):
+    self.statementMul = statementMul
+  def accept(self, Visitor):
+    Visitor.visitStatementBlockOpt_StatementMul(self)
+
+class StatementMul(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class StatementMul_Mul(StatementMul):
+  def __init__(self, statement,statementMul):
+    self.statement =statement
+    self.statementMul = statementMul
+  def accept(self, Visitor):
+    Visitor.visitStatementMul_Statement_Mul(self)
+
+class StatementMul_Single(StatementMul):
+  def __init__ (self, statement):
+    self.statement = statement
+  def accept(self,Visitor):
+    Visitor.visitStatementMul_Single(self)
+
 class Statement_Expr(Statement):
   def __init__(self, expr, semiColon):
     self.expr = expr
@@ -149,6 +188,13 @@ class IfStatement_Complement(If):
     self.if_statement_complement = if_statement_complement
   def accept(self,Visitor):
     Visitor.visitIfStatement_Complement(self)
+
+class IfStatement_Single(If):
+  def __init__(self, statementIf):
+    self.statementIf = statementIf
+  def accept(self, Visitor):
+    Visitor.visitIfStatement_Single(self)
+
 
 class StatementIf(metaclass = ABCMeta):
   @abstractmethod

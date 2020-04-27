@@ -59,7 +59,26 @@ class Visitor():
   def visitFds_statements_noStatements(self, fds_statements):
     print('{')
     print('}')
-    
+
+  def visitStatementBlockOpt_ParenEmpty(self, statementBlockOpt):
+    statementBlockOpt.statement.accept(self)
+  
+  def StatementBlockOpt_ParenEmpty(self, StatementBlockOpt):
+    print('(',end='')
+    print(')',end='')
+  
+  def visitStatementBlockOpt_StatementMul(self, StatementBlockOpt):
+    print('(',end='')
+    StatementBlockOpt.statementMul.accept(self)
+    print(')',end='')
+
+  def visitStatementMul_Statement_Mul(self, StatementMul):
+    StatementMul.statement.accept(self)
+    StatementMul.statementMul.accept(self)
+
+  def visitStatementMul_Single(self, StatementMul):
+    StatementMul.statement.accept(self)
+
   def visitParameterList_Parameter_Mul(self, parameterList):
     parameterList.parameter.accept(self)
     parameterList.parameter_list_colon_parameter.accept(self)
@@ -148,11 +167,15 @@ class Visitor():
     statement.die.accept(self)
     print(';')
 
-  def visitIfStatement_Complement(self, if_statement):
-    if_statement.statement_if.accept(self) 
-    if_statement.if_statement_complement(self)
+  def visitIfStatement_Complement(self, ifStatement):
+    ifStatement.statement_if.accept(self) 
+    ifStatement.if_statement_complement(self)
+
+  def visitIfStatement_Single(self, ifStatement):
+    ifStatement.statementIf.accept(self)
 
   def visitStatementIf_ExprParen(self, statement_if):
+    print('if',end='')
     statement_if.expr_parentheses.accept(self)
     statement_if.statement_BLOCK_OPT.accept(self)
 

@@ -189,8 +189,8 @@ def p_if_statement(p):
   '''
   if len(p)==3:
     p[0] = sa.IfStatement_Complement(p[1],p[2])
-  #else:
-   # p[0] = sa.IfStatement_StatementIf(p[1])
+  else:
+    p[0] = sa.IfStatement_Single(p[1])
 
   
 def p_if_statement_complement(p):
@@ -198,11 +198,12 @@ def p_if_statement_complement(p):
   if_statement_complement : statement_elseif
     | statement_else
   '''
+
 def p_statement_if(p):
   ''' 
   statement_if : IF expr_parentheses statement_BLOCK_OPT 
   '''
-  if len(p) ==3:
+  if len(p) ==4:
     p[0] = sa.StatementIf_ExprParen(p[2],p[3])
 
 def p_statement_elseif(p):
@@ -595,6 +596,10 @@ def p_statement_MUL(p):
   statement_MUL : statement statement_MUL
     | statement
   '''
+  if len(p)==3:
+    sa.StatementMul_Mul(p[1],p[2])
+  else:
+    sa.StatementMul_Single(p[1])
   
 def p_for_expr_COLON_EXPR(p):
   '''
@@ -607,7 +612,13 @@ def p_statement_BLOCK_OPT(p):
   statement_BLOCK_OPT : statement 
     | LKEY statement_MUL RKEY 
     | LKEY RKEY
-  ''' 
+  '''
+  if isinstance(p[1],sa.Statement):
+    p[0] = sa.StatementBlockOpt_Statement(p[1])
+  elif len(p)==3:
+    p[0] = sa.StatementBlockOpt_ParenEmpty()
+  elif len(p)==4:
+    p[0] = sa.StatementBlockOpt_StatementMul(p[2])
 
 def p_parameter_list_COLON_PARAMETER(p):
   '''
@@ -659,7 +670,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    array($x,$y)
+    if($x==10) true
 ?>
 '''
 
