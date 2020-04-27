@@ -690,16 +690,21 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  function add() {
-    while(true) {
-      return 1;
-    }
-  }
+function add() {
+while($i <= $j){
+while($array[$i] < $x && $i < $fim){
+$i = $i + 1;
+}
+while(($array[$j] > $x) && ($j > $inicio)){
+$j = $j - 1;
+}
+}
+}
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=True)
+result = parser.parse(debug=False)
 v = vis.Visitor()
 result.accept(v)

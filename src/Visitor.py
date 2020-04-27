@@ -5,7 +5,6 @@ class Visitor():
   def visitMain_MainInner(self, main):
     print('<?php')
     pp.incrementTab()
-    pp.printTab()
     main.mainInner.accept(self)
     print('?>')
   
@@ -34,6 +33,7 @@ class Visitor():
     innerStatementMul.innerStatement.accept(self)
     
   def visitFuncDecStatement_Function(self, funcDecStatement):
+    pp.printTab()
     print('function', end=' ')
     funcDecStatement.fds_id.accept(self)
     funcDecStatement.fds_parameter.accept(self)
@@ -65,6 +65,7 @@ class Visitor():
     
   def visitFds_statements_noStatements(self, fds_statements):
     print('{')
+    pp.printTab()
     print('}')
     
   def visitParameterList_Parameter_Mul(self, parameterList):
@@ -158,6 +159,7 @@ class Visitor():
     statement.whilee.accept(self)
   
   def visitStatement_Do_While(self, statement):
+    pp.printTab()
     statement.dowhilee.accept(self)
     print(';')
 
@@ -453,13 +455,17 @@ class Visitor():
       statementblockopt.statement.accept(self)
   
   def visitStatementBlockOpt_StatementMul(self, statementblockopt):
-      print('{', end='')
+      print('{')
+      pp.incrementTab()
       statementblockopt.statementmul.accept(self)
-      print('}', end='')
+      pp.decrementTab()
+      pp.printTab()
+      print('}')
   
   def visitStatementBlockOpt_Empty(self, statementblockopt):
-      print('{', end='')
-      print('}', end='')
+      print('{')
+      pp.printTab()
+      print('}')
   
   def visitstatementMulSingle(self, statementMul):
       statementMul.statement.accept(self)
@@ -471,5 +477,6 @@ class Visitor():
   def visitDoWhileStatementSingle(self, whilestatement):
       print('do', end='')
       whilestatement.statementblockopt.accept(self)
+      pp.printTab()
       print('while', end='')
       whilestatement.exprparentheses.accept(self)
