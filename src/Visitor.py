@@ -136,14 +136,30 @@ class Visitor():
     
   def visitStatement_Return(self, statement):
     statement._return.accept(self)
-    
+  
+  def visitStatement_If(self, statement):
+    statement._if.accept(self)
+
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
     print(';')
-    
+  
   def visitStatement_Die(self, statement):
     statement.die.accept(self)
     print(';')
+
+  def visitIfStatement_Complement(self, if_statement):
+    if_statement.statement_if.accept(self) 
+    if_statement.if_statement_complement(self)
+
+  def visitStatementIf_ExprParen(self, statement_if):
+    statement_if.expr_parentheses.accept(self)
+    statement_if.statement_BLOCK_OPT.accept(self)
+
+  def visitExprParentheses_Expr(self, exprParentheses_Expr):
+    print('(',end='')
+    exprParentheses_Expr.expr.accept(self)
+    print(')',end='')
     
   def visitExpr_Expr1_Expr2(self, expr):
     expr.expr1.accept(self)

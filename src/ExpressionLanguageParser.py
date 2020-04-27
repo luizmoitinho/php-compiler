@@ -103,7 +103,7 @@ def p_expr1(p):
     p[0] = sa.Expr1_Scalar(p[1])
   elif isinstance(p[1], sa.FunctionCall):
     p[0] = sa.Expr1_FunctionCall(p[1])
-  elif isinstance(p[2], sa.ArrayDeclaration):
+  elif (p[1] == 'array' and isinstance(p[2], sa.ArrayDeclaration)):
     p[0] = sa.Expr1_ArrayDeclaration(p[2])
   elif isinstance(p[2], sa.Expr):
     p[0] = sa.Expr1_ExprPar(p[2])
@@ -178,13 +178,20 @@ def p_statement(p):
     p[0] = sa.Statement_Continue(p[1])
   elif isinstance(p[1], sa.Return):
     p[0] = sa.Statement_Return(p[1])
-  
+  elif isinstance(p[1], sa.If):
+    p[0] = sa.Statement_If(p[1])
+
   
 def p_if_statement(p):
   '''
   if_statement : statement_if if_statement_complement
     | statement_if 
   '''
+  if len(p)==3:
+    p[0] = sa.IfStatement_Complement(p[1],p[2])
+  #else:
+   # p[0] = sa.IfStatement_StatementIf(p[1])
+
   
 def p_if_statement_complement(p):
   '''
@@ -195,6 +202,8 @@ def p_statement_if(p):
   ''' 
   statement_if : IF expr_parentheses statement_BLOCK_OPT 
   '''
+  if len(p) ==3:
+    p[0] = sa.StatementIf_ExprParen(p[2],p[3])
 
 def p_statement_elseif(p):
   '''
@@ -286,6 +295,8 @@ def p_expr_parentheses(p):
   '''
   expr_parentheses : LPAREN expr RPAREN
   '''
+  if len(p)==4:
+    p[0] = sa.ExprParentheses_Expr(p[2])
 
 def p_foreach_statement(p):
   '''
@@ -648,7 +659,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    array(&$x);
+    array($x,$y)
 ?>
 '''
 

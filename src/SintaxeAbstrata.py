@@ -109,7 +109,13 @@ class Statement_Exit(Statement):
     self.exit = exit
   def accept(self, Visitor):
     Visitor.visitStatement_Exit(self)
-    
+
+class Statement_If(Statement):
+  def __init__(self,_if):
+    self._if = _if
+  def accept(self, Visitor):
+    Visitor.visitStatement_If(self)
+
 class Statement_Die(Statement):
   def __init__(self, die):
     self.die = die
@@ -121,6 +127,42 @@ class FuncDecStatement(metaclass = ABCMeta):
   def accept(self, Visitor):
     pass
   
+class ExprParentheses(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self,Visitor):
+    pass
+
+class ExprParentheses_Expr(ExprParentheses):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitExprParentheses_Expr(self)
+
+class If(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class IfStatement_Complement(If):
+  def __init__(self,statement_if,if_statement_complement):
+    self.statement_if = statement_if
+    self.if_statement_complement = if_statement_complement
+  def accept(self,Visitor):
+    Visitor.visitIfStatement_Complement(self)
+
+class StatementIf(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class StatementIf_ExprParen(StatementIf):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT):
+    self.expr_parentheses = expr_parentheses
+    self.statement_BLOCK_OPT=statement_BLOCK_OPT
+  def accept(self,Visitor):
+    Visitor.visitStatementIf_ExprParen(self)
+
+
 class funcDecStatement_Function(FuncDecStatement):
   def __init__(self, fds_id, fds_parameter, fds_statements):
     self.fds_id = fds_id
