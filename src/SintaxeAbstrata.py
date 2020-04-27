@@ -122,6 +122,12 @@ class Statement_Do_While(Statement):
   def accept(self, Visitor):
     Visitor.visitStatement_Do_While(self)
     
+class Statement_Foreach(Statement):
+  def __init__(self, foreach):
+    self.foreach = foreach
+  def accept(self, Visitor):
+    Visitor.visitStatement_Foreach(self)
+    
 class Statement_Die(Statement):
   def __init__(self, die):
     self.die = die
@@ -511,8 +517,6 @@ class ArrayPairList_ArrayPair_Single(ArrayPairList):
   def accept(self, Visitor):
     Visitor.visitArrayPairList_ArrayPair_Single(self)
 
-
-
 class ArrayPair(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
@@ -744,6 +748,23 @@ class SimpleIndirectReference_Single(SimpleIndirectReference):
   def accept(self, Visitor):
     Visitor.visitSimpleIndirectReference_Single(self)
     
+class AmpersandVariable(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class AmpersandVariable_WithAmp(AmpersandVariable):
+  def __init__(self, variable_token):
+    self.variable_token = variable_token
+  def accept(self, Visitor):
+    Visitor.visitAmpersandVariable_WithAmp(self)
+    
+class AmpersandVariable_NoAmp(AmpersandVariable):
+  def __init__(self, variable_token):
+    self.variable_token = variable_token
+  def accept(self, Visitor):
+    Visitor.visitAmpersandVariable_NoAmp(self)
+    
 class Exit(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
@@ -883,6 +904,28 @@ class SelectorWithExpr(Selector):
 class SelectorWithoutExpr(Selector):
   def accept(self, Visitor):
     Visitor.visitSelectorWithoutExpr(self)
+    
+class ForeachStatement(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ForeachStatement_NoAssoc(ForeachStatement):
+  def __init__(self, expr, ampVariable, statementBlockOpt):
+    self.expr = expr
+    self.ampVariable = ampVariable
+    self.statementBlockOpt = statementBlockOpt
+  def accept(self, Visitor):
+    Visitor.visitForeachStatement_NoAssoc(self)
+    
+class ForeachStatement_WithAssoc(ForeachStatement):
+  def __init__(self, expr, ampVariableKey, ampVariableValue, statementBlockOpt):
+    self.expr = expr
+    self.ampVariableKey = ampVariableKey
+    self.ampVariableValue = ampVariableValue
+    self.statementBlockOpt = statementBlockOpt
+  def accept(self, Visitor):
+    Visitor.visitForeachStatement_WithAssoc(self)
 
 class WhileStatement(metaclass = ABCMeta):
   @abstractmethod

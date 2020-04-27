@@ -204,6 +204,9 @@ def p_statement(p):
     p[0] = sa.Statement_While(p[1])
   elif isinstance(p[1], sa.DoWhileStatement):
     p[0] = sa.Statement_Do_While(p[1])
+  elif isinstance(p[1], sa.ForeachStatement):
+    p[0] = sa.Statement_Foreach(p[1])
+    
   
   
 def p_if_statement(p):
@@ -309,6 +312,10 @@ def p_ampersand_variable(p):
   ampersand_variable : AMPERSAND VARIABLE
     | VARIABLE
   '''
+  if len(p) == 3:
+    p[0] = sa.AmpersandVariable_WithAmp(p[2])
+  else:
+    p[0] = sa.AmpersandVariable_NoAmp(p[1])
   
 def p_expr_parentheses(p):
   '''
@@ -321,6 +328,10 @@ def p_foreach_statement(p):
   foreach_statement : FOREACH LPAREN expr AS ampersand_variable RPAREN statement_BLOCK_OPT
   | FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_BLOCK_OPT
   '''
+  if len(p) == 8:
+    p[0] = sa.ForeachStatement_NoAssoc(p[3], p[5], p[7])
+  else: 
+    p[0] = sa.ForeachStatement_WithAssoc(p[3], p[5], p[7], p[9])
 
 def p_for_expr_OPT(p):
   '''
@@ -690,16 +701,9 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-function add() {
-while($i <= $j){
-while($array[$i] < $x && $i < $fim){
-$i = $i + 1;
-}
-while(($array[$j] > $x) && ($j > $inicio)){
-$j = $j - 1;
-}
-}
-}
+  foreach($valores as $key => $valor){
+    $valor++;
+  }
 ?>
 '''
 
