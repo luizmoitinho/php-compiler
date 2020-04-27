@@ -8,7 +8,6 @@ class PrettyPrinter():
     global space_buffer
     space_buffer = space_buffer + spaces
     
-    
   def printTab():
     global space_buffer
     print(space_buffer, end='')
