@@ -194,6 +194,10 @@ class Visitor():
     pp.printTab()
     statement._global.accept(self)
     print(';')
+    
+  def visitStatement_For(self, statement):
+    pp.printTab()
+    statement._for.accept(self)
 
   def visitIfStatement_Complement(self, ifStatement):
     ifStatement.statement_if.accept(self) 
@@ -416,6 +420,70 @@ class Visitor():
     
   def visitAmpersandVariable_NoAmp(self, ampersandVariable):
     print(ampersandVariable.variable_token, end='')
+    
+  def visitForStatement_For(self, forStatement):
+    print('for', end='')
+    print('(', end='')
+    forStatement.forParameters.accept(self)
+    print(')', end='')
+    forStatement.statementBlock.accept(self)
+    
+  def visitForParameters_Empty(self):
+    print(';;', end='')
+    
+  def visitForParameters_Left(self, forParameters):
+    forParameters.forExprLeft.accept(self)
+    print(';;',end='')
+  
+  def visitForParameters_Left_Mid(self, forParameters):
+    forParameters.forExprLeft.accept(self)
+    print(';', end=' ')
+    forParameters.forExprMid.accept(self)
+    print(';', end='')
+    
+  def visitForParameters_Left_Right(self, forParameters):
+    forParameters.forExprLeft.accept(self)
+    print(';', end='')
+    print(';', end=' ')
+    forParameters.forExprRight.accept(self)
+  
+  def visitForParameters_Mid(self, forParameters):
+    print(';', end=' ')
+    forParameters.forExprMid.accept(self)
+    print(';', end='')
+    
+  def visitForParameters_Mid_Right(self, forParameters):
+    print(';', end=' ')
+    forParameters.forExprMid.accept(self)
+    print(';', end=' ')
+    forParameters.forExprRight.accept(self)
+    
+  def visitForParameters_Right(self, forParameters):
+    print(';;', end=' ')
+    forParameters.forExprRight.accept(self)
+    
+  def visitForParameters_Full(self, forParameters):
+    forParameters.forExprLeft.accept(self)
+    print(';', end=' ')
+    forParameters.forExprMid.accept(self)
+    print(';', end=' ')
+    forParameters.forExprRight.accept(self)
+
+  def visitForExprOpt_Single(self, forExprOpt):
+    forExprOpt.expr.accept(self)
+    
+  def visitForExprOpt_Mul(self, forExprOpt):
+    forExprOpt.expr.accept(self)
+    forExprOpt.forExprOpt.accept(self)
+    
+  def visitForExprColonExpr_Single(self, forExprColonExpr):
+    print(',', end=' ')
+    forExprColonExpr.expr.accept(self)
+    
+  def visitForExprColonExpr_Mul(self, forExprColonExpr):
+    print(',', end=' ')
+    forExprColonExpr.expr.accept(self)
+    forExprColonExpr.forExprColonExpr.accept(self)
     
   def visitGlobalStatement_Single(self, globalStatement):
     print('global', end=' ')

@@ -172,6 +172,12 @@ class Statement_Global(Statement):
     self._global = _global
   def accept(self, Visitor):
     Visitor.visitStatement_Global(self)
+    
+class Statement_For(Statement):
+  def __init__(self, _for):
+    self._for = _for
+  def accept(self, Visitor):
+    Visitor.visitStatement_For(self)
 
 class FuncDecStatement(metaclass = ABCMeta):
   @abstractmethod
@@ -847,6 +853,110 @@ class AmpersandVariable_NoAmp(AmpersandVariable):
   def accept(self, Visitor):
     Visitor.visitAmpersandVariable_NoAmp(self)
     
+class ForStatement(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+    
+class ForStatement_For(ForStatement):
+  def __init__(self, forParameters, statementBlock):
+    self.forParameters = forParameters
+    self.statementBlock = statementBlock
+  def accept(self, Visitor):
+    Visitor.visitForStatement_For(self)
+    
+class ForParameters(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ForParameters_Empty(ForParameters):
+  def accept(self, Visitor):
+    Visitor.visitForParameters_Empty()
+    
+class ForParameters_Left(ForParameters):
+  def __init__(self, forExprLeft):
+    self.forExprLeft = forExprLeft
+  def accept(self, Visitor):
+    Visitor.visitForParameters_Left(self)
+    
+class ForParameters_Left_Mid(ForParameters):
+  def __init__(self, forExprLeft, forExprMid):
+    self.forExprLeft = forExprLeft
+    self.forExprMid = forExprMid
+  def accept(self, Visitor):
+    Visitor.visitForParameters_Left_Mid(self)
+    
+class ForParameters_Left_Right(ForParameters):
+  def __init__(self, forExprLeft, forExprRight):
+    self.forExprLeft = forExprLeft
+    self.forExprRight = forExprRight
+  def accept(self, Visitor):
+    Visitor.visitForParameters_Left_Right(self)
+    
+class ForParameters_Mid(ForParameters):
+  def __init__(self, forExprMid):
+    self.forExprMid = forExprMid
+  def accept(self, Visitor):
+    Visitor.visitForParameters_Mid(self)
+    
+class ForParameters_Mid_Right(ForParameters):
+  def __init__(self, forExprMid, forExprRight):
+    self.forExprMid = forExprMid
+    self.forExprRight = forExprRight
+  def accept(self, Visitor):
+    Visitor.visitForParameters_Mid_Right(self)
+    
+class ForParameters_Right(ForParameters):
+  def __init__(self, forExprRight):
+    self.forExprRight = forExprRight
+  def accept(self, Visitor):
+    Visitor.visitForParameters_Right(self)
+    
+class ForParameters_Full(ForParameters):
+  def __init__(self, forExprLeft, forExprMid, forExprRight):
+    self.forExprLeft = forExprLeft
+    self.forExprMid = forExprMid
+    self.forExprRight = forExprRight
+  def accept(self, Visitor):
+    Visitor.visitForParameters_Full(self)
+    
+class ForExprOpt(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ForExprOpt_Single(ForExprOpt):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitForExprOpt_Single(self)
+  
+class ForExprOpt_Mul(ForExprOpt):
+  def __init__(self, expr, forExprOpt):
+    self.expr = expr
+    self.forExprOpt = forExprOpt
+  def accept(self, Visitor):
+    Visitor.visitForExprOpt_Mul(self)
+    
+class ForExprColonExpr(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class ForExprColonExpr_Single(ForExprColonExpr):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitForExprColonExpr_Single(self)
+    
+class ForExprColonExpr_Mul(ForExprColonExpr):
+  def __init__(self, expr, forExprColonExpr):
+    self.expr = expr
+    self.forExprColonExpr = forExprColonExpr
+  def accept(self, Visitor):
+    Visitor.visitForExprColonExpr_Mul(self)
+
 class GlobalStatement(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):

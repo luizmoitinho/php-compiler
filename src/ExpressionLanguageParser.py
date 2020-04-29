@@ -209,6 +209,8 @@ def p_statement(p):
     p[0] = sa.Statement_Foreach(p[1])
   elif isinstance(p[1], sa.GlobalStatement):
     p[0] = sa.Statement_Global(p[1])
+  elif isinstance(p[1], sa.ForStatement):
+    p[0] = sa.Statement_For(p[1])
   
 def p_global_statement(p):
   '''
@@ -302,6 +304,7 @@ def p_for_statement(p):
   '''
   for_statement : FOR LPAREN for_parameters RPAREN statement_BLOCK_OPT
   '''
+  p[0] = sa.ForStatement_For(p[3], p[5])
   
 def p_for_parameters(p):
   '''
@@ -314,6 +317,23 @@ def p_for_parameters(p):
   | SEMICOLON SEMICOLON for_expr_OPT
   | for_expr_OPT SEMICOLON for_expr_OPT SEMICOLON for_expr_OPT
   '''
+  if len(p) == 3:
+    p[0] = sa.ForParameters_Empty()
+  elif len(p) == 4 and isinstance(p[1], sa.ForExprOpt):
+    p[0] = sa.ForParameters_Left(p[1])
+  elif len(p) == 5 and isinstance(p[1], sa.ForExprOpt) and isinstance(p[3], sa.ForExprOpt):
+    p[0] = sa.ForParameters_Left_Mid(p[1], p[3])
+  elif len(p) == 5 and isinstance(p[1], sa.ForExprOpt) and isinstance(p[4], sa.ForExprOpt):
+    p[0] = sa.ForParameters_Left_Right(p[1], p[4])
+  elif len(p) == 4 and isinstance(p[2], sa.ForExprOpt):
+    p[0] = sa.ForParameters_Mid(p[2])
+  elif len(p) == 5 and isinstance(p[2], sa.ForExprOpt) and isinstance(p[4], sa.ForExprOpt):
+    p[0] = sa.ForParameters_Mid_Right(p[2], p[4])
+  elif len(p) == 4 and isinstance(p[3], sa.ForExprOpt):
+    p[0] = sa.ForParameters_Right(p[3])
+  else:
+    p[0] = sa.ForParameters_Full(p[1], p[3], p[5])
+  
   
 def p_global_var(p):
   '''
@@ -371,6 +391,20 @@ def p_for_expr_OPT(p):
   for_expr_OPT : expr for_expr_COLON_EXPR
   | expr
   '''
+  if len(p) == 3:
+    p[0] = sa.ForExprOpt_Mul(p[1], p[2])
+  else:
+    p[0] = sa.ForExprOpt_Single(p[1])
+    
+def p_for_expr_COLON_EXPR(p):
+  '''
+  for_expr_COLON_EXPR : COLON expr for_expr_COLON_EXPR
+    | COLON expr
+  '''
+  if len(p) == 3:
+    p[0] = sa.ForExprColonExpr_Single(p[2])
+  else:
+    p[0] = sa.ForExprColonExpr_Mul(p[2], p[3])
 
 def p_function_call(p):
   '''
@@ -665,12 +699,6 @@ def p_statement_MUL(p):
   else:
     p[0] = sa.statementMulSingle(p[1])
   
-def p_for_expr_COLON_EXPR(p):
-  '''
-  for_expr_COLON_EXPR : COLON expr for_expr_COLON_EXPR
-    | COLON expr
-  '''
-  
 def p_statement_BLOCK_OPT(p):
   '''
   statement_BLOCK_OPT : statement 
@@ -734,7 +762,9 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  global $valor, ${$valor1};
+  for($valor = 0; $valor > 10; $valor++){
+    $valor++;
+  }
 ?>
 '''
 
