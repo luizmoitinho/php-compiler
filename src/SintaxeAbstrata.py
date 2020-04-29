@@ -166,6 +166,12 @@ class Statement_Die(Statement):
     self.die = die
   def accept(self, Visitor):
     Visitor.visitStatement_Die(self)
+    
+class Statement_Global(Statement):
+  def __init__(self, _global):
+    self._global = _global
+  def accept(self, Visitor):
+    Visitor.visitStatement_Global(self)
 
 class FuncDecStatement(metaclass = ABCMeta):
   @abstractmethod
@@ -840,6 +846,65 @@ class AmpersandVariable_NoAmp(AmpersandVariable):
     self.variable_token = variable_token
   def accept(self, Visitor):
     Visitor.visitAmpersandVariable_NoAmp(self)
+    
+class GlobalStatement(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class GlobalStatement_Single(GlobalStatement):
+  def __init__(self, globalVar):
+    self.globalVar = globalVar
+  def accept(self, Visitor):
+    Visitor.visitGlobalStatement_Single(self)
+    
+class GlobalStatement_Mul(GlobalStatement):
+  def __init__(self, globalVar, colonGlobal):
+    self.globalVar = globalVar
+    self.colonGlobal = colonGlobal
+  def accept(self, Visitor):
+    Visitor.visitGlobalStatement_Mul(self)
+    
+class GlobalVarMul(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class GlobalVarMul_Single(GlobalVarMul):
+  def __init__(self, globalVar):
+    self.globalVar = globalVar
+  def accept(self, Visitor):
+    Visitor.visitGlobalVarMul_Single(self)
+    
+class GlobalVarMul_Mul(GlobalVarMul):
+  def __init__(self, globalVar, globalVarMul):
+    self.globalVar = globalVar
+    self.globalVarMul = globalVarMul
+  def accept(self, Visitor):
+    Visitor.visitGlobalVarMul_Mul(self)
+    
+class GlobalVar(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class GlobalVar_Var(GlobalVar):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitGlobalVar_Var(self)
+    
+class GlobalVar_DolarVar(GlobalVar):
+  def __init__(self, variable):
+    self.variable = variable
+  def accept(self, Visitor):
+    Visitor.visitGlobalVar_DolarVar(self)
+    
+class GlobalVar_DolarExpr(GlobalVar):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    Visitor.visitGlobalVar_DolarExpr(self)
     
 class Exit(metaclass = ABCMeta):
   @abstractmethod

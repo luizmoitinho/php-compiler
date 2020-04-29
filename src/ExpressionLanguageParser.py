@@ -185,8 +185,7 @@ def p_statement(p):
     | return_statement
     | exit_statement SEMICOLON
     | die_statement SEMICOLON
-    | GLOBAL global_var statement_COLON_GLOBAL SEMICOLON
-    | GLOBAL global_var SEMICOLON
+    | global_statement SEMICOLON
   '''
   if isinstance(p[1], sa.Expr): 
     p[0] = sa.Statement_Expr(p[1], p[2])
@@ -208,6 +207,18 @@ def p_statement(p):
     p[0] = sa.Statement_Do_While(p[1])
   elif isinstance(p[1], sa.ForeachStatement):
     p[0] = sa.Statement_Foreach(p[1])
+  elif isinstance(p[1], sa.GlobalStatement):
+    p[0] = sa.Statement_Global(p[1])
+  
+def p_global_statement(p):
+  '''
+  global_statement : GLOBAL global_var statement_COLON_GLOBAL 
+    | GLOBAL global_var 
+  '''
+  if len(p) == 3:
+    p[0] = sa.GlobalStatement_Single(p[2])
+  else:
+    p[0] = sa.GlobalStatement_Mul(p[2], p[3])
     
   
 def p_if_statement(p):
@@ -310,12 +321,22 @@ def p_global_var(p):
     | DOLAR VARIABLE
     | DOLAR LKEY expr RKEY 
   '''
+  if len(p) == 2:
+    p[0] = sa.GlobalVar_Var(p[1])
+  elif len(p) == 3:
+    p[0] = sa.GlobalVar_DolarVar(p[2])
+  else: 
+    p[0] = sa.GlobalVar_DolarExpr(p[3])
 
 def p_statement_COLON_GLOBAL(p):
   '''
   statement_COLON_GLOBAL : COLON global_var statement_COLON_GLOBAL
     | COLON global_var
   '''
+  if len(p) == 3:
+    p[0] = sa.GlobalVarMul_Single(p[2])
+  else:
+    p[0] = sa.GloballVarMul_Mul(p[2], p[3])
 
 def p_ampersand_variable(p):
   '''
@@ -713,16 +734,12 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  foreach($arr as $valor)
-    while(true)
-      if(true)
-        $valor++;
-
+  global $valor, ${$valor1};
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=False)
+result = parser.parse(debug=True)
 v = vis.Visitor()
 result.accept(v)

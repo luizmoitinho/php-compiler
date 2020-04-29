@@ -189,6 +189,11 @@ class Visitor():
     pp.printTab()
     statement.die.accept(self)
     print(';')
+    
+  def visitStatement_Global(self, statement):
+    pp.printTab()
+    statement._global.accept(self)
+    print(';')
 
   def visitIfStatement_Complement(self, ifStatement):
     ifStatement.statement_if.accept(self) 
@@ -411,6 +416,37 @@ class Visitor():
     
   def visitAmpersandVariable_NoAmp(self, ampersandVariable):
     print(ampersandVariable.variable_token, end='')
+    
+  def visitGlobalStatement_Single(self, globalStatement):
+    print('global', end=' ')
+    globalStatement.globalVar.accept(self)
+    
+  def visitGlobalStatement_Mul(self, globalStatement):
+    print('global', end=' ')
+    globalStatement.globalVar.accept(self)
+    globalStatement.colonGlobal.accept(self)
+    
+  def visitGlobalVar_Var(self, globalVar):
+    print(globalVar.variable, end='')
+    
+  def visitGlobalVar_DolarVar(self, globalVar):
+    print('$', end='')
+    print(globalVar.variable, end='')
+    
+  def visitGlobalVar_DolarExpr(self, globalVar):
+    print('$', end='')
+    print('{', end=' ')
+    globalVar.expr.accept(self)
+    print('', '}', end='')
+    
+  def visitGlobalVarMul_Single(self, globalVarMul):
+    print(',', end=' ')
+    globalVarMul.globalVar.accept(self)
+  
+  def visitGlobalVarMul_Mul(self, globalVarMul):
+    print(',', end=' ')
+    globalVarMul.globalVar.accept(self)
+    globalVarMul.globalVarMul.accept(self)
     
   def visitExit_ExitExpr(self, _exit):
     print('exit', end='')
