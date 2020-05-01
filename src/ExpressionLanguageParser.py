@@ -200,7 +200,7 @@ def p_statement(p):
     p[0] = sa.Statement_Continue(p[1])
   elif isinstance(p[1], sa.Return):
     p[0] = sa.Statement_Return(p[1])
-  elif isinstance(p[1], sa.If):
+  elif isinstance(p[1], sa.IfStatement):
     p[0] = sa.Statement_If(p[1])
   elif isinstance(p[1], sa.WhileStatement):
     p[0] = sa.Statement_While(p[1])
@@ -220,13 +220,6 @@ def p_if_statement(p):
   else:
     p[0] = sa.IfStatement_Single(p[1])
 
-  
-def p_if_statement_complement(p):
-  '''
-  if_statement_complement : statement_elseif
-    | statement_else
-  '''
-
 def p_statement_if(p):
   ''' 
   statement_if : IF expr_parentheses statement_BLOCK_OPT 
@@ -234,14 +227,24 @@ def p_statement_if(p):
   if len(p) ==4:
     p[0] = sa.StatementIf_ExprParen(p[2],p[3])
 
-def p_statement_elseif(p):
+def p_if_statement_complement(p):
   '''
-  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT
+  if_statement_complement : statement_elseif
+    | statement_else
   '''
+  p[0] = sa.IfStatement_Else(p[1])
 
 def p_statement_else(p):
   '''
   statement_else : ELSE statement_BLOCK_OPT
+  '''
+  if len(p)==3:
+    p[0] = sa.StatementElse_Else(p[2])
+
+
+def p_statement_elseif(p):
+  '''
+  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT
   '''
 
 def p_while_statement(p):
@@ -631,6 +634,7 @@ def p_array_pair(p):
     p[0] = sa.ArrayPair_Attr_Expr(p[1],p[3])
   elif len(p) == 5:
     p[0] =  sa.ArrayPair_Attr_AmpersandVariable(p[1],p[4])
+    
 
 # Expressões regulares transformadas em regras.
 # ======================================================================
@@ -713,11 +717,20 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  foreach($arr as $valor)
-    while(true)
-      if(true)
-        $valor++;
-
+  if($x<10){
+    $i=10;
+  }
+  else{
+    $i++;
+     if($x<10){
+    $i=10;
+  }
+  else{
+    $i++;
+  }
+  }
+    
+  
 ?>
 '''
 
