@@ -60,7 +60,14 @@ class InnerStatementMul(metaclass=ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
-    
+
+class InnerStatementMul_Mul(InnerStatementMul):
+  def __init__(self, innerStatement, innerStatementMul):
+    self.innerStatement = innerStatement
+    self.innerStatementMul = innerStatementMul
+  def accept(self, Visitor):
+    Visitor.visitInnerStatementMul_Mul(self)
+
 class InnerStatementMul_Single(InnerStatementMul):
   def __init__(self, innerStatement):
     self.innerStatement = innerStatement
@@ -142,7 +149,6 @@ class Statement_If(Statement):
   def accept(self, Visitor):
     Visitor.visitStatement_If(self)
 
-
 class Statement_While(Statement):
   def __init__(self, whilee):
     self.whilee = whilee
@@ -195,26 +201,53 @@ class ExprParentheses_Expr(ExprParentheses):
   def accept(self, Visitor):
     Visitor.visitExprParentheses_Expr(self)
 
-class If(metaclass = ABCMeta):
+
+class Else(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self,Visitor):
+    pass
+
+class IfStatementComplement(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self,Visitor):
+    pass
+
+class IfStatement_Else(IfStatementComplement):
+  def __init__(self, statement_else):
+    self.statement_else = statement_else
+  def accept(self, Visitor):
+    Visitor.visitIfStatemnet_Else(self)
+
+class StatementElse(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
 
-class IfStatement_Complement(If):
+class StatementElse_Else(StatementElse):
+  def __init__(self, statementBlockOpt):
+    self.statementBlockOpt = statementBlockOpt
+  def accept(self, Visitor):
+    Visitor.visitStatementElse_Else(self)
+    
+class IfStatement(metaclass=ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class IfStatement_Complement(IfStatement):
   def __init__(self,statement_if,if_statement_complement):
     self.statement_if = statement_if
     self.if_statement_complement = if_statement_complement
   def accept(self,Visitor):
     Visitor.visitIfStatement_Complement(self)
 
-class IfStatement_Single(If):
+class IfStatement_Single(IfStatement):
   def __init__(self, statementIf):
     self.statementIf = statementIf
   def accept(self, Visitor):
     Visitor.visitIfStatement_Single(self)
 
-
-class StatementIf(metaclass = ABCMeta):
+class StatementIf(metaclass=ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
