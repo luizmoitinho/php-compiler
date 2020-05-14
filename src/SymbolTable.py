@@ -1,11 +1,13 @@
 symbolTable = []
-
+INT = 'int'
+FLOAT = 'float'
 SCOPE = 'scope'
 BINDABLE = 'bindable'
 FUNCTION = 'function'
 PARAMS = 'params'
 VARIABLE = 'var'
 TYPE = 'type'
+Number = [INT, FLOAT]
 
 def beginScope(nameScope):
   global symbolTable
