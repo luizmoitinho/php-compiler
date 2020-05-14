@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 import ply.lex as lex
-import Visitor as vis
+import SemanticVisitor as sv
 from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
 
@@ -766,14 +766,15 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  function add($valor1, $valor2){
-    
-  }
+function add($valor, $valor1){}
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
 result = parser.parse(debug=False)
-v = vis.Visitor()
-result.accept(v)
+
+visitor = sv.SemanticVisitor()
+#v = vis.Visitor()
+#for r in result:
+result.accept(visitor)

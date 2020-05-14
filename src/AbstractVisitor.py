@@ -4,27 +4,72 @@ from abc import ABCMeta
 class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
-  def visitMain_MainInner():
+  def visitMain_MainInner(self, main):
     pass
   
   @abstractmethod
-  def visitMain_MainInner_Empty():
+  def visitMain_MainInner_Empty(self):
     pass
   
+  @abstractmethod
+  def visitMainInner_InnerStatement(self, mainInner):
+    pass
+  
+  @abstractmethod
+  def visitInnerStatement_FuncDecStatement(self, innerStatement):
+    pass
+  
+  @abstractmethod
+  def visitFuncDecStatement_Function(self, funcDecStatement):
+    pass
+  
+  @abstractmethod
+  def visitFds_id_withAmpersand(self, fds_id):
+    pass
+  
+  @abstractmethod
+  def visitFds_id_noAmpersand(self, fds_id):
+    pass
+  
+  @abstractmethod
+  def visitFds_parameter_withParameter(self, fds_parameter):
+    pass
+  
+  @abstractmethod
+  def visitFds_parameter_noParameter(self):
+    pass
+  
+  @abstractmethod
+  def visitParameterList_Parameter_Mul(self, parameterList):
+    pass
+  
+  @abstractmethod
+  def visitParameterList_Parameter_Single(self, parameterList):
+    pass
+  
+  @abstractmethod
+  def visitParameterListColonParameter_Mul(self, parameterListColonParameter):
+    pass
+  
+  @abstractmethod
+  def visitParameterListColonParameter_Single(self, parameterListColonParameter):
+    pass
+  
+  @abstractmethod
+  def visitFds_statements_noStatements(self):
+    pass
+  
+  @abstractmethod
+  def visitParameter_Var(self, parameter):
+    pass
+  
+  '''
   @abstractmethod
   def visitMainInner_InnerStatement_MainInner():
     pass
   
   @abstractmethod
-  def visitMainInner_InnerStatement():
-    pass
-  
-  @abstractmethod
   def visitInnerStatement_Statement():
-    pass
-
-  @abstractmethod
-  def visitInnerStatement_FuncDecStatement():
     pass
   
   @abstractmethod
@@ -36,31 +81,7 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitFuncDecStatement_Function():
-    pass
-  
-  @abstractmethod
-  def visitFds_id_withAmpersand():
-    pass
-  
-  @abstractmethod
-  def visitFds_id_noAmpersand():
-    pass
-  
-  @abstractmethod
-  def visitFds_parameter_withParameter():
-    pass
-  
-  @abstractmethod
-  def visitFds_parameter_noParameter():
-    pass
-  
-  @abstractmethod
   def visitFds_statements_withStatements():
-    pass
-  
-  @abstractmethod
-  def visitFds_statements_noStatements():
     pass
   
   @abstractmethod
@@ -73,26 +94,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitStatementMul_Single():
-    pass
-  
-  @abstractmethod
-  def visitParameterList_Parameter_Mul():
-    pass
-  
-  @abstractmethod
-  def visitParameterList_Parameter_Single():
-    pass
-  
-  @abstractmethod
-  def visitParameterListColonParameter_Mul():
-    pass
-  
-  @abstractmethod
-  def visitParameterListColonParameter_Single():
-    pass
-  
-  @abstractmethod
-  def visitParameter_Var():
     pass
   
   @abstractmethod
@@ -607,3 +608,5 @@ class AbstractVisitor(metaclass = ABCMeta):
   @abstractmethod
   def visitDoWhileStatementSingle():
     pass
+    
+'''

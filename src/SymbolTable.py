@@ -16,15 +16,17 @@ def beginScope(nameScope):
 def endScope():
   global symbolTable
   symbolTable = symbolTable[0:-1]
+  print(symbolTable)
   
-def addVar(name, type):
+def addVar(name):
   global symbolTable
-  symbolTable[-1][name] = {BINDABLE: VARIABLE, TYPE: type}
+  symbolTable[-1][name] = {BINDABLE: VARIABLE}
+  print(symbolTable)
     
-#Função não vai necessitar de tipo, linguagem fracamente tipada
-def addFunction(params, returnType):
+#Função não vai necessitar de tipo?, linguagem fracamente tipada
+def addFunction(name, params):
   global symbolTable
-  symbolTable[-1][name] = {BINDABLE: FUNCTION, PARAMS: params, TYPE: returnType}
+  symbolTable[-1][name] = {BINDABLE: FUNCTION, PARAMS: params}
   
 def getBindable(bindableName):
     global symbolTable

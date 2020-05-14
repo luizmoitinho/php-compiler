@@ -9,7 +9,7 @@ class Visitor(AbstractVisitor):
     main.mainInner.accept(self)
     print('?>')
   
-  def visitMain_MainInner_Empty(self, main):
+  def visitMain_MainInner_Empty(self):
     print('<?php', end=' ')
     print('?>', end=' ')
     
@@ -52,7 +52,7 @@ class Visitor(AbstractVisitor):
     fds_parameter.parameter_list.accept(self)
     print(')', end='')
     
-  def visitFds_parameter_noParameter(self, fds_parameter):
+  def visitFds_parameter_noParameter(self):
     print('(', end='')
     print(')', end='')
     
@@ -64,7 +64,7 @@ class Visitor(AbstractVisitor):
     pp.printTab()
     print('}')
     
-  def visitFds_statements_noStatements(self, fds_statements):
+  def visitFds_statements_noStatements(self):
     print('{')
     pp.printTab()
     print('}')
