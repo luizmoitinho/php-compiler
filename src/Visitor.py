@@ -1,6 +1,7 @@
+from AbstractVisitor import AbstractVisitor
 from PrettyPrinter import PrettyPrinter as pp
 
-class Visitor():
+class Visitor(AbstractVisitor):
 
   def visitMain_MainInner(self, main):
     print('<?php')
