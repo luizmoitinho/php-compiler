@@ -201,6 +201,12 @@ class ExprParentheses_Expr(ExprParentheses):
   def accept(self, Visitor):
     Visitor.visitExprParentheses_Expr(self)
 
+
+class Else(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self,Visitor):
+    pass
+
 class IfStatementComplement(metaclass = ABCMeta):
   @abstractmethod
   def accept(self,Visitor):
@@ -210,13 +216,7 @@ class IfStatement_Else(IfStatementComplement):
   def __init__(self, statement_else):
     self.statement_else = statement_else
   def accept(self, Visitor):
-    Visitor.visitIfStatement_Else(self)
-
-class IfStatement_ElseIf(IfStatementComplement):
-  def __init__(self, statement_elseif):
-    self.statement_elseif = statement_elseif
-  def accept(self, Visitor):
-    Visitor.visitIfStatement_Else(self)
+    Visitor.visitIfStatemnet_Else(self)
 
 class StatementElse(metaclass = ABCMeta):
   @abstractmethod
@@ -228,20 +228,7 @@ class StatementElse_Else(StatementElse):
     self.statementBlockOpt = statementBlockOpt
   def accept(self, Visitor):
     Visitor.visitStatementElse_Else(self)
-
-
-class StatementElseIf(metaclass=ABCMeta):
-  @abstractmethod
-  def accept(self,Visitor):
-    pass
-
-class  StatementElseIf_ElseIf(StatementElseIf):
-  def __init__(self, expr_parentheses, statement_BLOCK_OPT):
-    self.expr_parentheses = expr_parentheses
-    self.statement_BLOCK_OPT =statement_BLOCK_OPT
-  def accept(self,Visitor):
-    Visitor.visitStatementElseIf_ElseIf(self)
- 
+    
 class IfStatement(metaclass=ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
