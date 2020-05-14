@@ -766,31 +766,14 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-<<<<<<< HEAD
-  for($valor = 0; $valor > 10; $valor++){
-    $valor++;
-  }
-=======
-  if($x<10){
-    $i=10;
-  }
-  else{
-    $i++;
-     if($x<10){
-    $i=10;
-  }
-  else{
-    $i++;
-  }
-  }
+  function add($valor1, $valor2){
     
-  
->>>>>>> else_statement
+  }
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=True)
+result = parser.parse(debug=False)
 v = vis.Visitor()
 result.accept(v)
