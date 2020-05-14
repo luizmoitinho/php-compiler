@@ -245,7 +245,10 @@ def p_if_statement_complement(p):
   if_statement_complement : statement_elseif
     | statement_else
   '''
-  p[0] = sa.IfStatement_Else(p[1])
+  if isinstance(p[1],sa.StatementElse):
+    p[0] = sa.IfStatement_Else(p[1])
+  else:
+    p[0] = sa.IfStatement_ElseIf(p[1])
 
 def p_statement_else(p):
   '''
@@ -259,6 +262,8 @@ def p_statement_elseif(p):
   '''
   statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT
   '''
+  if len(p)==4:
+    p[0] = sa.StatementElseIf_ElseIf(p[2],p[3])
 
 def p_while_statement(p):
   '''
@@ -359,7 +364,7 @@ def p_statement_COLON_GLOBAL(p):
   if len(p) == 3:
     p[0] = sa.GlobalVarMul_Single(p[2])
   else:
-    p[0] = sa.GloballVarMul_Mul(p[2], p[3])
+    p[0] = sa.GlobalVarMul_Mul(p[2], p[3])
 
 def p_ampersand_variable(p):
   '''
@@ -766,31 +771,21 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-<<<<<<< HEAD
-  for($valor = 0; $valor > 10; $valor++){
-    $valor++;
-  }
-=======
   if($x<10){
     $i=10;
   }
-  else{
-    $i++;
-     if($x<10){
-    $i=10;
+  else if($x>=20){
+    $i -=10;
   }
   else{
     $i++;
   }
-  }
-    
   
->>>>>>> else_statement
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=True)
+result = parser.parse(debug=False)
 v = vis.Visitor()
 result.accept(v)
