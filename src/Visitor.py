@@ -163,22 +163,6 @@ class Visitor():
     pp.printTab()
     statement._return.accept(self)
   
-  def visitStatement_If(self, statement):
-    pp.printTab()
-    statement._if.accept(self)
-
-  def visitStatementElse_Else(self, statementElse):
-    pp.printTab()
-    print('else',end='')
-    statementElse.statementBlockOpt.accept(self)
-
-  def visitStatementElseIf_ElseIf(self, statementElseIf):
-    pp.printTab()
-    print('elseif',end='')
-    statementElseIf.expr_parentheses.accept(self)
-    statementElseIf.statement_BLOCK_OPT.accept(self)
-
-
   def visitStatement_Exit(self, statement):
     pp.printTab()
     statement.exit.accept(self)
@@ -222,6 +206,21 @@ class Visitor():
     print('if',end='')
     statement_if.expr_parentheses.accept(self)
     statement_if.statement_BLOCK_OPT.accept(self)
+
+  def visitStatement_If(self, statement):
+    pp.printTab()
+    statement._if.accept(self)
+
+  def visitStatementElse_Else(self, statementElse):
+    pp.printTab()
+    print('else',end='')
+    statementElse.statementBlockOpt.accept(self)
+
+  def visitStatementElseIf_ElseIf(self, statementElseIf):   
+    pp.printTab() 
+    print('elseif',end='')
+    statementElseIf.expr_parentheses.accept(self)
+    statementElseIf.statement_BLOCK_OPT.accept(self)
 
   def visitExprParentheses_Expr(self, exprParentheses_Expr):
     print('(',end='')

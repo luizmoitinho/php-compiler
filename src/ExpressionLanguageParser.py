@@ -245,11 +245,11 @@ def p_if_statement_complement(p):
   if_statement_complement : statement_elseif
     | statement_else
   '''
-  if isinstance(p[1],sa.StatementElse):
-    p[0] = sa.IfStatement_Else(p[1])
-  else:
+  if isinstance(p[1], sa.StatementElseIf):
     p[0] = sa.IfStatement_ElseIf(p[1])
-
+  elif isinstance(p[1],sa.StatementElse):
+    p[0] = sa.IfStatement_Else(p[1])
+   
 def p_statement_else(p):
   '''
   statement_else : ELSE statement_BLOCK_OPT
@@ -774,11 +774,11 @@ arquivo = '''
   if($x<10){
     $i=10;
   }
-  else if($x>=20){
+  elseif($x>=20){
     $i -=10;
   }
   else{
-    $i++;
+    $i=20;
   }
   
 ?>
@@ -786,6 +786,6 @@ arquivo = '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=False)
+result = parser.parse(debug=True)
 v = vis.Visitor()
 result.accept(v)
