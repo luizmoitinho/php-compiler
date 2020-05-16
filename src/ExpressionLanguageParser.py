@@ -766,7 +766,8 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-function add($valor, $valor1){}
+$valor1;
+$valor1;
 ?>
 '''
 
