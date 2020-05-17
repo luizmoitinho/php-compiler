@@ -12,6 +12,10 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
+  def visitMainInner_InnerStatement_MainInner():
+    pass
+  
+  @abstractmethod
   def visitMainInner_InnerStatement(self, mainInner):
     pass
   
@@ -92,6 +96,10 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
+  def visitExpr1_FunctionCall(self, expr1):
+    pass
+  
+  @abstractmethod
   def visitVariable_Reference_Variable(self, variable):
     pass
   
@@ -103,9 +111,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitCompoundVariableSingle(self, singleVariable):
     pass
   '''
-  @abstractmethod
-  def visitMainInner_InnerStatement_MainInner():
-    pass
   
   @abstractmethod
   def visitStatementBlockOpt_ParenEmpty():
@@ -281,10 +286,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitAssignOperator_Token():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_FunctionCall():
     pass
   
   @abstractmethod

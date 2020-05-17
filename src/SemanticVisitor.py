@@ -26,6 +26,10 @@ class SemanticVisitor(AbstractVisitor):
   def visitMain_MainInner_Empty(self, main):
     st.endScope()
     
+  def visitMainInner_InnerStatement_MainInner(self, mainInner):
+    mainInner.innerStatement.accept(self)
+    mainInner.mainInner.accept(self)
+    
   def visitMainInner_InnerStatement(self, mainInner):
     mainInner.innerStatement.accept(self)
     
@@ -94,6 +98,9 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr1_Variable(self, expr1):
     expr1.variable.accept(self)
     
+  def visitExpr1_FunctionCall(self, expr1):
+    expr1.functionCall.accept(self)
+    
   def visitVariable_Reference_Variable(self, variable):
     variable.reference_variable.accept(self)
     
@@ -104,3 +111,8 @@ class SemanticVisitor(AbstractVisitor):
   def visitCompoundVariableSingle(self, singleVariable):
     if(st.getBindable(singleVariable.variable) == None):
       st.addVar(singleVariable.variable)
+
+  def visitFunctionCall_NoParameter(self, functionCall):
+    bindable = st.getBindable(functionCall.id)
+    if bindable == None:
+      print('ERROR: Function', functionCall.id, 'called but never defined.')

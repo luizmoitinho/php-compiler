@@ -1,6 +1,7 @@
 symbolTable = []
 INT = 'int'
 FLOAT = 'float'
+BOOL = 'boolean'
 SCOPE = 'scope'
 BINDABLE = 'bindable'
 FUNCTION = 'function'
@@ -18,7 +19,7 @@ def beginScope(nameScope):
 def endScope():
   global symbolTable
   symbolTable = symbolTable[0:-1]
-  print(symbolTable)
+  #print(symbolTable)
   
 def addVar(name):
   global symbolTable
