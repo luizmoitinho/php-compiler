@@ -42,15 +42,19 @@ class SemanticVisitor(AbstractVisitor):
   def visitFuncDecStatement_Function(self, funcDecStatement):
     funcId = funcDecStatement.fds_id.accept(self)
     params = funcDecStatement.fds_parameter.accept(self)
-    st.addFunction(funcId, params)
-    st.beginScope(funcId)
-    for i in range(0, len(params)):
-      st.addVar(params[i])
-    funcDecStatement.fds_statements.accept(self)
-    st.endScope()
+    functionExists = st.getBindable(funcId)
+    if functionExists == None:
+      st.addFunction(funcId, params)
+      st.beginScope(funcId)
+      for i in range(0, len(params)):
+        st.addVar(params[i])
+      funcDecStatement.fds_statements.accept(self)
+      st.endScope()
+    else:
+      print('ERROR: function', funcId, 'has already been declared.')
     
   def visitFds_id_withAmpersand(self, fds_id):
-    return '&' + fds_id.id
+    return fds_id.id
     
   def visitFds_id_noAmpersand(self, fds_id):
     return fds_id.id
@@ -79,8 +83,8 @@ class SemanticVisitor(AbstractVisitor):
   def visitFds_statements_withStatements(self, fds_statements):
     fds_statements.inner_statement_MUL.accept(self)
     
-  def visitFds_statements_noStatements(self):
-    return []
+  def visitFds_statements_noStatements(self, fds_statements):
+    return 
   
   def visitInnerStatementMul_Mul(self, innerStatementMul):
     innerStatementMul.innerStatement.accept(self)
@@ -96,7 +100,7 @@ class SemanticVisitor(AbstractVisitor):
     expr.expr1.accept(self)
     
   def visitExpr1_Variable(self, expr1):
-    expr1.variable.accept(self)
+    expr1.variable.accept(self) 
     
   def visitExpr1_FunctionCall(self, expr1):
     expr1.functionCall.accept(self)
@@ -109,10 +113,11 @@ class SemanticVisitor(AbstractVisitor):
     
   #A variável será definida caso não esteja na tabela de símbolos
   def visitCompoundVariableSingle(self, singleVariable):
-    if(st.getBindable(singleVariable.variable) == None):
+    variable = st.getBindable(singleVariable.variable)
+    if(variable == None):
       st.addVar(singleVariable.variable)
 
   def visitFunctionCall_NoParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
     if bindable == None:
-      print('ERROR: Function', functionCall.id, 'called but never defined.')
+      print('ERROR: Function', functionCall.id,'called but never defined.')
