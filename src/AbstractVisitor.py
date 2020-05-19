@@ -124,8 +124,41 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
+  def visitFunctionCall_NoParameter(self, functionCall):
+    pass
+  
+  @abstractmethod
+  def visitFunctionCall_WithParameter(self, functionCall):
+    pass
+  
+  @abstractmethod
+  def visitFCParameterList_Single(self, fcParameterList):
+    pass
+  
+  @abstractmethod
+  def visitFCParameterList_Mul(self, fcParameterList):
+    pass
+  
+  @abstractmethod
+  def visitFCParameterListColonParameter_Single(self, fcParameterListColonParameter):
+    pass
+  
+  @abstractmethod
+  def visitFCParameterListColonParameter_Mul(self, fcParameterListColonParameter):
+    pass
+  
+  @abstractmethod
+  def visitFunctionCallParameter_Expr(self, functionCallParameter):
+    pass
+  
+  @abstractmethod
+  def visitFunctionCallParameter_AmpersandVariable(self, functionCallParameter):
+    pass
+  
+  @abstractmethod
   def visitScalar_Token(self, scalar):
     pass
+  
   '''
   
   @abstractmethod
@@ -362,38 +395,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitArrayPair_Attr_Expr():
-    pass
-  
-  @abstractmethod
-  def visitFunctionCall_NoParameter():
-    pass
-  
-  @abstractmethod
-  def visitFunctionCall_WithParameter():
-    pass
-  
-  @abstractmethod
-  def visitFCParameterList_Single():
-    pass
-  
-  @abstractmethod
-  def visitFCParameterList_Mul():
-    pass
-  
-  @abstractmethod
-  def visitFCParameterListColonParameter_Single():
-    pass
-  
-  @abstractmethod
-  def visitFCParameterListColonParameter_Mul():
-    pass
-  
-  @abstractmethod
-  def visitFunctionCallParameter_Expr():
-    pass
-  
-  @abstractmethod
-  def visitFunctionCallParameter_AmpersandVariable():
     pass
   
   @abstractmethod

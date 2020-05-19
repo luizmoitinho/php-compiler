@@ -81,7 +81,7 @@ class SemanticVisitor(AbstractVisitor):
     return [parameter.variable]
   
   def visitFds_statements_withStatements(self, fds_statements):
-    fds_statements.inner_statement_MUL.accept(self)
+    return fds_statements.inner_statement_MUL.accept(self)
     
   def visitFds_statements_noStatements(self, fds_statements):
     return 
@@ -94,16 +94,16 @@ class SemanticVisitor(AbstractVisitor):
     innerStatementMul.innerStatement.accept(self)
     
   def visitStatement_Expr(self, statement):
-    statement.expr.accept(self)
+    return statement.expr.accept(self)
     
   def visitExpr_Expr1(self, expr):
-    expr.expr1.accept(self)
+    return expr.expr1.accept(self)
     
   def visitExpr1_Variable(self, expr1):
-    expr1.variable.accept(self) 
+    return expr1.variable.accept(self) 
     
   def visitExpr1_FunctionCall(self, expr1):
-    expr1.functionCall.accept(self)
+    return expr1.functionCall.accept(self)
     
   def visitExpr1_True(self, expr1):
     return st.BOOL
@@ -115,26 +115,54 @@ class SemanticVisitor(AbstractVisitor):
     return expr1.scalar.accept(self)
     
   def visitVariable_Reference_Variable(self, variable):
-    variable.reference_variable.accept(self)
+    return variable.reference_variable.accept(self)
     
   def visitReferenceVariable_Compound(self, referenceVariable):
-    referenceVariable.compoundvariable.accept(self)
+    return referenceVariable.compoundvariable.accept(self)
     
   #A variável será definida caso não esteja na tabela de símbolos
   def visitCompoundVariableSingle(self, singleVariable):
     variable = st.getBindable(singleVariable.variable)
     if(variable == None):
       st.addVar(singleVariable.variable)
+    return variable
 
   def visitFunctionCall_NoParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
     if bindable == None:
       print('ERROR: Function', functionCall.id,'called but never defined.')
+      
+  def visitFunctionCall_WithParameter(self, functionCall):
+    bindable = st.getBindable(functionCall.id)
+    if bindable == None:
+      print('ERROR: Function', functionCall.id,'called but never defined.')
+    if bindable != None and bindable[st.BINDABLE] == st.FUNCTION:
+      params = functionCall.parameterList.accept(self)
+      if len(params) != len(bindable[st.PARAMS]):
+        print('ERROR: Number of parameters of function', functionCall.id, 'differs from declaration.')
+        
+  def visitFCParameterList_Single(self, fcParameterList):
+    return fcParameterList.fcParameter.accept(self) 
 
+  def visitFCParameterList_Mul(self, fcParameterList):
+    return fcParameterList.fcParameter.accept(self), fcParameterList.fcColonParameter.accept(self)
+    
+  def visitFCParameterListColonParameter_Single(self, fcParameterListColonParameter):
+    return [fcParameterListColonParameter.fcParameter.accept(self)]
+    
+  def visitFCParameterListColonParameter_Mul(self, fcParameterListColonParameter):
+    return [fcParameterListColonParameter.fcParameter.accept(self)] + fcParameterListColonParameter.fcplColonParameter.accept(self)
+  
+  def visitFunctionCallParameter_Expr(self, functionCallParameter):
+    return functionCallParameter.expr.accept(self)
+    
+  def visitFunctionCallParameter_AmpersandVariable(self, functionCallParameter):
+    return functionCallParameter.variable
+  
   def visitScalar_Token(self, scalar):
     if isinstance(scalar.token, int):
       return st.INT
     elif isinstance(scalar.token, float):
-      return st.FLOAT 
+      return st.FLOAT
     elif isinstance(scalar.token, str):
       return st.STRING
