@@ -100,6 +100,18 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
+  def visitExpr1_True(self, expr1):
+    pass
+  
+  @abstractmethod
+  def visitExpr1_False(self, expr1):
+    pass
+  
+  @abstractmethod
+  def visitExpr1_Scalar(self, expr1):
+    pass
+  
+  @abstractmethod
   def visitVariable_Reference_Variable(self, variable):
     pass
   
@@ -109,6 +121,10 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitCompoundVariableSingle(self, singleVariable):
+    pass
+  
+  @abstractmethod
+  def visitScalar_Token(self, scalar):
     pass
   '''
   
@@ -158,10 +174,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitCommonScalar_Token():
-    pass
-  
-  @abstractmethod
-  def visitScalar_Token():
     pass
   
   @abstractmethod
@@ -309,10 +321,6 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitExpr1_Variable():
-    pass
-  
-  @abstractmethod
   def visitExpr1_ArrayDeclaration():
     pass
   
@@ -354,18 +362,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitArrayPair_Attr_Expr():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_Scalar():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_True():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_False():
     pass
   
   @abstractmethod

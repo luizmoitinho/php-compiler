@@ -105,6 +105,15 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr1_FunctionCall(self, expr1):
     expr1.functionCall.accept(self)
     
+  def visitExpr1_True(self, expr1):
+    return st.BOOL
+  
+  def visitExpr1_False(self, expr1):
+    return st.BOOL
+  
+  def visitExpr1_Scalar(self, expr1):
+    return expr1.scalar.accept(self)
+    
   def visitVariable_Reference_Variable(self, variable):
     variable.reference_variable.accept(self)
     
@@ -121,3 +130,11 @@ class SemanticVisitor(AbstractVisitor):
     bindable = st.getBindable(functionCall.id)
     if bindable == None:
       print('ERROR: Function', functionCall.id,'called but never defined.')
+
+  def visitScalar_Token(self, scalar):
+    if isinstance(scalar.token, int):
+      return st.INT
+    elif isinstance(scalar.token, float):
+      return st.FLOAT 
+    elif isinstance(scalar.token, str):
+      return st.STRING

@@ -767,7 +767,7 @@ lex.lex()
 arquivo = '''
 <?php
   function add($valor){
-    
+    'lala';
   }
 ?>
 '''
