@@ -201,6 +201,16 @@ class ExprParentheses_Expr(ExprParentheses):
   def accept(self, Visitor):
     Visitor.visitExprParentheses_Expr(self)
 
+class IfStatement(metaclass =  ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class IfStatement_statement_if(IfStatement):
+  def __init__(self, statement_if):
+    self.statement_if = statement_if
+  def accept(self, Visitor):
+    Visitor.visitIfStatement_statement_if(self)
 
 class StatementIf(metaclass=ABCMeta):
   @abstractmethod
@@ -213,8 +223,6 @@ class StatementIf_Single(StatementIf):
     self.statement_BLOCK_OPT=statement_BLOCK_OPT
   def accept(self,Visitor):
     Visitor.visitStatementIf_ExprParen(self)
-
-
 
 class funcDecStatement_Function(FuncDecStatement):
   def __init__(self, fds_id, fds_parameter, fds_statements):

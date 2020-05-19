@@ -203,6 +203,9 @@ class Visitor():
   def visitStatement_If(self, statement):
     pp.printTab()
     statement._if.accept(self)
+  
+  def visitIfStatement_statement_if(self, IfStatement):
+    IfStatement.statement_if.accept(self)
 
   def visitExprParentheses_Expr(self, exprParentheses_Expr):
     print('(',end='')
