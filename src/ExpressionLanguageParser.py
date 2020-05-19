@@ -212,6 +212,39 @@ def p_statement(p):
   elif isinstance(p[1], sa.ForStatement):
     p[0] = sa.Statement_For(p[1])
   
+
+def if_statement(p):
+  '''
+  if_statement : statement_if
+  | statement_if statement_elseif
+  | statement_if statement_elseif statement_else
+  '''
+
+  
+def p_statement_if(p):
+  ''' 
+  statement_if : IF expr_parentheses statement_BLOCK_OPT statement_if
+   | IF expr_parentheses statement_BLOCK_OPT
+  '''
+  if len(p) ==4:
+    p[0] = sa.StatementIf_Mul(p[2],p[3],p[4])
+  if len(p) ==4:
+    p[0] = sa.StatementIf_Single(p[2],p[3])
+
+def p_statement_else(p):
+  '''
+  statement_else : ELSE statement_BLOCK_OPT statement_else
+    | ELSE statement_BLOCK_OPT
+    |
+  '''
+
+def p_statement_elseif(p):
+  '''
+  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT statement_elseif
+   | ELSEIF expr_parentheses statement_BLOCK_OPT
+   |
+  '''
+
 def p_global_statement(p):
   '''
   global_statement : GLOBAL global_var statement_COLON_GLOBAL 
@@ -221,49 +254,7 @@ def p_global_statement(p):
     p[0] = sa.GlobalStatement_Single(p[2])
   else:
     p[0] = sa.GlobalStatement_Mul(p[2], p[3])
-    
-  
-def p_if_statement(p):
-  '''
-  if_statement : statement_if if_statement_complement
-    | statement_if 
-  '''
-  if len(p)==3:
-    p[0] = sa.IfStatement_Complement(p[1],p[2])
-  else:
-    p[0] = sa.IfStatement_Single(p[1])
 
-def p_statement_if(p):
-  ''' 
-  statement_if : IF expr_parentheses statement_BLOCK_OPT 
-  '''
-  if len(p) ==4:
-    p[0] = sa.StatementIf_ExprParen(p[2],p[3])
-
-def p_if_statement_complement(p):
-  '''
-  if_statement_complement : statement_elseif
-    | statement_else
-  '''
-  if isinstance(p[1], sa.StatementElseIf):
-    p[0] = sa.IfStatement_ElseIf(p[1])
-  elif isinstance(p[1],sa.StatementElse):
-    p[0] = sa.IfStatement_Else(p[1])
-   
-def p_statement_else(p):
-  '''
-  statement_else : ELSE statement_BLOCK_OPT
-  '''
-  if len(p)==3:
-    p[0] = sa.StatementElse_Else(p[2])
-
-
-def p_statement_elseif(p):
-  '''
-  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT
-  '''
-  if len(p)==4:
-    p[0] = sa.StatementElseIf_ElseIf(p[2],p[3])
 
 def p_while_statement(p):
   '''

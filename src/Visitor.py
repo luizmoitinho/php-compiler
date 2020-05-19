@@ -195,13 +195,6 @@ class Visitor():
     pp.printTab()
     statement._for.accept(self)
 
-  def visitIfStatement_Single(self, ifStatement):
-    ifStatement.statementIf.accept(self)
-
-  def visitIfStatement_Complement(self, ifStatement):
-    ifStatement.statement_if.accept(self) 
-    ifStatement.if_statement_complement.accept(self)
-
   def visitStatementIf_ExprParen(self, statement_if):
     print('if',end='')
     statement_if.expr_parentheses.accept(self)
@@ -210,17 +203,6 @@ class Visitor():
   def visitStatement_If(self, statement):
     pp.printTab()
     statement._if.accept(self)
-
-  def visitStatementElse_Else(self, statementElse):
-    pp.printTab()
-    print('else',end='')
-    statementElse.statementBlockOpt.accept(self)
-
-  def visitStatementElseIf_ElseIf(self, statementElseIf):   
-    pp.printTab() 
-    print('elseif',end='')
-    statementElseIf.expr_parentheses.accept(self)
-    statementElseIf.statement_BLOCK_OPT.accept(self)
 
   def visitExprParentheses_Expr(self, exprParentheses_Expr):
     print('(',end='')
@@ -232,6 +214,7 @@ class Visitor():
   
   def visitIfStatement_ElseIf(self, ifStatementElseif):
      ifStatementElseif.statement_elseif.accept(self)
+
 
   def visitExpr_Minus_Expr1(self, expr):
     print('-', end='')
