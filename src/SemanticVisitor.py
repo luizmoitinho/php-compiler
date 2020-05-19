@@ -98,6 +98,16 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitExpr_Expr1(self, expr):
     return expr.expr1.accept(self)
+  
+  def visitExpr_Expr3(self, expr):
+    return expr.expr3.accept(self)
+  
+  def visitExpr3_Var_Assign_Expr(self, expr3):
+    var = expr3.variable.accept(self)
+    ass = expr3.assignOp.accept(self)
+    expr = expr3.expr.accept(self)
+    print(var, ass, expr)
+    return var, ass, expr 
     
   def visitExpr1_Variable(self, expr1):
     return expr1.variable.accept(self) 
@@ -119,13 +129,13 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitReferenceVariable_Compound(self, referenceVariable):
     return referenceVariable.compoundvariable.accept(self)
-    
-  #A variável será definida caso não esteja na tabela de símbolos
+      
   def visitCompoundVariableSingle(self, singleVariable):
     variable = st.getBindable(singleVariable.variable)
     if(variable == None):
       st.addVar(singleVariable.variable)
-    return variable
+      return singleVariable.variable #retorna o token variable
+    return variable #retorna os dados da variável, caso já declarada
 
   def visitFunctionCall_NoParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
@@ -166,3 +176,6 @@ class SemanticVisitor(AbstractVisitor):
       return st.FLOAT
     elif isinstance(scalar.token, str):
       return st.STRING
+    
+  def visitAssignOperator_Token(self, assignOp):
+    return assignOp.token

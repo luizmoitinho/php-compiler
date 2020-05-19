@@ -92,6 +92,10 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
+  def visitExpr_Expr3(self, expr):
+    pass
+  
+  @abstractmethod
   def visitExpr1_Variable(self, expr1):
     pass
   
@@ -157,6 +161,10 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitScalar_Token(self, scalar):
+    pass
+  
+  @abstractmethod
+  def visitAssignOperator_Token(self, assignOp):
     pass
   
   '''
@@ -290,10 +298,6 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitExpr_Expr3():
-    pass
-  
-  @abstractmethod
   def visitExpr2_TernaryExpr():
     pass
   
@@ -327,10 +331,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitTypeCastOp_Token():
-    pass
-  
-  @abstractmethod
-  def visitAssignOperator_Token():
     pass
   
   @abstractmethod

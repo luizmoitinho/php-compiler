@@ -20,14 +20,14 @@ def beginScope(nameScope):
 
 def endScope():
   global symbolTable
-  print(symbolTable[-1][SCOPE], '- End scope:', symbolTable[-1][SCOPE ])
+  print(symbolTable[-2][SCOPE], '- End scope:', symbolTable[-1][SCOPE ])
   symbolTable = symbolTable[0:-1]
-  
+
 def addVar(name, type = None):
   global symbolTable
   symbolTable[-1][name] = {BINDABLE: VARIABLE, TYPE: type}
   print(symbolTable[-1][SCOPE], '- Create variable', name, 'with type', type)
-  
+
 def updateBindableType(name, type):
   global symbolTable
   for i in reversed(range(len(symbolTable))):
@@ -37,10 +37,11 @@ def updateBindableType(name, type):
       return symbolTable[i][name]
   return None
 
-def addFunction(name, params):
+def addFunction(name, params, type = None):
   global symbolTable
-  symbolTable[-1][name] = {BINDABLE: FUNCTION, PARAMS: params}
-  
+  print(symbolTable[-1][SCOPE], '- Create function', name, 'with params', params, 'and type', type)
+  symbolTable[-1][name] = {BINDABLE: FUNCTION, PARAMS: params, TYPE: type}
+
 def getBindable(bindableName):
   global symbolTable
   for i in reversed(range(len(symbolTable))):
