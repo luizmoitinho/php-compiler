@@ -2,6 +2,7 @@ symbolTable = []
 INT = 'int'
 FLOAT = 'float'
 BOOL = 'boolean'
+STRING = 'string'
 SCOPE = 'scope'
 BINDABLE = 'bindable'
 FUNCTION = 'function'
