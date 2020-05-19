@@ -16,26 +16,38 @@ def beginScope(nameScope):
   global symbolTable
   symbolTable.append({})
   symbolTable[-1][SCOPE] = nameScope
-  print(symbolTable)
+  print(symbolTable[-1][SCOPE], '- Create scope:', nameScope)
 
 def endScope():
   global symbolTable
+  print(symbolTable[-1][SCOPE], '- End scope:', symbolTable[-1][SCOPE ])
   symbolTable = symbolTable[0:-1]
-  #print(symbolTable)
   
-def addVar(name):
+def addVar(name, type = None):
   global symbolTable
-  symbolTable[-1][name] = {BINDABLE: VARIABLE}
-  print(symbolTable)
-    
-#Função não vai necessitar de tipo?, linguagem fracamente tipada
+  symbolTable[-1][name] = {BINDABLE: VARIABLE, TYPE: type}
+  print(symbolTable[-1][SCOPE], '- Create variable', name, 'with type', type)
+  
+def updateBindableType(name, type):
+  global symbolTable
+  for i in reversed(range(len(symbolTable))):
+    if(name in symbolTable[i].keys()):
+      symbolTable[i][name][TYPE] = type
+      print(symbolTable[i][SCOPE], '- Update bindable type of', symbolTable[i][name][BINDABLE], name, 'to', type)
+      return symbolTable[i][name]
+  return None
+
 def addFunction(name, params):
   global symbolTable
   symbolTable[-1][name] = {BINDABLE: FUNCTION, PARAMS: params}
   
 def getBindable(bindableName):
-    global symbolTable
-    for i in reversed(range(len(symbolTable))):
-        if (bindableName in symbolTable[i].keys()):
-            return symbolTable[i][bindableName]
-    return None
+  global symbolTable
+  for i in reversed(range(len(symbolTable))):
+      if (bindableName in symbolTable[i].keys()):
+          return symbolTable[i][bindableName]
+  return None
+
+def printTable():
+  global symbolTable
+  print(symbolTable)
