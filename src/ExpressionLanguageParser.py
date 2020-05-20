@@ -212,6 +212,51 @@ def p_statement(p):
   elif isinstance(p[1], sa.ForStatement):
     p[0] = sa.Statement_For(p[1])
   
+
+def p_if_statement(p):
+  '''
+  if_statement : statement_if
+  | statement_if statement_else
+  | statement_if statement_elseif
+  | statement_if statement_elseif statement_else
+  '''
+  if len(p)== 2:
+    p[0] = sa.IfStatement_statement_if(p[1])
+  elif len(p) == 3 and isinstance(p[2], sa.StatementElse):
+    p[0] = sa.IfStatement_statementIf_Else(p[1],p[2])
+  elif len(p)== 3 and isinstance(p[2], sa.StatementElseIf):
+    p[0] = sa.IfStatement_StatementIf_Elseif(p[1],p[2])
+  elif len(p)== 4:
+    p[0] = sa.IfStatement_StmIf_Elseif_Else(p[1],p[2],p[3])
+  
+def p_statement_if(p):
+  ''' 
+  statement_if : IF expr_parentheses statement_BLOCK_OPT statement_if
+   | IF expr_parentheses statement_BLOCK_OPT
+  '''
+  if len(p) ==5:
+    p[0] = sa.StatementIf_Mul(p[2],p[3],p[4])
+  elif len(p) ==4:
+    p[0] = sa.StatementIf_Single(p[2],p[3])
+
+def p_statement_elseif(p):
+  '''
+  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT statement_elseif
+   | ELSEIF expr_parentheses statement_BLOCK_OPT
+   |
+  '''
+  if len(p) == 5:
+    p[0] = sa.StatementElseIf_Mul(p[2],p[3],p[4])
+  elif len(p) == 4:
+    p[0] = sa.StatementElseIf_Single(p[2],p[3])
+
+def p_statement_else(p):
+  '''
+  statement_else : ELSE statement_BLOCK_OPT
+  '''
+  if len(p) == 3:
+    p[0] =  sa.StatementElse_Single(p[2])
+
 def p_global_statement(p):
   '''
   global_statement : GLOBAL global_var statement_COLON_GLOBAL 
@@ -221,49 +266,7 @@ def p_global_statement(p):
     p[0] = sa.GlobalStatement_Single(p[2])
   else:
     p[0] = sa.GlobalStatement_Mul(p[2], p[3])
-    
-  
-def p_if_statement(p):
-  '''
-  if_statement : statement_if if_statement_complement
-    | statement_if 
-  '''
-  if len(p)==3:
-    p[0] = sa.IfStatement_Complement(p[1],p[2])
-  else:
-    p[0] = sa.IfStatement_Single(p[1])
 
-def p_statement_if(p):
-  ''' 
-  statement_if : IF expr_parentheses statement_BLOCK_OPT 
-  '''
-  if len(p) ==4:
-    p[0] = sa.StatementIf_ExprParen(p[2],p[3])
-
-def p_if_statement_complement(p):
-  '''
-  if_statement_complement : statement_elseif
-    | statement_else
-  '''
-  if isinstance(p[1], sa.StatementElseIf):
-    p[0] = sa.IfStatement_ElseIf(p[1])
-  elif isinstance(p[1],sa.StatementElse):
-    p[0] = sa.IfStatement_Else(p[1])
-   
-def p_statement_else(p):
-  '''
-  statement_else : ELSE statement_BLOCK_OPT
-  '''
-  if len(p)==3:
-    p[0] = sa.StatementElse_Else(p[2])
-
-
-def p_statement_elseif(p):
-  '''
-  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT
-  '''
-  if len(p)==4:
-    p[0] = sa.StatementElseIf_ElseIf(p[2],p[3])
 
 def p_while_statement(p):
   '''
@@ -773,14 +776,16 @@ arquivo = '''
 <?php
   if($x<10){
     $i=10;
+    sif($x==10)
+      $x=10;  
+    else
+      $i=10;
+
   }
-  elseif($x>=20){
-    $i -=10;
-  }
-  else{
-    $i=20;
-  }
-  
+  elseif($x==10)
+    $x=10;  
+  else
+    $i=10;
 ?>
 '''
 
