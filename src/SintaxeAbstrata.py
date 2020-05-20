@@ -212,12 +212,28 @@ class IfStatement_statement_if(IfStatement):
   def accept(self, Visitor):
     Visitor.visitIfStatement_statement_if(self)
 
+class IfStatement_statementIf_Else(IfStatement):
+  def __init__(self, statement_if, statement_else):
+    self.statement_if =  statement_if
+    self.statement_else =  statement_else
+  def accept(self, Visitor):
+    Visitor.vistIfStatement_statementIf_Else(self)
+    
+
 class IfStatement_StatementIf_Elseif(IfStatement):
   def __init__ (self,statement_if, statement_elseif):
     self.statement_if = statement_if
     self.statement_elseif = statement_elseif
   def accept(self, Visitor):
     Visitor.visitIfStatement_StatementIf_Elseif(self)
+
+class IfStatement_StmIf_Elseif_Else(IfStatement):
+  def __init__(self,statement_if,statement_elseif,statement_else):
+    self.statement_if = statement_if 
+    self.statement_elseif = statement_elseif
+    self.statement_else =  statement_else
+  def accept(self, Visitor):
+    Visitor.visitIfStatement_Stm_If_Elseif_Else(self)
 
 class StatementIf(metaclass=ABCMeta):
   @abstractmethod
@@ -239,9 +255,14 @@ class StatementIf_Single(StatementIf):
   def accept(self,Visitor):
     Visitor.visitStatementIf_Single(self)
 
+class ElseIf_ifStatement(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
 class StatementElseIf(metaclass = ABCMeta):
   @abstractmethod
-  def __init__(self, Visitor):
+  def accept(self, Visitor):
     pass
 
 class StatementElseIf_Mul(StatementElseIf):
@@ -258,6 +279,18 @@ class StatementElseIf_Single(StatementElseIf):
     self.statement_BLOCK_OPT = statement_BLOCK_OPT
   def accept(self, Visitor):
     Visitor.visitStatementElseIf_Single(self)
+
+
+class StatementElse(metaclass =  ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class StatementElse_Single(StatementElse):
+  def __init__(self, statement_BLOCK_OPT):
+    self.statement_BLOCK_OPT = statement_BLOCK_OPT
+  def accept(self,Visitor):
+    Visitor.visitStatementElse_Single(self)
 
 
 class funcDecStatement_Function(FuncDecStatement):
