@@ -195,10 +195,16 @@ class Visitor():
     pp.printTab()
     statement._for.accept(self)
 
-  def visitStatementIf_ExprParen(self, statement_if):
+  def visitStatementIf_Mul(self, statementIfMul):
     print('if',end='')
-    statement_if.expr_parentheses.accept(self)
-    statement_if.statement_BLOCK_OPT.accept(self)
+    statementIfMul.expr_parentheses.accept(self)
+    statementIfMul.statement_BLOCK_OPT.accept(self)
+    statementIfMul.statement_if.accept(self)
+
+  def visitStatementIf_Single(self, statementIfSingle):
+    print('if',end='')
+    statementIfSingle.expr_parentheses.accept(self)
+    statementIfSingle.statement_BLOCK_OPT.accept(self)
 
   def visitStatement_If(self, statement):
     pp.printTab()

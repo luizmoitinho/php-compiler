@@ -217,12 +217,21 @@ class StatementIf(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
 
+
+class StatementIf_Mul(StatementIf):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT,statement_if):
+    self.expr_parentheses = expr_parentheses
+    self.statement_BLOCK_OPT=statement_BLOCK_OPT
+    self.statement_if = statement_if
+  def accept(self,Visitor):
+    Visitor.visitStatementIf_Mul(self)
+
 class StatementIf_Single(StatementIf):
   def __init__(self, expr_parentheses,statement_BLOCK_OPT):
     self.expr_parentheses = expr_parentheses
     self.statement_BLOCK_OPT=statement_BLOCK_OPT
   def accept(self,Visitor):
-    Visitor.visitStatementIf_ExprParen(self)
+    Visitor.visitStatementIf_Single(self)
 
 class funcDecStatement_Function(FuncDecStatement):
   def __init__(self, fds_id, fds_parameter, fds_statements):
