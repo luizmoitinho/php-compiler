@@ -195,21 +195,40 @@ class Visitor():
     pp.printTab()
     statement._for.accept(self)
 
+  def visitStatement_If(self, statement):
+    statement._if.accept(self)
+
+  def visitIfStatement_StatementIf_Elseif(self, statementIfElseif):
+    statementIfElseif.statement_if.accept(self)
+    statementIfElseif.statement_elseif.accept(self)
+
   def visitStatementIf_Mul(self, statementIfMul):
+    pp.printTab()
     print('if',end='')
     statementIfMul.expr_parentheses.accept(self)
     statementIfMul.statement_BLOCK_OPT.accept(self)
     statementIfMul.statement_if.accept(self)
 
   def visitStatementIf_Single(self, statementIfSingle):
+    pp.printTab()
     print('if',end='')
     statementIfSingle.expr_parentheses.accept(self)
     statementIfSingle.statement_BLOCK_OPT.accept(self)
 
-  def visitStatement_If(self, statement):
+  def visitStatementElseIf_Mul(self, statementElseIfMul):
     pp.printTab()
-    statement._if.accept(self)
-  
+    print('elseif',end='')
+    statementElseIfMul.expr_parentheses.accept(self)
+    statementElseIfMul.statement_BLOCK_OPT.accept(self)
+    statementElseIfMul.statement_elseif.accept(self)
+
+  def visitStatementElseIf_Single(self, statementElseIfSingle):
+    pp.printTab()
+    print('elseif',end='')
+    statementElseIfSingle.expr_parentheses.accept(self)
+    statementElseIfSingle.statement_BLOCK_OPT.accept(self)
+
+
   def visitIfStatement_statement_if(self, IfStatement):
     IfStatement.statement_if.accept(self)
 

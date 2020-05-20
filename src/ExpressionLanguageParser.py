@@ -219,8 +219,10 @@ def p_if_statement(p):
   | statement_if statement_elseif
   | statement_if statement_elseif statement_else
   '''
-  if(len(p)==2):
-    p[0] =  sa.IfStatement_statement_if(p[1])
+  if len(p)==2:
+    p[0] = sa.IfStatement_statement_if(p[1])
+  if len(p)==3:
+    p[0] = sa.IfStatement_StatementIf_Elseif(p[1],p[2])
   
 def p_statement_if(p):
   ''' 
@@ -229,7 +231,7 @@ def p_statement_if(p):
   '''
   if len(p) ==5:
     p[0] = sa.StatementIf_Mul(p[2],p[3],p[4])
-  if len(p) ==4:
+  elif len(p) ==4:
     p[0] = sa.StatementIf_Single(p[2],p[3])
 
 def p_statement_else(p):
@@ -245,6 +247,10 @@ def p_statement_elseif(p):
    | ELSEIF expr_parentheses statement_BLOCK_OPT
    |
   '''
+  if len(p) == 5:
+    p[0] = sa.StatementElseIf_Mul(p[2],p[3],p[4])
+  elif len(p) == 4:
+    p[0] = sa.StatementElseIf_Single(p[2],p[3])
 
 def p_global_statement(p):
   '''
@@ -766,9 +772,18 @@ arquivo = '''
   if($x<10){
     $i=10;
   }
+  
   if($x<10){
     $i=10;
   }
+  elseif($x==2){
+    $i=2;
+  }
+
+  elseif($x==2){
+    $i=2;
+  }
+
   
 ?>
 '''

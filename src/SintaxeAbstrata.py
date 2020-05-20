@@ -212,11 +212,17 @@ class IfStatement_statement_if(IfStatement):
   def accept(self, Visitor):
     Visitor.visitIfStatement_statement_if(self)
 
+class IfStatement_StatementIf_Elseif(IfStatement):
+  def __init__ (self,statement_if, statement_elseif):
+    self.statement_if = statement_if
+    self.statement_elseif = statement_elseif
+  def accept(self, Visitor):
+    Visitor.visitIfStatement_StatementIf_Elseif(self)
+
 class StatementIf(metaclass=ABCMeta):
   @abstractmethod
   def accept(self, Visitor):
     pass
-
 
 class StatementIf_Mul(StatementIf):
   def __init__(self, expr_parentheses,statement_BLOCK_OPT,statement_if):
@@ -232,6 +238,27 @@ class StatementIf_Single(StatementIf):
     self.statement_BLOCK_OPT=statement_BLOCK_OPT
   def accept(self,Visitor):
     Visitor.visitStatementIf_Single(self)
+
+class StatementElseIf(metaclass = ABCMeta):
+  @abstractmethod
+  def __init__(self, Visitor):
+    pass
+
+class StatementElseIf_Mul(StatementElseIf):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT, statement_elseif):
+    self.expr_parentheses =  expr_parentheses
+    self.statement_BLOCK_OPT = statement_BLOCK_OPT
+    self.statement_elseif =  statement_elseif
+  def accept(self, Visitor):
+    Visitor.visitStatementElseIf_Mul(self)
+
+class StatementElseIf_Single(StatementElseIf):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT):
+    self.expr_parentheses =  expr_parentheses
+    self.statement_BLOCK_OPT = statement_BLOCK_OPT
+  def accept(self, Visitor):
+    Visitor.visitStatementElseIf_Single(self)
+
 
 class funcDecStatement_Function(FuncDecStatement):
   def __init__(self, fds_id, fds_parameter, fds_statements):
