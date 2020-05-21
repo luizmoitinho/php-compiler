@@ -51,7 +51,7 @@ class SemanticVisitor(AbstractVisitor):
       funcDecStatement.fds_statements.accept(self)
       st.endScope()
     else:
-      print('ERROR: function', funcId, 'has already been declared.')
+      print('ERROR: Function', funcId, 'has already been declared.')
     
   def visitFds_id_withAmpersand(self, fds_id):
     return fds_id.id
@@ -102,12 +102,35 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr_Expr3(self, expr):
     return expr.expr3.accept(self)
   
+  def visitExpr_Expr1_Expr2(self, expr):
+    type1 = expr.expr1.accept(self)
+    type2 = expr.expr2.accept(self)
+    #verificar se os tipo da expressão é uma variável, para acessar o tipo dela
+    if isinstance(expr.expr1, sa.Expr1_Variable):
+      type1 = type1[st.TYPE]
+    # Também verifica se o que foi passado é uma variável de forma diferente,
+    # pois não há certeza que expr2 seja do tipo Variable como expr1, e como o visit 
+    # de variable retorna um dicionário contendo a chave 'type', caso o conteúdo de 
+    # type2 inclua uma chave 'type' podemos considerar que o que está contido é uma variável
+    # -- A verificação de type1 poderia ser dessa forma, já que é uma forma mais inteligente 
+    # de verificar o resultado em si que foi recebido, #REMIND-ME
+    if type2 != None and st.TYPE in type2:
+      # Gerava erro caso o valor da key fosse None
+      type2 = type2[st.TYPE]
+    print(type1, type2)
+    c = coercion(type1, type2)
+    return c
+    
+  def visitExpr2_ArithmeticOp(self, expr2):
+    expr2.arithmeticOp.accept(self)
+    return expr2.expr.accept(self)
+  
   def visitExpr3_Var_Assign_Expr(self, expr3):
-    var = expr3.variable.accept(self)
-    ass = expr3.assignOp.accept(self)
-    expr = expr3.expr.accept(self)
-    print(var, ass, expr)
-    return var, ass, expr 
+    bindable = expr3.variable.accept(self)
+    expr3.assignOp.accept(self)
+    exprType = expr3.expr.accept(self)
+    print(exprType)
+    st.updateBindableType(bindable[st.NAME], exprType)
     
   def visitExpr1_Variable(self, expr1):
     return expr1.variable.accept(self) 
@@ -129,14 +152,13 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitReferenceVariable_Compound(self, referenceVariable):
     return referenceVariable.compoundvariable.accept(self)
-      
+
   def visitCompoundVariableSingle(self, singleVariable):
     variable = st.getBindable(singleVariable.variable)
     if(variable == None):
-      st.addVar(singleVariable.variable)
-      return singleVariable.variable #retorna o token variable
-    return variable #retorna os dados da variável, caso já declarada
-
+      return st.addVar(singleVariable.variable)
+    return variable
+  
   def visitFunctionCall_NoParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
     if bindable == None:
@@ -145,7 +167,7 @@ class SemanticVisitor(AbstractVisitor):
   def visitFunctionCall_WithParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
     if bindable == None:
-      print('ERROR: Function', functionCall.id,'called but never defined.')
+      print('ERROR: Function', functionCall.id, 'called but never defined.')
     if bindable != None and bindable[st.BINDABLE] == st.FUNCTION:
       params = functionCall.parameterList.accept(self)
       if len(params) != len(bindable[st.PARAMS]):
@@ -179,3 +201,6 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitAssignOperator_Token(self, assignOp):
     return assignOp.token
+  
+  def visitArithmeticOperator_Token(self, arithmeticOp):
+    return arithmeticOp.token

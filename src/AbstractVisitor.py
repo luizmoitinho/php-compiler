@@ -96,6 +96,14 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
+  def visitExpr_Expr1_Expr2(self, expr):
+    pass
+  
+  @abstractmethod
+  def visitExpr2_ArithmeticOp(self, expr2):
+    pass
+  
+  @abstractmethod
   def visitExpr1_Variable(self, expr1):
     pass
   
@@ -294,15 +302,7 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitExpr_Expr1_Expr2():
-    pass
-  
-  @abstractmethod
   def visitExpr2_TernaryExpr():
-    pass
-  
-  @abstractmethod
-  def visitExpr2_ArithmeticOp():
     pass
   
   @abstractmethod
