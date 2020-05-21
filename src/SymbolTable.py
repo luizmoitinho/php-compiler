@@ -10,7 +10,8 @@ FUNCTION = 'function'
 PARAMS = 'params'
 VARIABLE = 'var'
 TYPE = 'type'
-Number = [INT, FLOAT]
+NAME = 'name' 
+Number = [INT, FLOAT, STRING]
 
 def beginScope(nameScope):
   global symbolTable
@@ -27,6 +28,7 @@ def addVar(name, type = None):
   global symbolTable
   symbolTable[-1][name] = {BINDABLE: VARIABLE, TYPE: type}
   print(symbolTable[-1][SCOPE], '- Create variable', name, 'with type', type)
+  return { NAME: name, TYPE: type }
 
 def updateBindableType(name, type):
   global symbolTable
