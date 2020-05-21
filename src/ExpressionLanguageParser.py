@@ -768,7 +768,7 @@ arquivo = '''
 <?php
   $valor = 1;
   $valor1 = 2;
-  $valor2 = 2.25 + 50 + $valor + 20;
+  $valor2 =  true - false;
 ?>
 '''
 

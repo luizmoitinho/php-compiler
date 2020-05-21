@@ -106,17 +106,16 @@ class SemanticVisitor(AbstractVisitor):
     type1 = expr.expr1.accept(self)
     type2 = expr.expr2.accept(self)
     #verificar se os tipo da expressão é uma variável, para acessar o tipo dela
-    if isinstance(expr.expr1, sa.Expr1_Variable):
+    if type1 != None and st.TYPE in type1:
+      if type1[st.TYPE] == None:
+        print('ERROR: The value of', type1[st.NAME], 'is undefined.')
       type1 = type1[st.TYPE]
-    # Também verifica se o que foi passado é uma variável de forma diferente,
-    # pois não há certeza que expr2 seja do tipo Variable como expr1, e como o visit 
-    # de variable retorna um dicionário contendo a chave 'type', caso o conteúdo de 
-    # type2 inclua uma chave 'type' podemos considerar que o que está contido é uma variável
-    # -- A verificação de type1 poderia ser dessa forma, já que é uma forma mais inteligente 
-    # de verificar o resultado em si que foi recebido, #REMIND-ME
+      
     if type2 != None and st.TYPE in type2:
-      # Gerava erro caso o valor da key fosse None
+      if type2[st.TYPE] == None:
+        print('ERROR: The value of', type2[st.NAME], 'is undefined.')
       type2 = type2[st.TYPE]
+  
     print(type1, type2)
     c = coercion(type1, type2)
     return c
@@ -129,7 +128,6 @@ class SemanticVisitor(AbstractVisitor):
     bindable = expr3.variable.accept(self)
     expr3.assignOp.accept(self)
     exprType = expr3.expr.accept(self)
-    print(exprType)
     st.updateBindableType(bindable[st.NAME], exprType)
     
   def visitExpr1_Variable(self, expr1):
