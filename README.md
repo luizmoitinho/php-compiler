@@ -3,7 +3,7 @@
 ***
 
 ## Bibliotecas
-1.[PLY (Python Lex-Yacc)](https://www.dabeaz.com/ply/ply.html) 
+1. [PLY (Python Lex-Yacc)](https://www.dabeaz.com/ply/ply.html) 
 
 
 ## Documentos de apoio
