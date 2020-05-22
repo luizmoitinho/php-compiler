@@ -70,7 +70,6 @@ def updateBindableType(name, type):
       return bindableInfo 
   return None
 
-
 def printTable():
   global symbolTable
   print(symbolTable)
