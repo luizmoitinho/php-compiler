@@ -1,6 +1,7 @@
 ## Compilador na linguagem PHP
 ***
-###Analisador Sintático - EBNF
+### Analisador Sintático - EBNF
+Analisador Sintático - EBNF
 main: (<?PHP inner_statement* ?>)* [EOF];
 inner_statement: statement
 | function_declaration_statement
@@ -137,6 +138,8 @@ T_CURLY_OPEN: "${";
 T_CONSTANT_ENCAPSED_STRING: "'[^']*'|\"[^\"]*\"";
 T_STRING_VARNAME: "[a-zA-Z_][a-zA-Z0-9_]*";
 NEWLINE: "\r|\n|\r\n";
+
+
 
 ### Documentos de apoio
 * Link da documentação : https://www.php.net/manual/pt_BR/language.basic-syntax.comments.php
