@@ -53,7 +53,9 @@ def getBindable(bindableName):
     global symbolTable
     for i in reverse(range(len(symbolTable))):
         if(bindableName in symbolTable[i].key()):
-            return symbolTable[i][bindableName]
+            bindableInfo = symbolTable[i][name].copy()
+            bindableInfo.update({ NAME: name })
+            return bindableInfo
     return None
 
 
