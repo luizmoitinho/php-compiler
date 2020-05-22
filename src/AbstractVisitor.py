@@ -108,6 +108,22 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
+  def visitExpr1_Variable_Increment(self, expr1):
+    pass
+  
+  @abstractmethod
+  def visitExpr1_Variable_Decrement(self, expr1):
+    pass
+  
+  @abstractmethod
+  def visitExpr1_Increment_Variable(self, expr1):
+    pass
+  
+  @abstractmethod
+  def visitExpr1_Decrement_Variable(self, expr1):
+    pass
+  
+  @abstractmethod
   def visitExpr1_FunctionCall(self, expr1):
     pass
   
@@ -335,22 +351,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitExpr1_ExprPar():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_Variable_Increment():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_Variable_Decrement():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_Increment_Variable():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_Decrement_Variable():
     pass
   
   @abstractmethod

@@ -156,6 +156,26 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitExpr1_Variable(self, expr1):
     return expr1.variable.accept(self) 
+  
+  def visitExpr1_Variable_Increment(self, expr1):
+    variable = expr1.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      print('ERROR: Cannot increment variable', variable[st.NAME], 'with type', variable[st.TYPE])
+      
+  def visitExpr1_Variable_Decrement(self, expr1):
+    variable = expr1.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      print('ERROR: Cannot decrement variable', variable[st.NAME], 'with type', variable[st.TYPE])
+    
+  def visitExpr1_Increment_Variable(self, expr1):
+    variable = expr1.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      print('ERROR: Cannot increment variable', variable[st.NAME], 'with type', variable[st.TYPE])
+    
+  def visitExpr1_Decrement_Variable(self, expr1):
+    variable = expr1.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      print('ERROR: Cannot decrement variable', variable[st.NAME], 'with type', variable[st.TYPE])
     
   def visitExpr1_FunctionCall(self, expr1):
     return expr1.functionCall.accept(self)

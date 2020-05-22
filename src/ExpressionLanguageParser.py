@@ -767,10 +767,9 @@ lex.lex()
 arquivo = '''
 <?php
   function add($valor){
-    $valor1 = 1;
-    $valor = 1;
-    $valor = $valor1 + 1.5;
-    }
+      $valor = true;
+      $valor--;
+  }
 ?>
 '''
 
