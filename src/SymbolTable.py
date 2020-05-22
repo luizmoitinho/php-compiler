@@ -36,7 +36,10 @@ def updateBindableType(name, type):
     if(name in symbolTable[i].keys()):
       symbolTable[i][name][TYPE] = type
       print(symbolTable[i][SCOPE], '- Update bindable type of', symbolTable[i][name][BINDABLE], name, 'to', type)
-      return symbolTable[i][name]
+      # Adicionar o nome do bindable ao dicionario para uso em certos casos
+      bindableInfo = symbolTable[i][name].copy()
+      bindableInfo.update({ NAME: name })
+      return bindableInfo 
   return None
 
 def addFunction(name, params, type = None):
@@ -44,11 +47,14 @@ def addFunction(name, params, type = None):
   print(symbolTable[-1][SCOPE], '- Create function', name, 'with params', params, 'and type', type)
   symbolTable[-1][name] = {BINDABLE: FUNCTION, PARAMS: params, TYPE: type}
 
-def getBindable(bindableName):
+def getBindable(name):
   global symbolTable
   for i in reversed(range(len(symbolTable))):
-      if (bindableName in symbolTable[i].keys()):
-          return symbolTable[i][bindableName]
+      if (name in symbolTable[i].keys()):
+        # Adicionar o nome do bindable ao dicionario para uso em certos casos
+        bindableInfo = symbolTable[i][name].copy()
+        bindableInfo.update({ NAME: name })
+        return bindableInfo 
   return None
 
 def printTable():

@@ -60,7 +60,7 @@ class SemanticVisitor(AbstractVisitor):
     return fds_id.id
   
   def visitFds_parameter_noParameter(self):
-    return {}
+    return []
   
   def visitFds_parameter_withParameter(self, fds_parameter):
     return fds_parameter.parameter_list.accept(self)
@@ -78,6 +78,7 @@ class SemanticVisitor(AbstractVisitor):
     return parameterListColonParameter.parameter.accept(self)
     
   def visitParameter_Var(self, parameter):
+    print(parameter.variable)
     return [parameter.variable]
   
   def visitFds_statements_withStatements(self, fds_statements):
@@ -116,7 +117,6 @@ class SemanticVisitor(AbstractVisitor):
         print('ERROR: The value of', type2[st.NAME], 'is undefined.')
       type2 = type2[st.TYPE]
   
-    print(type1, type2)
     c = coercion(type1, type2)
     return c
     
@@ -126,9 +126,27 @@ class SemanticVisitor(AbstractVisitor):
   
   def visitExpr3_Var_Assign_Expr(self, expr3):
     bindable = expr3.variable.accept(self)
-    expr3.assignOp.accept(self)
+    assignOp = expr3.assignOp.accept(self)
     exprType = expr3.expr.accept(self)
-    st.updateBindableType(bindable[st.NAME], exprType)
+    
+    if assignOp == '=':
+      if exprType != None:
+        if st.TYPE in exprType:
+          st.updateBindableType(bindable[st.NAME], exprType[st.TYPE])
+        else:
+          st.updateBindableType(bindable[st.NAME], exprType)
+      else:
+        st.updateBindableType(bindable[st.NAME], None)
+    elif bindable[st.TYPE] == None:
+        print('ERROR: Invalid atribution', assignOp, 'on variable', bindable[st.NAME], 'that has type', bindable[st.TYPE]) 
+    else:
+      if exprType != None:
+        if st.TYPE in exprType:
+          st.updateBindableType(bindable[st.NAME], exprType[st.TYPE])
+        else:
+          st.updateBindableType(bindable[st.NAME], exprType)
+      else:
+        st.updateBindableType(bindable[st.NAME], None)
     
   def visitExpr1_Variable(self, expr1):
     return expr1.variable.accept(self) 
