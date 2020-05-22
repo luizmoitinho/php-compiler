@@ -118,6 +118,12 @@ class SemanticVisitor(AbstractVisitor):
       type2 = type2[st.TYPE]
   
     c = coercion(type1, type2)
+    if (c == None):
+      print('ERROR: Expression ', end='')
+      expr.expr1.accept(self.printer)
+      print(' has type', type1, 'while expression "', end='')
+      expr.expr2.accept(self.printer)
+      print(' " has type', type2)
     return c
     
   def visitExpr2_ArithmeticOp(self, expr2):
