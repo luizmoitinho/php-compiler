@@ -58,7 +58,6 @@ def getBindable(bindableName):
             return bindableInfo
     return None
 
-
 def printTable():
   global symbolTable
   print(symbolTable)
