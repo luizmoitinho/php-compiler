@@ -776,7 +776,7 @@ arquivo = '''
 <?php
   if($x<10){
     $i=10;
-    sif($x==10)
+    if($x==10)
       $x=10;  
     else
       $i=10;
