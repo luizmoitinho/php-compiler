@@ -24,7 +24,7 @@ NAME     = 'name'
 Number = [INT,FLOAT]
 
 
-#=====  FUNCOES DA SYMBOLTABLE
+#======= FUNCOES DA SYMBOLTABLE ===============
 
 def beginScope(nameScope):
     global symbolTable
@@ -57,6 +57,18 @@ def getBindable(bindableName):
             bindableInfo.update({ NAME: name })
             return bindableInfo
     return None
+
+def updateBindableType(name, type):
+  global symbolTable
+  for i in reversed(range(len(symbolTable))):
+    if(name in symbolTable[i].keys()):
+      symbolTable[i][name][TYPE] = type
+      print(symbolTable[i][SCOPE], '- Update bindable type of: {from: ', symbolTable[i][name][BINDABLE], name, ', to: ', type,'}')
+      # Adicionar o nome do bindable ao dicionario para uso em certos casos
+      bindableInfo = symbolTable[i][name].copy()
+      bindableInfo.update({ NAME: name })
+      return bindableInfo 
+  return None
 
 def printTable():
   global symbolTable
