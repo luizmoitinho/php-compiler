@@ -1,4 +1,4 @@
-## Compilador na linguagem PHP
+## Compilador para a linguagem PHP
 
 ***
 
