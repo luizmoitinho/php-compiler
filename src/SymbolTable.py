@@ -1,17 +1,21 @@
 symbolTable = []
-INT = 'int'
-FLOAT = 'float'
-BOOL = 'boolean'
-STRING = 'string'
-ARRAY = 'array'
-SCOPE = 'scope'
-BINDABLE = 'bindable'
+
+INT     = 'int'
+FLOAT   = 'float'
+BOOL    = 'boolean'
+STRING  = 'string'
+ARRAY   = 'array'
+
+SCOPE    = 'scope'
 FUNCTION = 'function'
-PARAMS = 'params'
+PARAMS   = 'params'
 VARIABLE = 'var'
-TYPE = 'type'
-NAME = 'name' 
-Number = [INT, FLOAT, STRING]
+
+TYPE      = 'type'
+NAME      = 'name' 
+BINDABLE  = 'bindable'
+
+Number = [INT, FLOAT]
 
 def beginScope(nameScope):
   global symbolTable
