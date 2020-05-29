@@ -1,5 +1,4 @@
 symbolTable = []
-<<<<<<< HEAD
 INT = 'int'
 FLOAT = 'float'
 BOOL = 'boolean'
