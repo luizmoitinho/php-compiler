@@ -4,15 +4,20 @@ from Visitor import Visitor
 
 import SintaxeAbstrata as sa
 
-def coercion(type1, type2):
-  if (type1 in st.Number and type2 in st.Number):
-      if (type1 == st.FLOAT or type2 == st.FLOAT):
-          return st.FLOAT
-      else:
-          return st.INT
-  else:
-      return None
 
+def isValidNumber(number):
+    try:
+        if(number in st.Number and int(number) or float(number) ):
+            return True
+    except ValueError:
+        return False
+
+def coercion(type1, type2):
+    if (type1 in st.Number and type2 in st.Number):
+        if (type1 == st.FLOAT or type2 == st.FLOAT):
+            return st.FLOAT
+        return st.INT
+    return None
 
 class SemanticVisitor(AbstractVisitor):
   
