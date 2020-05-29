@@ -774,7 +774,10 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-   $nome = "luiz";
+   while(true){
+     $x=1;
+     $x++;
+   }
 ?>
 '''
 

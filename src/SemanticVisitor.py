@@ -4,7 +4,6 @@ from Visitor import Visitor
 
 import SintaxeAbstrata as sa
 
-
 def isValidNumber(number):
     try:
         if(number in st.Number and int(number) or float(number) ):
@@ -40,10 +39,33 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitInnerStatement_FuncDecStatement(self, innerStatement):
     innerStatement.funcDecStatement.accept(self)
-    
+
   def visitInnerStatement_Statement(self, innerStatement):
     innerStatement.statement.accept(self)
-    
+
+  def visitExprParentheses_Expr(self, exprParentheses):
+    exprParentheses.expr.accept(self)
+
+  def visitStatementBlockOpt_Statement(self, statementBlockOpt):
+    statementBlockOpt.statement.accept(self)
+
+  def visitStatementBlockOpt_StatementMul(self, statementBlockOpt):
+    statementBlockOpt.statementmul.accept(self)
+  
+  def visitstatementMulSingle(self, statementMul):
+    statementMul.statement.accept(self)
+
+  def visitstatementMulMul(self, statementMul):
+    statementMul.statement.accept(self)
+    statementMul.statementMul.accept(self)
+
+  def visitStatement_While(self, statement):
+    statement.whilee.accept(self)
+
+  def visitWhileStatementSingle(self, whileStatement):
+    whileStatement.exprparentheses.accept(self)
+    whileStatement.statement.accept(self)
+
   def visitFuncDecStatement_Function(self, funcDecStatement):
     funcId = funcDecStatement.fds_id.accept(self)
     params = funcDecStatement.fds_parameter.accept(self)
@@ -251,3 +273,4 @@ class SemanticVisitor(AbstractVisitor):
   
   def visitArithmeticOperator_Token(self, arithmeticOp):
     return arithmeticOp.token
+

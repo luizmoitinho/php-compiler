@@ -30,7 +30,7 @@ class AbstractVisitor(metaclass = ABCMeta):
   @abstractmethod
   def visitFuncDecStatement_Function(self, funcDecStatement):
     pass
-  
+
   @abstractmethod
   def visitFds_id_withAmpersand(self, fds_id):
     pass
@@ -189,6 +189,34 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitAssignOperator_Token(self, assignOp):
+    pass
+
+  @abstractmethod
+  def visitStatementBlockOpt_Statement(self, statementBlockOpt):
+    pass
+
+  @abstractmethod
+  def visitStatementBlockOpt_StatementMul(self, statementBlockOpt):
+    pass
+
+  @abstractmethod
+  def visitstatementMulSingle(self, statementMul):
+    pass
+  
+  @abstractmethod
+  def visitstatementMulMul(self, statementMul):
+    pass
+
+  @abstractmethod
+  def visitExprParentheses_Expr(self, exprParentheses):
+    pass
+
+  @abstractmethod
+  def visitStatement_While(sefl, statement):
+    pass
+
+  @abstractmethod
+  def visitWhileStatementSingle(self, whileStatement):
     pass
 
   '''
