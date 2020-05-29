@@ -18,7 +18,6 @@ class Main_MainInner(Main):
 class Main_MainInner_Empty(Main):
   def accept(self, Visitor):
     return Visitor.visitMain_MainInner_Empty(self)
-    
 
 #MAIN_INNER ABSTRATA E CONCRETAS  
 class MainInner(metaclass=ABCMeta):
@@ -1267,9 +1266,9 @@ class StatementBlockOpt_Empty(StatementBlockOpt):
     return Visitor.visitStatementBlockOpt_Empty(self)
 
 class statementMulMul(StatementMul):
-  def __init__(self, statement, statementmul):
+  def __init__(self, statement, statementMul):
     self.statement = statement
-    self.statementmul = statementmul
+    self.statementMul = statementMul
   def accept(self, Visitor):
     return Visitor.visitstatementMulMul(self)
   

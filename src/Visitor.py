@@ -682,7 +682,7 @@ class Visitor(AbstractVisitor):
   
   def visitstatementMulMul(self, statementMul):
       statementMul.statement.accept(self)
-      statementMul.statementmul.accept(self)
+      statementMul.statementMul.accept(self)
   
   def visitDoWhileStatementSingle(self, whilestatement):
       print('do', end='')
