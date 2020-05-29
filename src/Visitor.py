@@ -1,6 +1,7 @@
+from AbstractVisitor import AbstractVisitor
 from PrettyPrinter import PrettyPrinter as pp
 
-class Visitor():
+class Visitor(AbstractVisitor):
 
   def visitMain_MainInner(self, main):
     print('<?php')
@@ -8,7 +9,7 @@ class Visitor():
     main.mainInner.accept(self)
     print('?>')
   
-  def visitMain_MainInner_Empty(self, main):
+  def visitMain_MainInner_Empty(self):
     print('<?php', end=' ')
     print('?>', end=' ')
     
@@ -51,7 +52,7 @@ class Visitor():
     fds_parameter.parameter_list.accept(self)
     print(')', end='')
     
-  def visitFds_parameter_noParameter(self, fds_parameter):
+  def visitFds_parameter_noParameter(self):
     print('(', end='')
     print(')', end='')
     
@@ -63,7 +64,7 @@ class Visitor():
     pp.printTab()
     print('}')
     
-  def visitFds_statements_noStatements(self, fds_statements):
+  def visitFds_statements_noStatements(self):
     print('{')
     pp.printTab()
     print('}')
