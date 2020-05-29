@@ -190,7 +190,7 @@ class AbstractVisitor(metaclass = ABCMeta):
   @abstractmethod
   def visitAssignOperator_Token(self, assignOp):
     pass
-  
+
   '''
   
   @abstractmethod
