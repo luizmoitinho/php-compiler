@@ -212,7 +212,7 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
 
   @abstractmethod
-  def visitStatement_While(sefl, statement):
+  def visitStatement_While(self, statement):
     pass
 
   @abstractmethod
