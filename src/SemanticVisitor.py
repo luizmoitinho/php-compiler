@@ -56,15 +56,18 @@ class SemanticVisitor(AbstractVisitor):
     statementMul.statement.accept(self)
 
   def visitstatementMulMul(self, statementMul):
+    st.beginScope('while')
     statementMul.statement.accept(self)
     statementMul.statementMul.accept(self)
-
+    st.endScope()
+    
   def visitStatement_While(self, statement):
     statement.whilee.accept(self)
 
   def visitWhileStatementSingle(self, whileStatement):
-    whileStatement.exprparentheses.accept(self)
+    exprBool = whileStatement.exprparentheses.accept(self)
     whileStatement.statement.accept(self)
+    st.beginScope
 
   def visitFuncDecStatement_Function(self, funcDecStatement):
     funcId = funcDecStatement.fds_id.accept(self)
