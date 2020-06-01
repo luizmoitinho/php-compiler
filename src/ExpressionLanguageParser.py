@@ -3,7 +3,7 @@ import ply.lex as lex
 import SemanticVisitor as sv
 from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
-
+import Visitor as vis
 precedence = (
   ('left', 'PLUS', 'MINUS'),
   ('left', 'TIMES', 'DIVIDE'),
@@ -243,7 +243,6 @@ def p_statement_elseif(p):
   '''
   statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT statement_elseif
    | ELSEIF expr_parentheses statement_BLOCK_OPT
-   |
   '''
   if len(p) == 5:
     p[0] = sa.StatementElseIf_Mul(p[2],p[3],p[4])
@@ -525,12 +524,8 @@ def p_scalar(p):
 def p_variable(p):
   '''
   variable : reference_variable
-    | simple_indirect_reference_DOLAR reference_variable
   '''
-  if len(p) == 2:
-    p[0] = sa.Variable_Reference_Variable(p[1])
-  else :
-    p[0] = sa.Variable_Simple_Indirect(p[1], p[2])
+  p[0] = sa.Variable_Reference_Variable(p[1])
   
 def p_reference_variable(p):
   '''
@@ -544,13 +539,9 @@ def p_reference_variable(p):
   
 def p_compound_variable(p):
   '''
-  compound_variable : VARIABLE 
-    | DOLAR LKEY expr RKEY 
+  compound_variable : VARIABLE
   '''
-  if len(p) == 5:
-    p[0] = sa.CompoundVariableMul(p[3])
-  else:
-    p[0] = sa.CompoundVariableSingle(p[1])
+  p[0] = sa.CompoundVariableSingle(p[1])
 
 def p_selector(p):
   '''
@@ -775,18 +766,33 @@ lex.lex()
 arquivo = '''
 <?php
   $x=1;
-  function soma(){
-    $x= 1 + 1 + true;
+  if(true){
+    $x=10;
   }
+  if(true){
+    $x=10;
+  }
+  if(true){
+    $x=10;
+  }
+  elseif(true){
+    $x=11;
+  }
+  elseif(true){
+    $x=11;
+  }
+  else{
+    $x=11;
+  }
+
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=False)
-
-visitor = sv.SemanticVisitor()
+result = parser.parse(debug=True)
+#visitor = sv.SemanticVisitor()
 #v = vis.Visitor()
 #for r in result:
 
-result.accept(visitor)
+#result.accept(v)
