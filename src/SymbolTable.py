@@ -21,18 +21,21 @@ def beginScope(nameScope):
   global symbolTable
   symbolTable.append({})
   symbolTable[-1][SCOPE] = nameScope
-  print(symbolTable[-1][SCOPE], '- Create scope:', nameScope)
+  #print(symbolTable[-1][SCOPE], '- Create scope:', nameScope)
+  
 
 def endScope():
   global symbolTable
-  print(symbolTable[-2][SCOPE], '- End scope:', symbolTable[-1][SCOPE ])
+  #print(symbolTable[-2][SCOPE], '- End scope:', symbolTable[-1][SCOPE ])
   symbolTable = symbolTable[0:-1]
 
 def addVar(name, type = None):
   global symbolTable
   symbolTable[-1][name] = {BINDABLE: VARIABLE, TYPE: type}
   print(symbolTable[-1][SCOPE], '- Create variable', name, 'with type', type)
+  printTable()
   return { NAME: name, TYPE: type }
+  
 
 def updateBindableType(name, type):
   global symbolTable
