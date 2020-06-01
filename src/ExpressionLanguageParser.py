@@ -774,10 +774,13 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-   while(true){
-     $x=1;
-     $x++;
-   }
+  while(true){
+    $x=10;
+    while(true){
+      $x=10.5;
+      $y=10;
+    }
+  }
 ?>
 '''
 
@@ -788,4 +791,5 @@ result = parser.parse(debug=False)
 visitor = sv.SemanticVisitor()
 #v = vis.Visitor()
 #for r in result:
+
 result.accept(visitor)
