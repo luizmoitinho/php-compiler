@@ -107,7 +107,6 @@ class SemanticVisitor(AbstractVisitor):
     return parameterListColonParameter.parameter.accept(self)
     
   def visitParameter_Var(self, parameter):
-    print(parameter.variable)
     return [parameter.variable]
   
   def visitFds_statements_withStatements(self, fds_statements):
@@ -140,24 +139,25 @@ class SemanticVisitor(AbstractVisitor):
       if type1[st.TYPE] == None:
         print('ERROR: The value of', type1[st.NAME], 'is undefined.')
       type1 = type1[st.TYPE]
-      
-    if type2 != None and st.TYPE in type2:
-      if type2[st.TYPE] == None:
-        print('ERROR: The value of', type2[st.NAME], 'is undefined.')
-      type2 = type2[st.TYPE]
   
-    c = coercion(type1, type2)
+    c = coercion(type1, type2[1])
     if (c == None):
       print('ERROR: Expression ', end='')
       expr.expr1.accept(self.printer)
       print(' has type', type1, 'while expression "', end='')
-      expr.expr2.accept(self.printer)
-      print(' " has type', type2)
+      expr.expr2.expr.accept(self.printer)
+      print('" has type', type2[1])
     return c
     
   def visitExpr2_ArithmeticOp(self, expr2):
-    expr2.arithmeticOp.accept(self)
-    return expr2.expr.accept(self)
+    exprType = expr2.expr.accept(self)
+    
+    if st.TYPE in exprType and exprType != None:
+      if exprType[st.TYPE] == None:
+        print('ERROR: The value of', type2[st.NAME], 'is undefined.')
+      exprType = exprType[st.TYPE]
+    
+    return [st.ARITH, exprType]
   
   def visitExpr3_Var_Assign_Expr(self, expr3):
     bindable = expr3.variable.accept(self)
@@ -167,21 +167,16 @@ class SemanticVisitor(AbstractVisitor):
     if assignOp == '=':
       if exprType != None:
         if st.TYPE in exprType:
-          st.updateBindableType(bindable[st.NAME], exprType[st.TYPE])
+          st.addVar(bindable[st.NAME], exprType[st.TYPE])
         else:
-          st.updateBindableType(bindable[st.NAME], exprType)
+          st.addVar(bindable[st.NAME], exprType)
       else:
-        st.updateBindableType(bindable[st.NAME], None)
+        print('ERROR: Atribution to variable ', end='')
+        expr3.variable.accept(self.printer)
+        print(' returned type', bindable[st.TYPE])
     elif bindable[st.TYPE] == None:
         print('ERROR: Invalid atribution', assignOp, 'on variable', bindable[st.NAME], 'that has type', bindable[st.TYPE]) 
-    else:
-      if exprType != None:
-        if st.TYPE in exprType:
-          st.updateBindableType(bindable[st.NAME], exprType[st.TYPE])
-        else:
-          st.updateBindableType(bindable[st.NAME], exprType)
-      else:
-        st.updateBindableType(bindable[st.NAME], None)
+
     
   def visitExpr1_Variable(self, expr1):
     return expr1.variable.accept(self) 

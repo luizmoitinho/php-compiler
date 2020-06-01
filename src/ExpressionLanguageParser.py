@@ -774,12 +774,9 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  while(true){
-    $x=10;
-    while(true){
-      $x=10.5;
-      $y=10;
-    }
+  $x=1;
+  function soma(){
+    $x= 1 + 1 + true;
   }
 ?>
 '''

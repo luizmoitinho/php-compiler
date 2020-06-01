@@ -92,8 +92,8 @@ tokens = [
 ] + list(reserved.values())
 
 t_ignore = ' \t'
-t_COMMENT_SINGLE = r'\//.* | \#.*'
-t_COMMENT_MULTI = r'\/\*(.|\n)*\*\/'
+t_ignore_COMMENT_SINGLE = r'\//.* | \#.*'
+t_ignore_COMMENT_MULTI = r'\/\*(.|\n)*\*\/'
 t_BEGIN_PROGRAM = r'\<\?php'
 t_END_PROGRAM =  r'\?\>'
 t_DOLAR =  r'\$'
