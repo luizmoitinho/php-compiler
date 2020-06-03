@@ -765,34 +765,18 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  $x=1;
-  if(true){
-    $x=10;
-  }
-  if(true){
-    $x=10;
-  }
-  if(true){
-    $x=10;
-  }
-  elseif(true){
-    $x=11;
-  }
-  elseif(true){
-    $x=11;
-  }
-  else{
-    $x=11;
-  }
-
+  do{
+    while(true){
+      $valor = 10;
+    }
+  }while(true);
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=True)
-#visitor = sv.SemanticVisitor()
+result = parser.parse(debug=False)
+visitor = sv.SemanticVisitor()
 #v = vis.Visitor()
 #for r in result:
-
-#result.accept(v)
+result.accept(visitor)

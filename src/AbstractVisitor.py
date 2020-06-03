@@ -219,6 +219,14 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitWhileStatementSingle(self, whileStatement):
     pass
 
+  @abstractmethod
+  def visitStatement_Do_While(self, whilestatement):
+    pass
+
+  @abstractmethod
+  def visitDoWhileStatementSingle(self, whilestatement):
+    pass
+
   '''
   
   @abstractmethod
@@ -610,20 +618,9 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitStatementBlockOpt_StatementMul():
-    pass
-  
-  @abstractmethod
   def visitStatementBlockOpt_Empty():
     pass
   
-  @abstractmethod
-  def visitstatementMulSingle():
-    pass
-  
-  @abstractmethod
-  def visitstatementMulMul():
-    pass
   
   @abstractmethod
   def visitDoWhileStatementSingle():
