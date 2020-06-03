@@ -267,7 +267,15 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitAssignOperator_Token(self, assignOp):
     return assignOp.token
-  
+
   def visitArithmeticOperator_Token(self, arithmeticOp):
     return arithmeticOp.token
 
+  def visitStatement_Do_While(self, statement):
+    statement.dowhilee.accept(self)
+  
+  def visitDoWhileStatementSingle(self, whilestatement):
+    st.beginScope('dowhile')
+    whilestatement.statementblockopt.accept(self)
+    exprBool = whilestatement.exprparentheses.accept(self)
+    st.endScope()
