@@ -240,8 +240,7 @@ class Visitor(AbstractVisitor):
     print('elseif',end='')
     statementElseIfSingle.expr_parentheses.accept(self)
     statementElseIfSingle.statement_BLOCK_OPT.accept(self)
-
-
+    
   def visitStatementElse_Single(self, statementElse):
     pp.printTab()
     print('else',end='')
@@ -682,7 +681,7 @@ class Visitor(AbstractVisitor):
   
   def visitstatementMulMul(self, statementMul):
       statementMul.statement.accept(self)
-      statementMul.statementmul.accept(self)
+      statementMul.statementMul.accept(self)
   
   def visitDoWhileStatementSingle(self, whilestatement):
       print('do', end='')

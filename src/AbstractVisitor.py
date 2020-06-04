@@ -30,7 +30,7 @@ class AbstractVisitor(metaclass = ABCMeta):
   @abstractmethod
   def visitFuncDecStatement_Function(self, funcDecStatement):
     pass
-  
+
   @abstractmethod
   def visitFds_id_withAmpersand(self, fds_id):
     pass
@@ -223,9 +223,162 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitArrayPairListArr_Single(self, arrayPairList):
     pass
   
+  @abstractmethod
+  def visitStatementBlockOpt_Statement(self, statementBlockOpt):
+    pass
+
+  @abstractmethod
+  def visitStatementBlockOpt_StatementMul(self, statementBlockOpt):
+    pass
+
+  @abstractmethod
+  def visitstatementMulSingle(self, statementMul):
+    pass
   
-  '''
+  @abstractmethod
+  def visitstatementMulMul(self, statementMul):
+    pass
+
+  @abstractmethod
+  def visitExprParentheses_Expr(self, exprParentheses):
+    pass
+
+  @abstractmethod
+  def visitStatement_While(self, statement):
+    pass
+
+  @abstractmethod
+  def visitWhileStatementSingle(self, whileStatement):
+    pass
+
+  @abstractmethod
+  def visitStatement_Do_While(self, whilestatement):
+    pass
+
+  @abstractmethod
+  def visitDoWhileStatementSingle(self, whilestatement):
+    pass
+
+  @abstractmethod 
+  def visitStatement_If(self, statementIf):
+    pass
+    
+  @abstractmethod
+  def visitIfStatement_statement_if(self, ifStatement):
+    pass
+
+  @abstractmethod
+  def visitStatementElseIf_Mul(self, ifMul):
+    pass
+
+  @abstractmethod
+  def visitStatementIf_Mul(self, ifMul):
+    pass
+
+  @abstractmethod
+  def visitStatementIf_Single(self, ifSingle):
+    pass
   
+  @abstractmethod
+  def visitIfStatement_Else(self, IfStatementElse):
+    pass
+  
+  @abstractmethod
+  def visitStatementElse_Single(self, statementElse):
+    pass
+
+  @abstractmethod
+  def visitIfStatement_StatementIf_Elseif(self, statementIfElseif):
+    pass
+
+  @abstractmethod
+  def visitStatementElseIf_Mul(self, statementElseIf):
+    pass
+
+  @abstractmethod
+  def visitStatementElseIf_Single(self, StatementElseIf):
+    pass
+  
+  @abstractmethod
+  def visitIfStatement_Stm_If_Elseif_Else(self, ifConditional):
+    pass
+
+  @abstractmethod
+  def visitStatement_For(self, statement):
+    pass
+  
+  @abstractmethod
+  def visitForStatement_For(self, forStatement):
+    pass
+  
+  @abstractmethod
+  def visitForParameters_Empty(self):
+    pass
+  @abstractmethod
+  def visitForParameters_Left(self, forParameters):
+    pass
+  
+  @abstractmethod
+  def visitForParameters_Left_Mid(self, forParameters):
+    pass
+
+  @abstractmethod 
+  def visitForParameters_Left_Right(self, forParameters):
+    pass
+  
+  @abstractmethod
+  def visitForParameters_Mid(self, forParameters):
+    pass
+
+  @abstractmethod 
+  def visitForParameters_Mid_Right(self, forParameters):
+    pass
+    
+  @abstractmethod
+  def visitForParameters_Right(self, forParameters):
+    pass
+
+  @abstractmethod 
+  def visitForParameters_Full(self, forParameters):
+    pass
+
+  @abstractmethod 
+  def visitForExprOpt_Mul(self, forExprOpt):
+    pass
+
+  @abstractmethod 
+  def visitForExprOpt_Single(self, forExprOpt):
+    pass
+
+  @abstractmethod 
+  def visitForExprColonExpr_Single(self, forExprColonExpr):
+    pass
+
+  @abstractmethod 
+  def visitForExprColonExpr_Mul(self, forExprColonExpr):
+    pass
+
+  @abstractmethod
+  def visitStatement_Exit(self, statement):
+    pass
+
+  @abstractmethod
+  def visitExit_ExitExpr(self, _exit):
+    pass
+
+  @abstractmethod
+  def visitExit_Empty(self):
+    pass
+  
+  @abstractmethod
+  def visitExitExpr_Expr(self, exitExpr):
+    pass
+
+  @abstractmethod
+  def visitExitExpr_Empty(self):
+    pass
+
+  '''  
   @abstractmethod
   def visitStatementBlockOpt_ParenEmpty():
     pass
@@ -287,23 +440,7 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitStatement_If():
-    pass
-  
-  @abstractmethod
   def visitStatementElse_Else():
-    pass
-  
-  @abstractmethod
-  def visitStatement_Exit():
-    pass
-  
-  @abstractmethod
-  def visitStatement_While():
-    pass
-  
-  @abstractmethod
-  def visitStatement_Do_While():
     pass
   
   @abstractmethod
@@ -316,10 +453,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitStatement_Global():
-    pass
-  
-  @abstractmethod
-  def visitStatement_For():
     pass
   
   @abstractmethod
@@ -423,62 +556,6 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitForStatement_For():
-    pass
-  
-  @abstractmethod
-  def visitForParameters_Empty():
-    pass
-  
-  @abstractmethod
-  def visitForParameters_Left():
-    pass
-  
-  @abstractmethod
-  def visitForParameters_Left_Mid():
-    pass
-  
-  @abstractmethod
-  def visitForParameters_Left_Right():
-    pass
-  
-  @abstractmethod
-  def visitForParameters_Mid():
-    pass
-  
-  @abstractmethod
-  def visitForParameters_Mid_Right():
-    pass
-  
-  @abstractmethod
-  def visitForParameters_Right():
-    pass
-  
-  @abstractmethod
-  def visitForParameters_Full():
-    pass
-  
-  @abstractmethod
-  def visitForExprOpt_Single():
-    pass
-  
-  @abstractmethod
-  def visitForExprOpt_Mul():
-    pass
-  
-  @abstractmethod
-  def visitForExprColonExpr_Single():
-    pass
-  
-  @abstractmethod
-  def visitForExprColonExpr_Mul():
-    pass
-  
-  @abstractmethod
-  def visitGlobalStatement_Single():
-    pass
-  
-  @abstractmethod
   def visitGlobalStatement_Mul():
     pass
   
@@ -501,29 +578,9 @@ class AbstractVisitor(metaclass = ABCMeta):
   @abstractmethod
   def visitGlobalVarMul_Mul():
     pass
-  
-  @abstractmethod
-  def visitExit_ExitExpr():
-    pass
-  
-  @abstractmethod
-  def visitExit_Empty():
-    pass
-  
-  @abstractmethod
-  def visitDie_ExitExpr():
-    pass
-  
+   
   @abstractmethod
   def visitDie_Empty():
-    pass
-  
-  @abstractmethod
-  def visitExitExpr_Expr():
-    pass
-  
-  @abstractmethod
-  def visitExitExpr_Empty():
     pass
   
   @abstractmethod
@@ -583,23 +640,7 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitStatementBlockOpt_StatementMul():
-    pass
-  
-  @abstractmethod
   def visitStatementBlockOpt_Empty():
     pass
-  
-  @abstractmethod
-  def visitstatementMulSingle():
-    pass
-  
-  @abstractmethod
-  def visitstatementMulMul():
-    pass
-  
-  @abstractmethod
-  def visitDoWhileStatementSingle():
-    pass
-    
+   
 '''

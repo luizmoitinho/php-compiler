@@ -18,7 +18,6 @@ class Main_MainInner(Main):
 class Main_MainInner_Empty(Main):
   def accept(self, Visitor):
     return Visitor.visitMain_MainInner_Empty(self)
-    
 
 #MAIN_INNER ABSTRATA E CONCRETAS  
 class MainInner(metaclass=ABCMeta):
@@ -210,14 +209,14 @@ class IfStatement_statement_if(IfStatement):
   def __init__(self, statement_if):
     self.statement_if = statement_if
   def accept(self, Visitor):
-    Visitor.visitIfStatement_statement_if(self)
+    return Visitor.visitIfStatement_statement_if(self)
 
 class IfStatement_statementIf_Else(IfStatement):
   def __init__(self, statement_if, statement_else):
     self.statement_if =  statement_if
     self.statement_else =  statement_else
   def accept(self, Visitor):
-    return Visitor.visitIfStatemnet_Else(self)
+    return Visitor.visitIfStatement_Else(self)
 
 
 class IfStatement_StatementIf_Elseif(IfStatement):
@@ -225,30 +224,23 @@ class IfStatement_StatementIf_Elseif(IfStatement):
     self.statement_if = statement_if
     self.statement_elseif = statement_elseif
   def accept(self, Visitor):
-    Visitor.visitIfStatement_StatementIf_Elseif(self)
+    return Visitor.visitIfStatement_StatementIf_Elseif(self)
 
 class IfStatement_StmIf_Elseif_Else(IfStatement):
   def __init__(self,statement_if,statement_elseif,statement_else):
     self.statement_if = statement_if 
     self.statement_elseif = statement_elseif
     self.statement_else =  statement_else
-
   def accept(self, Visitor):
-    return Visitor.visitStatementElse_Else(self)
-    
-class IfStatement(metaclass=ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      Visitor.visitIfStatement_Stm_If_Elseif_Else(self)
+    return Visitor.visitIfStatement_Stm_If_Elseif_Else(self)
 
 class StatementIf_Mul(IfStatement):
   def __init__(self, expr_parentheses,statement_BLOCK_OPT,statement_if):
     self.expr_parentheses = expr_parentheses
     self.statement_BLOCK_OPT=statement_BLOCK_OPT
     self.statement_if = statement_if
-
   def accept(self,Visitor):
-    return Visitor.visitIfStatement_Complement(self)
+    return Visitor.visitStatementIf_Mul(self)
 
 class StatementIf_Single(IfStatement):
   def __init__(self, expr_parentheses,statement_BLOCK_OPT):
@@ -273,7 +265,7 @@ class StatementElseIf_Mul(StatementElseIf):
     self.statement_BLOCK_OPT = statement_BLOCK_OPT
     self.statement_elseif =  statement_elseif
   def accept(self, Visitor):
-    Visitor.visitStatementElseIf_Mul(self)
+    return Visitor.visitStatementElseIf_Mul(self)
 
 class StatementElseIf_Single(StatementElseIf):
   def __init__(self, expr_parentheses,statement_BLOCK_OPT):
@@ -281,7 +273,7 @@ class StatementElseIf_Single(StatementElseIf):
     self.statement_BLOCK_OPT = statement_BLOCK_OPT
 
   def accept(self, Visitor):
-    Visitor.visitStatementElseIf_Single(self)
+    return Visitor.visitStatementElseIf_Single(self)
 
 
 class StatementElse(metaclass =  ABCMeta):
@@ -294,9 +286,7 @@ class StatementElse_Single(StatementElse):
     self.statement_BLOCK_OPT = statement_BLOCK_OPT
 
   def accept(self,Visitor):
-    return Visitor.visitStatementIf_ExprParen(self)
-
-
+    return Visitor.visitStatementElse_Single(self)
 
 class funcDecStatement_Function(FuncDecStatement):
   def __init__(self, fds_id, fds_parameter, fds_statements):
@@ -1267,9 +1257,9 @@ class StatementBlockOpt_Empty(StatementBlockOpt):
     return Visitor.visitStatementBlockOpt_Empty(self)
 
 class statementMulMul(StatementMul):
-  def __init__(self, statement, statementmul):
+  def __init__(self, statement, statementMul):
     self.statement = statement
-    self.statementmul = statementmul
+    self.statementMul = statementMul
   def accept(self, Visitor):
     return Visitor.visitstatementMulMul(self)
   

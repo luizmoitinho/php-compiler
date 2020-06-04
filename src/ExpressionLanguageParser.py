@@ -3,7 +3,7 @@ import ply.lex as lex
 import SemanticVisitor as sv
 from ExpressionLanguageLex import *
 import SintaxeAbstrata as sa
-
+import Visitor as vis
 precedence = (
   ('left', 'PLUS', 'MINUS'),
   ('left', 'TIMES', 'DIVIDE'),
@@ -243,7 +243,6 @@ def p_statement_elseif(p):
   '''
   statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT statement_elseif
    | ELSEIF expr_parentheses statement_BLOCK_OPT
-   |
   '''
   if len(p) == 5:
     p[0] = sa.StatementElseIf_Mul(p[2],p[3],p[4])
@@ -385,7 +384,6 @@ def p_expr_parentheses(p):
   '''
   if len(p)==4:
     p[0] = sa.ExprParentheses_Expr(p[2])
-
 
 def p_foreach_statement(p):
   '''
@@ -540,13 +538,9 @@ def p_reference_variable(p):
   
 def p_compound_variable(p):
   '''
-  compound_variable : VARIABLE 
-    | DOLAR LKEY expr RKEY 
+  compound_variable : VARIABLE
   '''
-  if len(p) == 5:
-    p[0] = sa.CompoundVariableMul(p[3])
-  else:
-    p[0] = sa.CompoundVariableSingle(p[1])
+  p[0] = sa.CompoundVariableSingle(p[1])
 
 def p_selector(p):
   '''
@@ -769,7 +763,6 @@ arquivo = '''
 lex.input(arquivo)
 parser = yacc.yacc()
 result = parser.parse(debug=False)
-
 visitor = sv.SemanticVisitor()
 #v = vis.Visitor()
 #for r in result:
