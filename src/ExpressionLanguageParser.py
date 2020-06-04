@@ -734,17 +734,6 @@ def p_reference_variable_SELECTOR(p):
   else :
     p[0] = sa.ReferenceVariableSelectorSingle(p[1])
 
-def p_simple_indirect_reference_DOLAR(p):
-  '''
-  simple_indirect_reference_DOLAR : DOLAR simple_indirect_reference_DOLAR
-    | DOLAR
-  '''
-  if len(p) == 3:
-    p[0] = sa.SimpleIndirectReference_Mul(p[2])
-  else:
-    p[0] = sa.SimpleIndirectReference_Single()
-  
-
 def p_array_pair_list_ARR_PAIR(p):
   '''
   array_pair_list_ARR_PAIR : COLON array_pair array_pair_list_ARR_PAIR
@@ -764,10 +753,13 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
- if(true){
-   $x=120;
- }
- 
+  $valor = 1;
+  function add(){
+    $valor1 = array('1', '2', '3');
+  }
+?>
+'''
+
 lex.input(arquivo)
 parser = yacc.yacc()
 result = parser.parse(debug=False)

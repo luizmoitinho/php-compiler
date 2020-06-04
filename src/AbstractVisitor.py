@@ -128,6 +128,10 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
+  def visitExpr1_ArrayDeclaration(self, expr1):
+    pass
+  
+  @abstractmethod
   def visitExpr1_True(self, expr1):
     pass
   
@@ -190,7 +194,35 @@ class AbstractVisitor(metaclass = ABCMeta):
   @abstractmethod
   def visitAssignOperator_Token(self, assignOp):
     pass
-
+  
+  @abstractmethod
+  def visitArrayDec_NoPairList(self, arrayDec):
+    pass
+  
+  @abstractmethod
+  def visitArrayDec_WithPairList(self, arrayDec):
+    pass
+  
+  @abstractmethod
+  def visitArrayPairList_ArrayPair_Single(self, arrayPairList):
+    pass
+  
+  @abstractmethod
+  def visitArrayPairList_ArrayPair_Mul(self, arrayPairList):
+    pass
+  
+  @abstractmethod
+  def visitArrayPair_Expr(self, arrayPair):
+    pass
+  
+  @abstractmethod
+  def visitArrayPairList_Mul(self, arrayPairList):
+    pass
+  
+  @abstractmethod
+  def visitArrayPairListArr_Single(self, arrayPairList):
+    pass
+  
   @abstractmethod
   def visitStatementBlockOpt_Statement(self, statementBlockOpt):
     pass
@@ -485,38 +517,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitExpr1_ExprPar():
-    pass
-  
-  @abstractmethod
-  def visitExpr1_ArrayDeclaration():
-    pass
-  
-  @abstractmethod
-  def visitArrayDec_WithPairList():
-    pass
-  
-  @abstractmethod
-  def visitArrayDec_NoPairList():
-    pass
-  
-  @abstractmethod
-  def visitArrayPair_Expr():
-    pass
-  
-  @abstractmethod
-  def visitArrayPairList_Mul():
-    pass
-  
-  @abstractmethod
-  def visitArrayPairListArr_Single():
-    pass
-  
-  @abstractmethod
-  def visitArrayPairList_ArrayPair_Mul():
-    pass
-  
-  @abstractmethod
-  def visitArrayPairList_ArrayPair_Single():
     pass
   
   @abstractmethod

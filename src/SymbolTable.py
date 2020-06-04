@@ -1,19 +1,21 @@
 symbolTable = []
+INT = 'int'
+FLOAT = 'float'
+BOOL = 'boolean'
+STRING = 'string'
+ARRAY = 'array'
 
-INT     = 'int'
-FLOAT   = 'float'
-BOOL    = 'boolean'
-STRING  = 'string'
-ARRAY   = 'array'
-
-SCOPE    = 'scope'
+SCOPE = 'scope'
+BINDABLE = 'bindable'
 FUNCTION = 'function'
-PARAMS   = 'params'
-VARIABLE = 'var'
+PARAMS = 'params'
 
-TYPE      = 'type'
-NAME      = 'name' 
-BINDABLE  = 'bindable'
+VARIABLE = 'var'
+TYPE = 'type'
+NAME = 'name' 
+
+COMP = 'compOp'
+ARITH = 'arithOp'
 
 COMP = 'compOp'
 ARITH = 'arithOp'
