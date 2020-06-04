@@ -59,6 +59,49 @@ class SemanticVisitor(AbstractVisitor):
     statementMul.statement.accept(self)
     statementMul.statementMul.accept(self)
     
+  def visitStatement_If(self, statementIf):
+    statementIf._if.accept(self)
+  
+  def visitIfStatement_statement_if(self, ifStatement):
+    ifStatement.statement_if.accept(self)
+  
+  def visitStatementIf_Mul(self, statementIfMul):
+    statementIfMul.expr_parentheses.accept(self)
+    statementIfMul.statement_BLOCK_OPT.accept(self)
+    statementIfMul.statement_if.accept(self)
+
+  def visitStatementIf_Single(self, ifSingle):
+    ifSingle.expr_parentheses.accept(self)
+    ifSingle.statement_BLOCK_OPT.accept(self)
+
+  def visitIfStatement_Else(self, IfStatementElse):
+    IfStatementElse.statement_if.accept(self)
+    IfStatementElse.statement_else.accept(self)
+  
+  def visitStatementElse_Single(self, statementElse):
+    statementElse.statement_BLOCK_OPT.accept(self)
+
+  def visitIfStatement_StatementIf_Elseif(self,statementIfElseif):
+    statementIfElseif.statement_if.accept(self)
+    statementIfElseif.statement_elseif.accept(self)
+  
+  def visitStatementElseIf_Mul(self, statementElseIf):
+    statementElseIf.expr_parentheses.accept(self)
+    statementElseIf.statement_BLOCK_OPT.accept(self)
+    statementElseIf.statement_elseif.accept(self)
+
+  def visitIfStatement_Stm_If_Elseif_Else(self, ifConditional):
+    ifConditional.statement_if.accept(self)
+    ifConditional.statement_elseif.accept(self)
+    ifConditional.statement_else.accept(self)
+
+  def visitStatementElseIf_Single(self, StatementElseIf):
+    StatementElseIf.expr_parentheses.accept(self)
+    StatementElseIf.statement_BLOCK_OPT.accept(self)
+
+  def visitIfStatement_statement_if(self, ifStatement):
+    ifStatement.statement_if.accept(self)
+
   def visitStatement_While(self, statement):
     statement.whilee.accept(self)
 
@@ -264,7 +307,7 @@ class SemanticVisitor(AbstractVisitor):
       return st.FLOAT
     elif isinstance(scalar.token, str):
       return st.STRING
-    
+    Fs
   def visitAssignOperator_Token(self, assignOp):
     return assignOp.token
 
@@ -279,3 +322,72 @@ class SemanticVisitor(AbstractVisitor):
     whilestatement.statementblockopt.accept(self)
     exprBool = whilestatement.exprparentheses.accept(self)
     st.endScope()
+
+  def visitStatement_For(self, statement):
+    statement._for.accept(self)
+  
+  def visitForStatement_For(self, forStatement):
+    st.beginScope('loopfor')
+    forStatement.forParameters.accept(self)
+    forStatement.statementBlock.accept(self)
+    st.endScope()
+  
+  def visitForParameters_Empty(self):
+    return
+  
+  def visitForParameters_Left(self, forParameters):
+    Atribuicao = forParameters.forExprLeft.accept(self)
+     
+  def visitForParameters_Left_Mid(self, forParameters):
+    Atribuicao = forParameters.forExprLeft.accept(self)
+    Condicao = forParameters.forExprMid.accept(self)
+        
+  def visitForParameters_Left_Right(self, forParameters):
+    Atribuicao = forParameters.forExprLeft.accept(self)
+    Incremento = forParameters.forExprRight.accept(self)
+  
+  def visitForParameters_Mid(self, forParameters):
+    Condicao = forParameters.forExprMid.accept(self)
+    
+  def visitForParameters_Mid_Right(self, forParameters):
+    Condicao = forParameters.forExprMid.accept(self)
+    Incremento = forParameters.forExprRight.accept(self)
+    
+  def visitForParameters_Right(self, forParameters):
+    Incremento = forParameters.forExprRight.accept(self)
+    
+  def visitForParameters_Full(self, forParameters):   
+    Atribuicao = forParameters.forExprLeft.accept(self)
+    Condicao = forParameters.forExprMid.accept(self)
+    Incremento = forParameters.forExprRight.accept(self)
+    
+  def visitForExprOpt_Mul(self, forExprOpt):
+    forExprOpt.forExprOpt.accept(self)
+    return forExprOpt.expr.accept(self)
+  
+  def visitForExprOpt_Single(self, forExprOpt):
+    return forExprOpt.expr.accept(self)
+  
+  def visitForExprColonExpr_Single(self, forExprColonExpr):
+    return forExprColonExpr.expr.accept(self)
+        
+  def visitForExprColonExpr_Mul(self, forExprColonExpr):
+    forExprColonExpr.forExprColonExpr.accept(self)
+    return forExprColonExpr.expr.accept(self)
+  
+  def visitStatement_Exit(self, statement):
+    statement.exit.accept(self)
+  
+  def visitExit_ExitExpr(self, _exit):
+    _exit.exitExpr.accept(self)
+  
+  def visitExit_Empty(self):
+    return
+  
+  def visitExitExpr_Expr(self, exitExpr):
+    exitExpr.expr.accept(self)
+  
+  def visitExitExpr_Empty(self):
+    return
+
+    
