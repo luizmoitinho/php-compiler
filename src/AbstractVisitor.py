@@ -12,7 +12,7 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitMainInner_InnerStatement_MainInner():
+  def visitMainInner_InnerStatement_MainInner(self):
     pass
   
   @abstractmethod
@@ -268,11 +268,11 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
 
   @abstractmethod
-  def visitStatementElseIf_Mul(self, ifMul):
+  def visitStatementElseIf_Mul(self, statementElseIfMul):
     pass
 
   @abstractmethod
-  def visitStatementIf_Mul(self, ifMul):
+  def visitStatementIf_Mul(self, statementIfMul):
     pass
 
   @abstractmethod
@@ -289,10 +289,6 @@ class AbstractVisitor(metaclass = ABCMeta):
 
   @abstractmethod
   def visitIfStatement_StatementIf_Elseif(self, statementIfElseif):
-    pass
-
-  @abstractmethod
-  def visitStatementElseIf_Mul(self, statementElseIf):
     pass
 
   @abstractmethod
@@ -378,6 +374,18 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitExitExpr_Empty(self):
     pass
 
+  @abstractmethod
+  def visitStatement_Break(self, statement):
+    pass
+
+  @abstractmethod
+  def visitBreak_Expr(self, _break):
+    pass
+  
+  @abstractmethod
+  def visitBreak_Empty(self):
+    pass
+
   '''  
   @abstractmethod
   def visitStatementBlockOpt_ParenEmpty():
@@ -425,10 +433,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitCommonScalar_Token():
-    pass
-  
-  @abstractmethod
-  def visitStatement_Break():
     pass
   
   @abstractmethod
@@ -581,14 +585,6 @@ class AbstractVisitor(metaclass = ABCMeta):
    
   @abstractmethod
   def visitDie_Empty():
-    pass
-  
-  @abstractmethod
-  def visitBreak_Expr():
-    pass
-  
-  @abstractmethod
-  def visitBreak_Empty():
     pass
   
   @abstractmethod

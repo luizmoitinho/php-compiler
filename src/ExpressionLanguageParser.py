@@ -754,8 +754,15 @@ lex.lex()
 arquivo = '''
 <?php
   $valor = 1;
-  function add(){
-    $valor1 = array('1', '2', '3');
+  if(true){
+    $valor = 1;
+  }
+  elseif(true){
+    $valor = 1;
+  }
+  else{
+    $valor = 1;
+    break;
   }
 ?>
 '''
