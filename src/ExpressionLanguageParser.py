@@ -385,7 +385,6 @@ def p_expr_parentheses(p):
   if len(p)==4:
     p[0] = sa.ExprParentheses_Expr(p[2])
 
-
 def p_foreach_statement(p):
   '''
   foreach_statement : FOREACH LPAREN expr AS ampersand_variable RPAREN statement_BLOCK_OPT
@@ -765,14 +764,10 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  do{
-    while(true){
-      $valor = 10;
-    }
-  }while(true);
-?>
-'''
-
+ if(true){
+   $x=120;
+ }
+ 
 lex.input(arquivo)
 parser = yacc.yacc()
 result = parser.parse(debug=False)
