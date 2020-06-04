@@ -78,7 +78,6 @@ class SemanticVisitor(AbstractVisitor):
     return parameterListColonParameter.parameter.accept(self)
     
   def visitParameter_Var(self, parameter):
-    print(parameter.variable)
     return [parameter.variable]
   
   def visitFds_statements_withStatements(self, fds_statements):
@@ -106,54 +105,49 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr_Expr1_Expr2(self, expr):
     type1 = expr.expr1.accept(self)
     type2 = expr.expr2.accept(self)
-    #verificar se os tipo da expressão é uma variável, para acessar o tipo dela
-    if type1 != None and st.TYPE in type1:
-      if type1[st.TYPE] == None:
-        print('ERROR: The value of', type1[st.NAME], 'is undefined.')
+    if type(type1) is dict:
       type1 = type1[st.TYPE]
-      
-    if type2 != None and st.TYPE in type2:
-      if type2[st.TYPE] == None:
-        print('ERROR: The value of', type2[st.NAME], 'is undefined.')
-      type2 = type2[st.TYPE]
-  
-    c = coercion(type1, type2)
+    
+    c = coercion(type1, type2[1])
     if (c == None):
       print('ERROR: Expression ', end='')
       expr.expr1.accept(self.printer)
-      print(' has type', type1, 'while expression "', end='')
-      expr.expr2.accept(self.printer)
-      print(' " has type', type2)
+      print(' has type', type1, 'while expression ', end='')
+      expr.expr2.expr.accept(self.printer)
+      print(' has type', type2[1])
     return c
-    
-  def visitExpr2_ArithmeticOp(self, expr2):
-    expr2.arithmeticOp.accept(self)
-    return expr2.expr.accept(self)
   
-  def visitExpr3_Var_Assign_Expr(self, expr3):
+  def visitExpr2_ArithmeticOp(self, expr2):
+    exprType = expr2.expr.accept(self)
+    
+    if type(exprType) is dict:
+      exprType = exprType[st.TYPE]
+    
+    return [st.ARITH, exprType]
+  
+  def visitExpr3_Var_Assign_Expr(self, expr3):   
     bindable = expr3.variable.accept(self)
     assignOp = expr3.assignOp.accept(self)
     exprType = expr3.expr.accept(self)
     
-    if assignOp == '=':
-      if exprType != None:
-        if st.TYPE in exprType:
-          st.updateBindableType(bindable[st.NAME], exprType[st.TYPE])
-        else:
-          st.updateBindableType(bindable[st.NAME], exprType)
-      else:
-        st.updateBindableType(bindable[st.NAME], None)
-    elif bindable[st.TYPE] == None:
-        print('ERROR: Invalid atribution', assignOp, 'on variable', bindable[st.NAME], 'that has type', bindable[st.TYPE]) 
-    else:
-      if exprType != None:
-        if st.TYPE in exprType:
-          st.updateBindableType(bindable[st.NAME], exprType[st.TYPE])
-        else:
-          st.updateBindableType(bindable[st.NAME], exprType)
-      else:
-        st.updateBindableType(bindable[st.NAME], None)
+    if exprType == None:
+      print('ERROR: Atribution to variable ', end='')
+      expr3.variable.accept(self.printer)
+      print(' returned type', exprType)
+      return
     
+    if type(exprType) is dict:
+      exprType = exprType[st.TYPE] 
+    
+    if assignOp == '=':
+        st.updateBindableType(bindable[st.NAME], exprType)
+    elif bindable[st.TYPE] not in st.Number:
+        print('ERROR: Invalid atribution', assignOp, 'on variable ', end='') 
+        expr3.variable.accept(self.printer)
+        print(' that has type', bindable[st.TYPE]) 
+    else:
+        st.updateBindableType(bindable[st.NAME], exprType)
+  
   def visitExpr1_Variable(self, expr1):
     return expr1.variable.accept(self) 
   
@@ -179,6 +173,10 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitExpr1_FunctionCall(self, expr1):
     return expr1.functionCall.accept(self)
+  
+  def visitExpr1_ArrayDeclaration(self, expr1):
+    expr1.arrayDeclaration.accept(self)
+    return st.ARRAY
     
   def visitExpr1_True(self, expr1):
     return st.BOOL
@@ -240,9 +238,33 @@ class SemanticVisitor(AbstractVisitor):
       return st.FLOAT
     elif isinstance(scalar.token, str):
       return st.STRING
-    
+
   def visitAssignOperator_Token(self, assignOp):
     return assignOp.token
   
   def visitArithmeticOperator_Token(self, arithmeticOp):
     return arithmeticOp.token
+  
+  def visitArrayDec_NoPairList(self, arrayDec):
+    return
+  
+  def visitArrayDec_WithPairList(self, arrayDec):
+    arrayDec.arrayPairList.accept(self)
+    
+  def visitArrayPairList_ArrayPair_Single(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    
+  def visitArrayPairList_ArrayPair_Mul(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    arrayPairList.arrayPairListArrPair.accept(self)
+    
+  def visitArrayPairList_Mul(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    arrayPairList.arrayPairListArr.accept(self)
+  
+  def visitArrayPairListArr_Single(self, arrayPairList):
+    print('single')
+    arrayPairList.arrayPair.accept(self)
+    
+  def visitArrayPair_Expr(self, arrayPair):
+    arrayPair.expr.accept(self)

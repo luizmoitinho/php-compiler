@@ -4,14 +4,20 @@ FLOAT = 'float'
 BOOL = 'boolean'
 STRING = 'string'
 ARRAY = 'array'
+
 SCOPE = 'scope'
 BINDABLE = 'bindable'
 FUNCTION = 'function'
 PARAMS = 'params'
+
 VARIABLE = 'var'
 TYPE = 'type'
 NAME = 'name' 
-Number = [INT, FLOAT, STRING]
+
+COMP = 'compOp'
+ARITH = 'arithOp'
+
+Number = [INT, FLOAT]
 
 def beginScope(nameScope):
   global symbolTable
