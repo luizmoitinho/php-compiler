@@ -62,9 +62,6 @@ class SemanticVisitor(AbstractVisitor):
   def visitStatement_If(self, statementIf):
     statementIf._if.accept(self)
   
-  def visitIfStatement_statement_if(self, ifStatement):
-    ifStatement.statement_if.accept(self)
-  
   def visitStatementIf_Mul(self, statementIfMul):
     statementIfMul.expr_parentheses.accept(self)
     statementIfMul.statement_BLOCK_OPT.accept(self)
@@ -85,10 +82,10 @@ class SemanticVisitor(AbstractVisitor):
     statementIfElseif.statement_if.accept(self)
     statementIfElseif.statement_elseif.accept(self)
   
-  def visitStatementElseIf_Mul(self, statementElseIf):
-    statementElseIf.expr_parentheses.accept(self)
-    statementElseIf.statement_BLOCK_OPT.accept(self)
-    statementElseIf.statement_elseif.accept(self)
+  def visitStatementElseIf_Mul(self, statementElseIfMul):
+    statementElseIfMul.expr_parentheses.accept(self)
+    statementElseIfMul.statement_BLOCK_OPT.accept(self)
+    statementElseIfMul.statement_elseif.accept(self)
 
   def visitIfStatement_Stm_If_Elseif_Else(self, ifConditional):
     ifConditional.statement_if.accept(self)
@@ -415,5 +412,15 @@ class SemanticVisitor(AbstractVisitor):
     exitExpr.expr.accept(self)
   
   def visitExitExpr_Empty(self):
+    return
+  
+  def visitStatement_Break(self, statement):
+    print("Entrei Break")
+    statement._break.accept(self)
+  
+  def visitBreak_Expr(self, _break):
+    return _break.expr.accept(self)
+  
+  def visitBreak_Empty(self):
     return
 
