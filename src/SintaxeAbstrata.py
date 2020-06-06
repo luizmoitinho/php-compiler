@@ -586,21 +586,114 @@ class Expr_LessEqual(Expr):
   def accept(self, Visitor):
     return Visitor.visitExpr_LessEqual(self)
 
+class Expr_AndLogical(Expr):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    return Visitor.visitExpr_AndLogical(self)
+
+class Expr_OrLogical(Expr):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    return Visitor.visitExpr_OrLogical(self)
+
+class Expr_PreIncrement(Expr):
+  def __init__(self, variable):
+    self.variable =  variable
+  def accept(self, Visitor):
+    return Visitor.visitExpr_PreIncrement(self)
+
+class Expr_PosIncrement(Expr):
+  def __init__(self, variable):
+    self.variable =  variable
+  def accept(self, Visitor):
+    return Visitor.visitExpr_PosIncrement(self)
+
+class Expr_PreDecrement(Expr):
+  def __init__(self, variable):
+    self.variable =  variable
+  def accept(self, Visitor):
+    return Visitor.visitExpr_PreDecrement(self)
+
+class Expr_PosDecrement(Expr):
+  def __init__(self, variable):
+    self.variable =  variable
+  def accept(self, Visitor):
+    return Visitor.visitExpr_PosDecrement(self)
+
 class Expr_Variable(Expr):
   def __init__(self, variable):
     self.variable =  variable
   def accept(self, Visitor):
     return Visitor.visitExpr_Variable(self)
 
+class Expr_ParenExpr(Expr):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_ParenExpr(self)
 
+class Expr_ArrayDeclaration(Expr):
+  def __init__(self, arrayDecl):
+    self.arrayDecl = arrayDecl
+  def accept(self, Visitor):
+    return Visitor.visitExpr_ArrayDeclaration(self)
 
+class Expr_FunctionCall(Expr):
+  def __init__(self, functionCall):
+    self.functionCall = functionCall
+  def accept(self, Visitor):
+    return Visitor.visitExpr_FunctionCall(self)
 
+class Expr_Scalar(Expr):
+  def __init__(self, scalar):
+    self.scalar = scalar
+  def accept(self, Visitor):
+    return Visitor.visitExpr_Scalar(self)
 
+class Expr_True(Expr):
+  def accept(self, Visitor):
+    return Visitor.visitExpr_True(self)
 
+class Expr_True(Expr):
+  def accept(self, Visitor):
+    return Visitor.visitExpr_True(self)
 
+class Expr_False(Expr):
+  def accept(self, Visitor):
+    return Visitor.visitExpr_False(self)
 
+class Expr_TerciaryOp(Expr):
+  def __init__(self, expr1,expr2,expr3):
+    self.expr1 = expr1
+    self.expr2 = expr2
+    self.expr3 = expr3
+  def accept(self, Visitor):
+    return Visitor.visitExpr_TerciaryOp(self)
 
+class Expr_AssignExpr(Expr):
+  def __init__(self, variable,expr):
+    self.variable = variable
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_AssignExpr(self)
 
+class Expr_AssignAmpersandExpr(Expr):
+  def __init__(self, variable,expr):
+    self.variable = variable
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_AssignAmpersandExpr(self)
+
+class Expr_TypeCastOp(Expr):
+  def __init__(self, typeCast,expr):
+    self.typeCast = typeCast
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_TypeCastOp(self)
 
 
 class TypeCastOp(metaclass=ABCMeta):

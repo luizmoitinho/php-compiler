@@ -602,39 +602,107 @@ class Visitor():
 
   def visitExpr_Mod(self, exprMod):
     exprMod.expr1.accept(self)
-    print('%', end='')
+    print(' % ', end='')
     exprMod.expr2.accept(self)
 
   def visitExpr_Equals(self, exprEqual):
     exprEqual.expr1.accept(self)
-    print('==', end='')
+    print(' == ', end='')
     exprEqual.expr2.accept(self) 
 
   def visitExpr_NotEqual(self, exprNotEqual):
     exprNotEqual.expr1.accept(self)
-    print('!=', end='')
+    print(' != ', end='')
     exprNotEqual.expr2.accept(self) 
 
   def visitExpr_GreatThan(self, exprGreatThan):
     exprGreatThan.expr1.accept(self)
-    print('>', end='')
+    print(' > ', end='')
     exprGreatThan.expr2.accept(self) 
 
   def visitExpr_GreatEqual(self, exprGreatEqual):
     exprGreatEqual.expr1.accept(self)
-    print('>=', end='')
+    print(' >= ', end='')
     exprGreatEqual.expr2.accept(self) 
 
   def visitExpr_LessThan(self, exprLessThan):
     exprLessThan.expr1.accept(self)
-    print('<', end='')
+    print(' < ', end='')
     exprLessThan.expr2.accept(self) 
 
   def visitExpr_LessEqual(self, exprLessEqual):
     exprLessEqual.expr1.accept(self)
-    print('<=', end='')
+    print(' <= ', end='')
     exprLessEqual.expr2.accept(self) 
 
+  def visitExpr_AndLogical(self, exprAndLogical):
+    exprAndLogical.expr1.accept(self)
+    print(' && ', end='')
+    exprAndLogical.expr2.accept(self) 
+
+  def visitExpr_OrLogical(self, exprOrLogical):
+    exprOrLogical.expr1.accept(self)
+    print(' || ', end='')
+    exprOrLogical.expr2.accept(self) 
+
+  def visitExpr_PreIncrement(self, exprPreIncrement):
+    print('++',end='')
+    exprPreIncrement.variable.accept(self)
+  
+  def visitExpr_PosIncrement(self, exprPosIncrement):
+    exprPosIncrement.variable.accept(self)
+    print('++',end='')
+
+  def visitExpr_PreDecrement(self, exprPreDecrement):
+    print('--',end='')
+    exprPreDecrement.variable.accept(self)
+  
+  def visitExpr_PosDecrement(self, exprPosDecrement):
+    exprPosIncrement.variable.accept(self)
+    print('--',end='')
 
   def visitExpr_Variable(self, exprVariable):
     exprVariable.variable.accept(self)
+
+  def visitExpr_ParenExpr(self, parenExpr):
+    parenExpr.expr.accept(self)
+  
+  def visitExpr_ArrayDeclaration(self, exprArrayDecl):
+    print('array', end='')
+    exprArrayDecl.arrayDecl.accept(self)
+
+  def visitExpr_FunctionCall(self, exprFunctionCall):
+    exprFunctionCall.functionCall.accept(self)
+  
+  def visitExpr_Scalar(self, exprScalar):
+    exprScalar.scalar.accept(self) 
+
+  def visitExpr_True(self,exprtrue):
+    print('true',end='')
+  
+  def visitExpr_False(self, exprTrue):
+    print('false',end='')
+  
+  def visitExpr_TerciaryOp(self, exprTerciary):
+    exprTerciary.expr1.accept(self)
+    print(' ? ',end='')
+    exprTerciary.expr2.accept(self)
+    print(' : ',end='')
+    exprTerciary.expr3.accept(self)  
+  
+  def visitExpr_AssignExpr(self, assignExpr):
+    assignExpr.variable.accept(self)
+    print(' = ',end='')
+    assignExpr.expr.accept(self)
+
+  def visitExpr_AssignAmpersandExpr(self, assignAmpersandExpr):
+    assignAmpersandExpr.variable.accept(self)
+    print(' = ',end='')
+    print('&',end='')
+    assignAmpersandExpr.expr.accept(self)
+
+  def visitExpr_TypeCastOp(self, typeCastOp):
+    print('(',end='')
+    typeCastOp.typeCast.accept(self)
+    print(') ',end='')
+    typeCastOp.expr.accept(self)

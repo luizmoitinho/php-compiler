@@ -65,12 +65,10 @@ def p_expr(p):
     | expr TIMES expr   
     | expr EQUALS expr
     | expr NOT_EQUAL expr
-
     | expr GREAT_THAN expr
     | expr GREAT_EQUAL expr
     | expr LESS_THAN expr
     | expr LESS_EQUAL expr
-    
     | expr AND expr
     | expr OR expr
     | INCREMENT variable
@@ -84,9 +82,7 @@ def p_expr(p):
     | scalar
     | TRUE
     | FALSE
-    | NUMBER_REAL
-    | NUMBER_INTEGER
-    | INTE_DOT expr DDOT expr
+    | expr INTE_DOT expr DDOT expr
     | variable assign_operator expr
     | variable assign_operator AMPERSAND expr
     | LPAREN type_cast_operator RPAREN expr
@@ -101,7 +97,6 @@ def p_expr(p):
     p[0] = sa.Expr_Divide(p[1],p[3])
   elif isinstance(p[1], sa.Expr) and p[2] == '%' and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_Mod(p[1],p[3])
-
   elif isinstance(p[1], sa.Expr) and p[2] == '==' and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_Equals(p[1],p[3])
   elif isinstance(p[1], sa.Expr) and p[2] == '!=' and isinstance(p[3], sa.Expr):
@@ -114,32 +109,40 @@ def p_expr(p):
     p[0] = sa.Expr_LessThan(p[1],p[3])
   elif isinstance(p[1], sa.Expr) and p[2] == '<=' and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_LessEqual(p[1],p[3])
-  
+  elif isinstance(p[1], sa.Expr) and p[2] == '&&' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_AndLogical(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '||' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_OrLogical(p[1],p[3])
+  elif len(p)==3 and p[1] =='++' and isinstance(p[2], sa.Variable):
+    p[0] = sa.Expr_PreIncrement(p[2])
+  elif len(p)==3 and isinstance(p[1], sa.Variable) and p[2] =='++':
+    p[0] = sa.Expr_PosIncrement(p[1])
+  elif len(p)==3 and p[1] =='--' and isinstance(p[2], sa.Variable):
+    p[0] = sa.Expr_PreDecrement(p[2])
+  elif len(p)==3 and isinstance(p[2], sa.Variable) and p[1] =='--':
+    p[0] = sa.Expr_PosDecrement(p[1])
+  elif p[1]=='(' and isinstance(p[2], sa.Expr) and p[3]==')':
+    p[0] = sa.Expr_ParenExpr(p[2])
+  elif len(p) == 3 and isinstance(p[2], sa.ArrayDeclaration):
+    p[0] = sa.Expr_ArrayDeclaration(p[2])
+  elif isinstance(p[1], sa.FunctionCall):
+    p[0] = sa.Expr_FunctionCall(p[1])
+  elif isinstance(p[1],sa.Scalar):
+    p[0] = sa.Expr_Scalar(p[1])
+  elif p[1] == 'true':
+    p[0] = sa.Expr_True()
+  elif p[1] == 'false':
+    p[0] = sa.Expr_False()
+  elif len(p) == 6 and isinstance(p[1], sa.Expr) and isinstance(p[3], sa.Expr) and  isinstance(p[5], sa.Expr):
+    p[0] = sa.Expr_TerciaryOp(p[1],p[3],p[5])
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_AssignExpr(p[1],p[3])
+  elif len(p) == 5 and isinstance(p[1], sa.Variable) and p[3]=='&' and isinstance(p[4], sa.Expr):
+    p[0] = sa.Expr_AssignAmpersandExpr(p[1],p[4])
+  elif p[1] == '(' and isinstance(p[2], sa.TypeCastOp) and p[3] ==')':
+    p[0] = sa.Expr_TypeCastOp(p[2],p[4])
   elif isinstance(p[1], sa.Variable):
-    p[0] = sa.Expr_Variable(p[1])
-  ''''
-  elif p[2] =='&&'  
-  elif p[2] =='||'
-
-  elif p[2] =='<'
-  elif p[2] =='<'
-  elif p[2] =='<'
-  elif p[1] =='++' and isisntance(p[2], sa.Variable)
-  elif isisntance(p[1], sa.Variable) and p[2] =='++'
-
-  elif p[1] =='--' and isisntance(p[2], sa.Variable)
-  elif isisntance(p[2], sa.Variable) and p[1] =='--'
-  elif p[1]=='(' and isinstance(p[2], sa.Variable) and p[3]==')'
-  elif len(p) == 2 and isinstance(p[2], sa.ArrayDeclaration)
-  elif isinstance(p[1], sa.FunctionCall)
-  elif isinstance(p[1],sa.Scalar)
-  elif p[1] == 'true'
-  elif p[1] == 'false'
-  elif p[1] == '?' and isinstance(p[2], sa.Expr) and p[3] == ':'
-  elif isinstance(p[1], sa.Variable) and p[2] == '=' and isinstance(p[3], sa.Expr)
-  elif p[1] == '(' and isinstance(p[2], sa.TypeCastOp) and p[3] ==')'
-  '''
-
+    p[0] = sa.Expr_Variable(p[1])  
 
 def p_exit_statement(p):
   '''
@@ -761,12 +764,8 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  $x == $y;
-  $x != $y;
-  $x < $y;
-  $x <= $y;
-  $x > $y;
-  $x <= $y;
+$x = &$y;
+(int)$x;
 ?>
 '''
 
