@@ -522,7 +522,7 @@ class Expr_Minus(Expr):
     self.expr2 = expr2
   def accept(self, Visitor):
     return Visitor.visitExpr_Minus(self)
-    
+
 class Expr_Times(Expr):
   def __init__(self, expr1,expr2):
     self.expr1 = expr1
@@ -544,11 +544,64 @@ class Expr_Mod(Expr):
   def accept(self, Visitor):
     return Visitor.visitExpr_Mod(self)
 
+class Expr_Equals(Expr):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    return Visitor.visitExpr_Equals(self)
+
+class Expr_NotEquals(Expr):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    return Visitor.visitExpr_NotEqual(self)
+
+class Expr_GreatThan(Expr):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    return Visitor.visitExpr_GreatThan(self)
+
+class Expr_GreatEqual(Expr):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    return Visitor.visitExpr_GreatEqual(self)
+
+class Expr_LessThan(Expr):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    return Visitor.visitExpr_LessThan(self)
+
+class Expr_LessEqual(Expr):
+  def __init__(self, expr1,expr2):
+    self.expr1 = expr1
+    self.expr2 = expr2
+  def accept(self, Visitor):
+    return Visitor.visitExpr_LessEqual(self)
+
 class Expr_Variable(Expr):
   def __init__(self, variable):
-    self.variable = variable
+    self.variable =  variable
   def accept(self, Visitor):
     return Visitor.visitExpr_Variable(self)
+
+
+
+
+
+
+
+
+
+
+
 
 class TypeCastOp(metaclass=ABCMeta):
   @abstractmethod

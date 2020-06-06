@@ -605,6 +605,36 @@ class Visitor():
     print('%', end='')
     exprMod.expr2.accept(self)
 
+  def visitExpr_Equals(self, exprEqual):
+    exprEqual.expr1.accept(self)
+    print('==', end='')
+    exprEqual.expr2.accept(self) 
+
+  def visitExpr_NotEqual(self, exprNotEqual):
+    exprNotEqual.expr1.accept(self)
+    print('!=', end='')
+    exprNotEqual.expr2.accept(self) 
+
+  def visitExpr_GreatThan(self, exprGreatThan):
+    exprGreatThan.expr1.accept(self)
+    print('>', end='')
+    exprGreatThan.expr2.accept(self) 
+
+  def visitExpr_GreatEqual(self, exprGreatEqual):
+    exprGreatEqual.expr1.accept(self)
+    print('>=', end='')
+    exprGreatEqual.expr2.accept(self) 
+
+  def visitExpr_LessThan(self, exprLessThan):
+    exprLessThan.expr1.accept(self)
+    print('<', end='')
+    exprLessThan.expr2.accept(self) 
+
+  def visitExpr_LessEqual(self, exprLessEqual):
+    exprLessEqual.expr1.accept(self)
+    print('<=', end='')
+    exprLessEqual.expr2.accept(self) 
+
 
   def visitExpr_Variable(self, exprVariable):
     exprVariable.variable.accept(self)

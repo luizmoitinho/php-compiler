@@ -51,6 +51,10 @@ def p_inner_statement_MUL(p):
   else:
     p[0] = sa.InnerStatementMul_Single(p[1])
 
+def p_expr_uminus(p):
+  'expr : MINUS expr %prec UMINUS'
+  p[0] = -p[2]
+
 # VERIFICAR A REGRA DE ATRIBUIÇÃO - PODE SER FATORADA!
 def p_expr(p):
   '''
@@ -60,12 +64,13 @@ def p_expr(p):
     | expr PERCENT expr
     | expr TIMES expr   
     | expr EQUALS expr
-    | MINUS expr %prec UMINUS 
-    | expr NOT_EQUAL
+    | expr NOT_EQUAL expr
+
     | expr GREAT_THAN expr
     | expr GREAT_EQUAL expr
     | expr LESS_THAN expr
     | expr LESS_EQUAL expr
+    
     | expr AND expr
     | expr OR expr
     | INCREMENT variable
@@ -79,6 +84,8 @@ def p_expr(p):
     | scalar
     | TRUE
     | FALSE
+    | NUMBER_REAL
+    | NUMBER_INTEGER
     | INTE_DOT expr DDOT expr
     | variable assign_operator expr
     | variable assign_operator AMPERSAND expr
@@ -94,15 +101,23 @@ def p_expr(p):
     p[0] = sa.Expr_Divide(p[1],p[3])
   elif isinstance(p[1], sa.Expr) and p[2] == '%' and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_Mod(p[1],p[3])
+
+  elif isinstance(p[1], sa.Expr) and p[2] == '==' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_Equals(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '!=' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_NotEquals(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '>' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_GreatThan(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '>=' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_GreatEqual(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '<' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_LessThan(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '<=' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_LessEqual(p[1],p[3])
+  
   elif isinstance(p[1], sa.Variable):
     p[0] = sa.Expr_Variable(p[1])
-  
-  '''
-  elif isinstance(p[1], sa.Expr) and p[2] == '<' and isinstance(p[3], sa.Expr):
-  elif isinstance(p[1], sa.Expr) and p[2] == '+' and isinstance(p[3], sa.Expr):
-  elif p[2] =='>'  
-  elif p[2] =='=>'
-
+  ''''
   elif p[2] =='&&'  
   elif p[2] =='||'
 
@@ -746,11 +761,12 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  $x + $y;
-  $x - $y;
-  $x * $y;
-  $x / $y;
-  $x % $y;
+  $x == $y;
+  $x != $y;
+  $x < $y;
+  $x <= $y;
+  $x > $y;
+  $x <= $y;
 ?>
 '''
 
