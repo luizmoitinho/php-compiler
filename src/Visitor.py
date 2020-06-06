@@ -1,7 +1,7 @@
 from AbstractVisitor import AbstractVisitor
 from PrettyPrinter import PrettyPrinter as pp
 
-class Visitor(AbstractVisitor):
+class Visitor():
 
   def visitMain_MainInner(self, main):
     print('<?php')
@@ -64,7 +64,7 @@ class Visitor(AbstractVisitor):
     pp.printTab()
     print('}')
     
-  def visitFds_statements_noStatements(self):
+  def visitFds_statements_noStatements(self, fds_statements):
     print('{')
     pp.printTab()
     print('}')
@@ -255,101 +255,13 @@ class Visitor(AbstractVisitor):
     ifStatementElse.statement_else.accept(self)
   
   def visitIfStatement_ElseIf(self, ifStatementElseif):
-     ifStatementElseif.statement_elseif.accept(self)
-
-
-  def visitExpr_Minus_Expr1(self, expr):
-    print('-', end='')
-    expr.expr1.accept(self)
-    
-  def visitExpr_Minus_Expr1_Expr2(self, expr):
-    print('-', end='')
-    expr.expr1.accept(self)
-    expr.expr2.accept(self)
-    
-  def visitExpr_Expr1_Expr2(self, expr):
-    expr.expr1.accept(self)
-    expr.expr2.accept(self)
-
-  def visitExpr_Expr1(self, expr):
-    expr.expr1.accept(self)
-    
-  def visitExpr_Expr3(self, expr):
-    expr.expr3.accept(self)
-    
-  def visitExpr2_TernaryExpr(self, expr2):
-    print('', '?', end=' ')
-    expr2.expr1.accept(self)
-    print('', ':', end=' ')
-    expr2.expr2.accept(self)
-    
-  def visitExpr2_ArithmeticOp(self, expr2):
-    expr2.arithmeticOp.accept(self)
-    expr2.expr.accept(self)
-    
-  def visitExpr2_ComparissionOp(self, expr2):
-    expr2.comparissionOp.accept(self)
-    expr2.expr.accept(self)
-    
-  def visitArithmeticOperator_Token(self, arithmeticOp):
-    print('', arithmeticOp.token, end=' ')
-    
-  def visitComparissionOperator_Token(self, comparissionOp):
-    print('', comparissionOp.token, end=' ')
-
-  def visitExpr3_TypeCast(self, expr3):
-    print('(', end='')
-    expr3.typeCast.accept(self)
-    print(')', end=' ')
-    expr3.expr.accept(self)
-    
-  def visitExpr3_Var_Assign_Expr(self, expr3):
-    expr3.variable.accept(self)
-    expr3.assignOp.accept(self)
-    expr3.expr.accept(self)
-    
-  def visitExpr3_Var_Assign_Amp_Expr(self, expr3):
-    expr3.variable.accept(self)
-    expr3.assignOp.accept(self)
-    print('&', end='')
-    expr3.expr.accept(self)
-    
+    ifStatementElseif.statement_elseif.accept(self)
+   
   def visitTypeCastOp_Token(self, typeCastOp):
     print(typeCastOp.token, end='')
     
   def visitAssignOperator_Token(self, assignOp):
     print('',assignOp.token, end=' ')
-
-  def visitExpr1_FunctionCall(self, expr1):
-    expr1.functionCall.accept(self)
-    
-  def visitExpr1_ExprPar(self, expr1):
-    print('(', end='')
-    expr1.expr.accept(self)
-    print(')', end='')
-    
-  def visitExpr1_Variable_Increment(self, expr1):
-    expr1.variable.accept(self)
-    print('++', end='')
-    
-  def visitExpr1_Variable_Decrement(self, expr1):
-    expr1.variable.accept(self)
-    print('--', end='')
-    
-  def visitExpr1_Increment_Variable(self, expr1):
-    print('++', end='')
-    expr1.variable.accept(self)
-    
-  def visitExpr1_Decrement_Variable(self, expr1):
-    print('--', end='')
-    expr1.variable.accept(self)
-    
-  def visitExpr1_Variable(self, expr1):
-    expr1.variable.accept(self)
-
-  def visitExpr1_ArrayDeclaration(self, expr1):
-    print('array', end='')
-    expr1.arrayDeclaration.accept(self)
 
   def visitArrayDec_WithPairList(self, arrayDec):
     print('(',end='')
@@ -392,15 +304,6 @@ class Visitor(AbstractVisitor):
     arrayPair.expr1.accept(self)
     print('=', end='')
     arrayPair.expr2.accept(self)
-
-  def visitExpr1_Scalar(self, expr1):
-    expr1.scalar.accept(self)
-  
-  def visitExpr1_True(self, expr1):
-    print('true', end='')
-    
-  def visitExpr1_False(self, expr1):
-    print('false', end='')
     
   def visitFunctionCall_NoParameter(self, functionCall):
     print(functionCall.id, end='')
@@ -435,26 +338,12 @@ class Visitor(AbstractVisitor):
     print('&', end='')
     print(functionCallParameter.variable, end='')
   
-  def visitVariable_Reference_Variable(self, variable):
-    variable.reference_variable.accept(self)
-
-  def visitVariable_Simple_Indirect(self, variable):
-    variable.simple_indirect.accept(self)
-    variable.reference_variable.accept(self)
-
-  def visitReferenceVariable_Compound_Reference(self, referenceVariable):
-    referenceVariable.compoundvariable.accept(self)
-    referenceVariable.referencevariableSELECTOR.accept(self)
-  
-  def visitReferenceVariable_Compound(self, referenceVariable):
-    referenceVariable.compoundvariable.accept(self)
-  
-  def visitSimpleIndirectReference_Mul(self, simpleIndirectReference):
-    print('$', end='')
-    simpleIndirectReference.simpleindirect.accept(self)
-  
-  def visitSimpleIndirectReference_Single(self, simpleIndirectReference):
-    print('$', end='')
+  def visitVariable_Single(self, variable):
+    print(variable.token, end='')
+    
+  def visitVariable_Array(self, variable):
+    print(variable.token, end='')
+    variable.selector.accept(self)
     
   def visitAmpersandVariable_WithAmp(self, ampersandVariable):
     print('&', end='')
@@ -689,3 +578,33 @@ class Visitor(AbstractVisitor):
       pp.printTab()
       print('while', end='')
       whilestatement.exprparentheses.accept(self)
+
+  # ============== NOVAS REGRAS =============================
+  def visitExpr_Plus(self, exprPlus):
+    exprPlus.expr1.accept(self)
+    print('+', end='')
+    exprPlus.expr2.accept(self)
+  
+  def visitExpr_Minus(self, exprMinus):
+    exprMinus.expr1.accept(self)
+    print('-', end='')
+    exprMinus.expr2.accept(self)
+
+  def visitExpr_Times(self, exprTimes):
+    exprTimes.expr1.accept(self)
+    print('*', end='')
+    exprTimes.expr2.accept(self)
+
+  def visitExpr_Divide(self, exprDivide):
+    exprDivide.expr1.accept(self)
+    print('/', end='')
+    exprDivide.expr2.accept(self)
+
+  def visitExpr_Mod(self, exprMod):
+    exprMod.expr1.accept(self)
+    print('%', end='')
+    exprMod.expr2.accept(self)
+
+
+  def visitExpr_Variable(self, exprVariable):
+    exprVariable.variable.accept(self)

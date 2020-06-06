@@ -1,12 +1,14 @@
 import ply.yacc as yacc
 import ply.lex as lex
 import SemanticVisitor as sv
-from ExpressionLanguageLex import *
+from Lex import *
 import SintaxeAbstrata as sa
 import Visitor as vis
+
 precedence = (
   ('left', 'PLUS', 'MINUS'),
   ('left', 'TIMES', 'DIVIDE'),
+  ('right', 'UMINUS')
 )
 
 def p_main(p):
@@ -48,55 +50,25 @@ def p_inner_statement_MUL(p):
     p[0] = sa.InnerStatementMul_Mul(p[1], p[2])
   else:
     p[0] = sa.InnerStatementMul_Single(p[1])
-  
+
+# VERIFICAR A REGRA DE ATRIBUIÇÃO - PODE SER FATORADA!
 def p_expr(p):
   '''
-  expr : MINUS expr1 expr2
-    | expr1 expr2
-    | expr3 
-    | MINUS expr1
-    | expr1
-  '''
-  if isinstance(p[1], sa.Expr1) and len(p) == 3:
-    p[0] = sa.Expr_Expr1_Expr2(p[1], p[2])
-  elif isinstance(p[1], sa.Expr1) and len(p) == 2:
-    p[0] = sa.Expr_Expr1(p[1])
-  elif isinstance(p[1], sa.Expr3) and len(p) == 2:
-    p[0] = sa.Expr_Expr3(p[1])
-  elif p[1] == '-' and len(p) == 3:
-    p[0] = sa.Expr_Minus_Expr1(p[2])
-  else: 
-    p[0] = sa.Expr_Minus_Expr1_Expr2(p[2], p[3])
-    
-def p_expr2(p): 
-  '''
-  expr2 : INTE_DOT expr DDOT expr 
-    | comparission_operator expr 
-    | arithmetic_operator expr
-  '''
-  if isinstance(p[1], sa.ArithmeticOperator):
-    p[0] = sa.Expr2_ArithmeticOp(p[1], p[2])
-  elif isinstance(p[1], sa.ComparissionOperator):
-    p[0] = sa.Expr2_ComparissionOp(p[1], p[2])
-  else:
-    p[0] = sa.Expr2_TernaryExpr(p[2], p[4])
-  
-def p_expr3(p):
-  '''
-  expr3 : variable assign_operator expr
-    | variable assign_operator AMPERSAND expr
-    | LPAREN type_cast_operator RPAREN expr
-  '''
-  if isinstance(p[2], sa.TypeCastOp):
-    p[0] = sa.Expr3_TypeCast(p[2], p[4])
-  elif isinstance(p[1], sa.Variable) and len(p) == 4:
-    p[0] = sa.Expr3_Var_Assign_Expr(p[1], p[2], p[3])
-  else:
-    p[0] = sa.Expr3_Var_Assign_Amp_Expr(p[1], p[2], p[4])
-
-def p_expr1(p): 
-  ''' 
-  expr1 : INCREMENT variable
+  expr : expr PLUS expr
+    | expr MINUS expr 
+    | expr DIVIDE expr
+    | expr PERCENT expr
+    | expr TIMES expr   
+    | expr EQUALS expr
+    | MINUS expr %prec UMINUS 
+    | expr NOT_EQUAL
+    | expr GREAT_THAN expr
+    | expr GREAT_EQUAL expr
+    | expr LESS_THAN expr
+    | expr LESS_EQUAL expr
+    | expr AND expr
+    | expr OR expr
+    | INCREMENT variable
     | variable INCREMENT
     | DECREMENT variable
     | variable DECREMENT
@@ -107,30 +79,53 @@ def p_expr1(p):
     | scalar
     | TRUE
     | FALSE
+    | INTE_DOT expr DDOT expr
+    | variable assign_operator expr
+    | variable assign_operator AMPERSAND expr
+    | LPAREN type_cast_operator RPAREN expr
   '''
-  if isinstance(p[1], sa.Variable) and len(p) == 2:
-    p[0] = sa.Expr1_Variable(p[1])
-  elif p[1] == 'true':
-    p[0] = sa.Expr1_True()
-  elif p[1] == 'false':
-    p[0] = sa.Expr1_False()
-  elif isinstance(p[1], sa.Scalar):
-    p[0] = sa.Expr1_Scalar(p[1])
-  elif isinstance(p[1], sa.FunctionCall):
-    p[0] = sa.Expr1_FunctionCall(p[1])
-  elif (p[1] == 'array' and isinstance(p[2], sa.ArrayDeclaration)):
-    p[0] = sa.Expr1_ArrayDeclaration(p[2])
-  elif isinstance(p[2], sa.Expr):
-    p[0] = sa.Expr1_ExprPar(p[2])
-  elif p[2] == '++':
-    p[0] = sa.Expr1_Variable_Increment(p[1])
-  elif p[2] == '--':
-    p[0] = sa.Expr1_Variable_Decrement(p[1])
-  elif p[1] == '++':
-    p[0] = sa.Expr1_Increment_Variable(p[2])
-  elif p[1] == '--':
-    p[0] = sa.Expr1_Decrement_Variable(p[2])
+  if isinstance(p[1], sa.Expr) and p[2] == '+' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_Plus(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '-' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_Minus(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '*' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_Times(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '/' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_Divide(p[1],p[3])
+  elif isinstance(p[1], sa.Expr) and p[2] == '%' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_Mod(p[1],p[3])
+  elif isinstance(p[1], sa.Variable):
+    p[0] = sa.Expr_Variable(p[1])
   
+  '''
+  elif isinstance(p[1], sa.Expr) and p[2] == '<' and isinstance(p[3], sa.Expr):
+  elif isinstance(p[1], sa.Expr) and p[2] == '+' and isinstance(p[3], sa.Expr):
+  elif p[2] =='>'  
+  elif p[2] =='=>'
+
+  elif p[2] =='&&'  
+  elif p[2] =='||'
+
+  elif p[2] =='<'
+  elif p[2] =='<'
+  elif p[2] =='<'
+  elif p[1] =='++' and isisntance(p[2], sa.Variable)
+  elif isisntance(p[1], sa.Variable) and p[2] =='++'
+
+  elif p[1] =='--' and isisntance(p[2], sa.Variable)
+  elif isisntance(p[2], sa.Variable) and p[1] =='--'
+  elif p[1]=='(' and isinstance(p[2], sa.Variable) and p[3]==')'
+  elif len(p) == 2 and isinstance(p[2], sa.ArrayDeclaration)
+  elif isinstance(p[1], sa.FunctionCall)
+  elif isinstance(p[1],sa.Scalar)
+  elif p[1] == 'true'
+  elif p[1] == 'false'
+  elif p[1] == '?' and isinstance(p[2], sa.Expr) and p[3] == ':'
+  elif isinstance(p[1], sa.Variable) and p[2] == '=' and isinstance(p[3], sa.Expr)
+  elif p[1] == '(' and isinstance(p[2], sa.TypeCastOp) and p[3] ==')'
+  '''
+
+
 def p_exit_statement(p):
   '''
   exit_statement : EXIT exit_expr
@@ -171,7 +166,6 @@ def p_array_declaration(p):
   else:
     p[0] = sa.ArrayDec_NoPairList()
 
-
 def p_statement(p):
   '''
   statement : expr SEMICOLON
@@ -211,7 +205,18 @@ def p_statement(p):
     p[0] = sa.Statement_Global(p[1])
   elif isinstance(p[1], sa.ForStatement):
     p[0] = sa.Statement_For(p[1])
-  
+
+def p_IF(p):
+  '''
+  S : S1 
+    | IF expr_parentheses S3
+  S1 : IF expr_parentheses S2 ELSE S1
+    |
+  S2 : ELSEIF expr_parentheses S2
+    | S1
+  S3 : S
+    | S1 ELSE S3
+  '''
 
 def p_if_statement(p):
   '''
@@ -522,25 +527,13 @@ def p_scalar(p):
   
 def p_variable(p):
   '''
-  variable : reference_variable
+  variable : VARIABLE reference_variable_SELECTOR
+    | VARIABLE
   '''
-  p[0] = sa.Variable_Reference_Variable(p[1])
-  
-def p_reference_variable(p):
-  '''
-  reference_variable : compound_variable reference_variable_SELECTOR
-  | compound_variable
-  ''' 
-  if len(p) == 3:
-    p[0] = sa.ReferenceVariable_Compound_Reference(p[1], p[2])
-  else :
-    p[0] = sa.ReferenceVariable_Compound(p[1])
-  
-def p_compound_variable(p):
-  '''
-  compound_variable : VARIABLE
-  '''
-  p[0] = sa.CompoundVariableSingle(p[1])
+  if len(p) == 2:
+    p[0] = sa.Variable_Single(p[1])
+  else:
+    p[0] = sa.Variable_Array(p[1], p[2])
 
 def p_selector(p):
   '''
@@ -726,7 +719,7 @@ def p_parameter_list_COLON_PARAMETER(p):
   
 def p_reference_variable_SELECTOR(p):
   '''
-  reference_variable_SELECTOR : selector reference_variable_SELECTOR
+    reference_variable_SELECTOR : selector reference_variable_SELECTOR
     | selector
   '''
   if len(p) == 3:
@@ -753,24 +746,18 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  $valor = 1;
-  if(true){
-    $valor = 1;
-  }
-  elseif(true){
-    $valor = 1;
-  }
-  else{
-    $valor = 1;
-    break;
-  }
+  $x + $y;
+  $x - $y;
+  $x * $y;
+  $x / $y;
+  $x % $y;
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=False)
-visitor = sv.SemanticVisitor()
-#v = vis.Visitor()
+result = parser.parse(debug=True)
+#visitor = sv.SemanticVisitor()
+v = vis.Visitor()
 #for r in result:
-result.accept(visitor)
+result.accept(v)
