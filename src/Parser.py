@@ -23,7 +23,7 @@ precedence = (
 
 def p_main(p):
   '''
-  main : BEGIN_PROGRAM main_INNER END_PROGRAM 
+  main : BEGIN_PROGRAM main_program END_PROGRAM 
   | BEGIN_PROGRAM END_PROGRAM 
   '''
   if len(p) == 4:
@@ -31,9 +31,9 @@ def p_main(p):
   else:
     p[0] = sa.Main_MainInner_Empty()
     
-def p_main_INNER(p):
+def p_main_program(p):
   '''
-  main_INNER : inner_statement main_INNER
+  main_program : inner_statement main_program
     | inner_statement
   '''
   if len(p) == 3:
@@ -282,8 +282,8 @@ def p_if_statement(p):
   
 def p_statement_if(p):
   ''' 
-  statement_if : IF expr_parentheses statement_BLOCK_OPT statement_if
-   | IF expr_parentheses statement_BLOCK_OPT
+  statement_if : IF expr_parentheses statement_block_optional statement_if
+   | IF expr_parentheses statement_block_optional
   '''
   if len(p) ==5:
     p[0] = sa.StatementIf_Mul(p[2],p[3],p[4])
@@ -292,8 +292,8 @@ def p_statement_if(p):
 
 def p_statement_elseif(p):
   '''
-  statement_elseif : ELSEIF expr_parentheses statement_BLOCK_OPT statement_elseif
-   | ELSEIF expr_parentheses statement_BLOCK_OPT
+  statement_elseif : ELSEIF expr_parentheses statement_block_optional statement_elseif
+   | ELSEIF expr_parentheses statement_block_optional
   '''
   if len(p) == 5:
     p[0] = sa.StatementElseIf_Mul(p[2],p[3],p[4])
@@ -302,7 +302,7 @@ def p_statement_elseif(p):
 
 def p_statement_else(p):
   '''
-  statement_else : ELSE statement_BLOCK_OPT
+  statement_else : ELSE statement_block_optional
   '''
   if len(p) == 3:
     p[0] =  sa.StatementElse_Single(p[2])
@@ -320,14 +320,14 @@ def p_global_statement(p):
 
 def p_while_statement(p):
   '''
-  while_statement : WHILE expr_parentheses statement_BLOCK_OPT
+  while_statement : WHILE expr_parentheses statement_block_optional
   '''
   if len(p)==4:
     p[0] = sa.WhileStatementSingle(p[2], p[3])
   
 def p_do_statement(p):
   '''
-  do_statement : DO statement_BLOCK_OPT WHILE expr_parentheses SEMICOLON
+  do_statement : DO statement_block_optional WHILE expr_parentheses SEMICOLON
   '''
   p[0] = sa.DoWhileStatementSingle(p[2], p[4])
 
@@ -363,7 +363,7 @@ def p_return_statement(p):
   
 def p_for_statement(p):
   '''
-  for_statement : FOR LPAREN for_parameters RPAREN statement_BLOCK_OPT
+  for_statement : FOR LPAREN for_parameters RPAREN statement_block_optional
   '''
   p[0] = sa.ForStatement_For(p[3], p[5])
   
@@ -438,8 +438,8 @@ def p_expr_parentheses(p):
 
 def p_foreach_statement(p):
   '''
-  foreach_statement : FOREACH LPAREN expr AS ampersand_variable RPAREN statement_BLOCK_OPT
-  | FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_BLOCK_OPT
+  foreach_statement : FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional
+  | FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional
   '''
   if len(p) == 8:
     p[0] = sa.ForeachStatement_NoAssoc(p[3], p[5], p[7])
@@ -505,17 +505,10 @@ def p_function_call_parameter(p):
     p[0] = sa.FunctionCallParameter_Expr(p[1])
   else:
     p[0] = sa.FunctionCallParameter_AmpersandVariable(p[2])
-  
-def p_unary_operator(p):
-  '''
-  unary_operator : EXC_DOT
-    | PLUS
-    | MINUS
-  '''
 
 def p_variable(p):
   '''
-  variable : VARIABLE reference_variable_SELECTOR
+  variable : VARIABLE variable_array_selector
     | VARIABLE
   '''
   if len(p) == 2:
@@ -611,7 +604,6 @@ def p_parameter_prefix(p):
 def p_parameter_type(p):
   '''
   parameter_type : INT_TYPE
-    | BOOLEAN_TYPE
     | STRING_TYPE
     | FLOAT_TYPE
     | ARRAY_TYPE
@@ -619,7 +611,6 @@ def p_parameter_type(p):
   '''
   p[0] = sa.ParameterType_Type(p[1])
 
-#VERIFICAR SYNTAX
 def p_static_scalar(p):
   '''
   static_scalar : common_scalar 
@@ -680,9 +671,9 @@ def p_statement_MUL(p):
   else:
     p[0] = sa.statementMulSingle(p[1])
   
-def p_statement_BLOCK_OPT(p):
+def p_statement_block_optional(p):
   '''
-  statement_BLOCK_OPT : statement 
+  statement_block_optional : statement 
     | LKEY statement_MUL RKEY 
     | LKEY RKEY
   '''
@@ -703,9 +694,9 @@ def p_parameter_list_COLON_PARAMETER(p):
   else:
     p[0] = sa.ParameterListColonParameter_Single(p[2])
   
-def p_reference_variable_SELECTOR(p):
+def p_variable_array_selector(p):
   '''
-    reference_variable_SELECTOR : selector reference_variable_SELECTOR
+    variable_array_selector : selector variable_array_selector
     | selector
   '''
   if len(p) == 3:
