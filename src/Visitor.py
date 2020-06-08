@@ -143,9 +143,6 @@ class Visitor():
     
   def visitCommonScalar_Token(self, commonScalar):
     print(commonScalar.token, end='')
-    
-  def visitScalar_Token(self, scalar):
-    print(scalar.token, end='')
   
   def visitStatement_Expr(self, statement):
     pp.printTab()
@@ -582,22 +579,26 @@ class Visitor():
   # ============== NOVAS REGRAS =============================
   def visitExpr_Plus(self, exprPlus):
     exprPlus.expr1.accept(self)
-    print('+', end='')
+    print(' + ', end='')
     exprPlus.expr2.accept(self)
   
   def visitExpr_Minus(self, exprMinus):
     exprMinus.expr1.accept(self)
-    print('-', end='')
+    print(' - ', end='')
     exprMinus.expr2.accept(self)
+    
+  def visitExpr_Uminus(self, exprUminus):
+    print('-', end='')
+    exprUminus.expr.accept(self)
 
   def visitExpr_Times(self, exprTimes):
     exprTimes.expr1.accept(self)
-    print('*', end='')
+    print(' * ', end='')
     exprTimes.expr2.accept(self)
 
   def visitExpr_Divide(self, exprDivide):
     exprDivide.expr1.accept(self)
-    print('/', end='')
+    print(' / ', end='')
     exprDivide.expr2.accept(self)
 
   def visitExpr_Mod(self, exprMod):
@@ -644,6 +645,10 @@ class Visitor():
     exprOrLogical.expr1.accept(self)
     print(' || ', end='')
     exprOrLogical.expr2.accept(self) 
+    
+  def visitExpr_NotLogical(self, exprNotLogical):
+    print('!', end='')
+    exprNotLogical.expr.accept(self)
 
   def visitExpr_PreIncrement(self, exprPreIncrement):
     print('++',end='')
@@ -665,7 +670,9 @@ class Visitor():
     exprVariable.variable.accept(self)
 
   def visitExpr_ParenExpr(self, parenExpr):
+    print('(',end='')
     parenExpr.expr.accept(self)
+    print(')',end='')
   
   def visitExpr_ArrayDeclaration(self, exprArrayDecl):
     print('array', end='')
@@ -706,3 +713,12 @@ class Visitor():
     typeCastOp.typeCast.accept(self)
     print(') ',end='')
     typeCastOp.expr.accept(self)
+
+  def visitExpr_NumberInt(self, exprNumber):
+    print(exprNumber.numberInt,end='')
+
+  def visitExpr_NumberFloat(self, exprNumber):
+    print(exprNumber.numberFloat,end='')
+
+  def visitExpr_EncapsedString(self, exprEncapsed):
+    print(exprEncapsed.encapsedString,end='')

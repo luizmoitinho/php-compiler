@@ -5,16 +5,26 @@ from Lex import *
 import SintaxeAbstrata as sa
 import Visitor as vis
 
+# DIREITA PARA ESQUERDA => ASSOC. DIREITA
+# ESQUERDA PARA DIREITA => ASSOC. ESQUERDA
+
 precedence = (
+  ('right', 'ADD_ASSIGN', 'SUB_ASSIGN', 'MOD_ASSIGN', 'PLUS_ASSIGN', 'DIVIDE_ASSIGN', 'ASSIGN'),
+  ('left','INTE_DOT', 'DDOT'),
+  ('left', 'AND', 'OR'),
+  ('left', 'EQUALS','NOT_EQUAL', 'LESS_THAN', 'LESS_EQUAL', 'GREAT_THAN', 'GREAT_EQUAL'),
   ('left', 'PLUS', 'MINUS'),
-  ('left', 'TIMES', 'DIVIDE'),
+  ('left', 'TIMES', 'DIVIDE','PERCENT'),
+  ('right', 'EXC_DOT'),
+  ('left', 'POS_INCREMENT','POS_DECREMENT'),
+  ('right', 'PRE_INCREMENT', 'PRE_DECREMENT', 'INT_TYPE', 'FLOAT_TYPE', 'ARRAY_TYPE', 'STRING_TYPE', 'BOOL_TYPE'),
   ('right', 'UMINUS')
 )
 
 def p_main(p):
   '''
   main : BEGIN_PROGRAM main_INNER END_PROGRAM 
-  | BEGIN_PROGRAM END_PROGRAM
+  | BEGIN_PROGRAM END_PROGRAM 
   '''
   if len(p) == 4:
     p[0] = sa.Main_MainInner(p[2])
@@ -50,47 +60,57 @@ def p_inner_statement_MUL(p):
     p[0] = sa.InnerStatementMul_Mul(p[1], p[2])
   else:
     p[0] = sa.InnerStatementMul_Single(p[1])
-
-def p_expr_uminus(p):
-  'expr : MINUS expr %prec UMINUS'
-  p[0] = -p[2]
-
+    
 # VERIFICAR A REGRA DE ATRIBUIÇÃO - PODE SER FATORADA!
 def p_expr(p):
   '''
   expr : expr PLUS expr
     | expr MINUS expr 
+    | MINUS expr %prec UMINUS
     | expr DIVIDE expr
     | expr PERCENT expr
     | expr TIMES expr   
     | expr EQUALS expr
     | expr NOT_EQUAL expr
-    | expr GREAT_THAN expr
+    | expr GREAT_THAN expr 
     | expr GREAT_EQUAL expr
     | expr LESS_THAN expr
     | expr LESS_EQUAL expr
     | expr AND expr
     | expr OR expr
-    | INCREMENT variable
-    | variable INCREMENT
-    | DECREMENT variable
-    | variable DECREMENT
+    | EXC_DOT expr
+    | PRE_INCREMENT variable
+    | variable POS_INCREMENT
+    | PRE_DECREMENT variable
+    | variable POS_DECREMENT
     | variable
     | LPAREN expr RPAREN
     | ARRAY_TYPE array_declaration
     | function_call
-    | scalar
+    | expr INTE_DOT expr DDOT expr
+    | variable ADD_ASSIGN expr
+    | variable SUB_ASSIGN expr
+    | variable MOD_ASSIGN expr
+    | variable PLUS_ASSIGN expr
+    | variable DIVIDE_ASSIGN expr
+    | variable ASSIGN expr
+    | LPAREN INT_TYPE RPAREN expr
+    | LPAREN FLOAT_TYPE RPAREN expr
+    | LPAREN STRING_TYPE RPAREN expr 
+    | LPAREN ARRAY_TYPE RPAREN expr
+    | LPAREN BOOL_TYPE RPAREN expr
+    | NUMBER_INTEGER
+    | NUMBER_REAL
+    | CONSTANT_ENCAPSED_STRING
     | TRUE
     | FALSE
-    | expr INTE_DOT expr DDOT expr
-    | variable assign_operator expr
-    | variable assign_operator AMPERSAND expr
-    | LPAREN type_cast_operator RPAREN expr
   '''
   if isinstance(p[1], sa.Expr) and p[2] == '+' and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_Plus(p[1],p[3])
   elif isinstance(p[1], sa.Expr) and p[2] == '-' and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_Minus(p[1],p[3])
+  elif p[1]== '-'  and isinstance(p[2], sa.Expr):
+    p[0] = sa.Expr_Uminus(p[2])
   elif isinstance(p[1], sa.Expr) and p[2] == '*' and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_Times(p[1],p[3])
   elif isinstance(p[1], sa.Expr) and p[2] == '/' and isinstance(p[3], sa.Expr):
@@ -113,6 +133,8 @@ def p_expr(p):
     p[0] = sa.Expr_AndLogical(p[1],p[3])
   elif isinstance(p[1], sa.Expr) and p[2] == '||' and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_OrLogical(p[1],p[3])
+  elif p[1] == '!':
+    p[0] = sa.Expr_NotLogical(p[2])
   elif len(p)==3 and p[1] =='++' and isinstance(p[2], sa.Variable):
     p[0] = sa.Expr_PreIncrement(p[2])
   elif len(p)==3 and isinstance(p[1], sa.Variable) and p[2] =='++':
@@ -127,22 +149,25 @@ def p_expr(p):
     p[0] = sa.Expr_ArrayDeclaration(p[2])
   elif isinstance(p[1], sa.FunctionCall):
     p[0] = sa.Expr_FunctionCall(p[1])
-  elif isinstance(p[1],sa.Scalar):
-    p[0] = sa.Expr_Scalar(p[1])
-  elif p[1] == 'true':
-    p[0] = sa.Expr_True()
-  elif p[1] == 'false':
-    p[0] = sa.Expr_False()
   elif len(p) == 6 and isinstance(p[1], sa.Expr) and isinstance(p[3], sa.Expr) and  isinstance(p[5], sa.Expr):
     p[0] = sa.Expr_TerciaryOp(p[1],p[3],p[5])
   elif len(p) == 4 and isinstance(p[1], sa.Variable) and isinstance(p[3], sa.Expr):
     p[0] = sa.Expr_AssignExpr(p[1],p[3])
-  elif len(p) == 5 and isinstance(p[1], sa.Variable) and p[3]=='&' and isinstance(p[4], sa.Expr):
-    p[0] = sa.Expr_AssignAmpersandExpr(p[1],p[4])
   elif p[1] == '(' and isinstance(p[2], sa.TypeCastOp) and p[3] ==')':
     p[0] = sa.Expr_TypeCastOp(p[2],p[4])
   elif isinstance(p[1], sa.Variable):
-    p[0] = sa.Expr_Variable(p[1])  
+    p[0] = sa.Expr_Variable(p[1])
+  elif p[1] == 'true':
+    p[0] = sa.Expr_True()
+  elif p[1] == 'false':
+    p[0] = sa.Expr_False()
+  elif int(p[1]):
+    p[0] = sa.Expr_NumberInt(p[1])
+  elif float(p[1]): 
+    p[0] = sa.Expr_NumberReal(p[1])
+  elif str(p[1]): 
+    p[0] = sa.Expr_EncapsedString(p[1]) 
+    
 
 def p_exit_statement(p):
   '''
@@ -226,15 +251,18 @@ def p_statement(p):
 
 def p_IF(p):
   '''
-  S : S1 
+  S : IF
+  '''
+  
+  '''
+  S1 
     | IF expr_parentheses S3
   S1 : IF expr_parentheses S2 ELSE S1
     |
   S2 : ELSEIF expr_parentheses S2
     | S1
   S3 : S
-    | S1 ELSE S3
-  '''
+    | S1 ELSE S3'''
 
 def p_if_statement(p):
   '''
@@ -484,65 +512,7 @@ def p_unary_operator(p):
     | PLUS
     | MINUS
   '''
-  
-def p_type_cast_operator(p):
-  '''
-    type_cast_operator : INT_TYPE
-      | DOUBLE_TYPE
-      | FLOAT_TYPE
-      | REAL_TYPE
-      | STRING_TYPE 
-      | ARRAY_TYPE
-      | BOOLEAN_TYPE
-      | BOOL_TYPE
-      | UNSET
-  '''
-  p[0] = sa.TypeCastOp_Token(p[1])
-  
-def p_assign_operator(p):
-  '''
-  assign_operator : ADD_ASSIGN
-    | SUB_ASSIGN
-    | MOD_ASSIGN
-    | PLUS_ASSIGN
-    | DIVIDE_ASSIGN
-    | ASSIGN
-  '''
-  p[0] = sa.AssignOperator_Token(p[1]) 
 
-def p_arithmetic_operator(p):
-  '''
-  arithmetic_operator : PLUS
-    | DIVIDE
-    | PERCENT
-    | TIMES
-    | MINUS
-  '''
-  p[0] = sa.ArithmeticOperator_Token(p[1])
-
-def p_comparission_operator(p): 
-  '''
-  comparission_operator : EQUALS
-    | GREAT_THAN
-    | LESS_THAN
-    | LESS_EQUAL
-    | GREAT_EQUAL
-    | NOT_EQUAL
-    | LEFT_LOGICAL
-    | RIGHT_LOGICAL
-    | AND
-    | OR
-  '''
-  p[0] = sa.ComparissionOperator_Token(p[1])
-
-def p_scalar(p):
-  '''
-  scalar : NUMBER_REAL
-    | NUMBER_INTEGER
-    | CONSTANT_ENCAPSED_STRING
-  '''
-  p[0] = sa.Scalar_Token(p[1])
-  
 def p_variable(p):
   '''
   variable : VARIABLE reference_variable_SELECTOR
@@ -646,8 +616,6 @@ def p_parameter_type(p):
     | FLOAT_TYPE
     | ARRAY_TYPE
     | BOOL_TYPE
-    | REAL_TYPE
-    | DOUBLE_TYPE
   '''
   p[0] = sa.ParameterType_Type(p[1])
 
@@ -764,8 +732,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-$x = &$y;
-(int)$x;
+  !1 + -1;
 ?>
 '''
 

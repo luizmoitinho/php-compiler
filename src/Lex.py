@@ -58,9 +58,11 @@ tokens = [
     'PERCENT',
     'ASSIGN',
     'CONCATENATE',
-    'INCREMENT',
+    'PRE_INCREMENT',
+    'POS_INCREMENT',
     'INTE_DOT',
-    'DECREMENT',
+    'PRE_DECREMENT',
+    'POS_DECREMENT',
     'ADD_ASSIGN',
     'SUB_ASSIGN',
     'MOD_ASSIGN',
@@ -104,8 +106,10 @@ t_DIVIDE = r'\/'
 t_PERCENT = r'\%'
 t_ASSIGN =  r'\='
 t_CONCATENATE =  r'\.\='
-t_INCREMENT =  r'\+\+'
-t_DECREMENT =  r'\-\-'
+t_PRE_INCREMENT = r'\+\+'
+t_POS_INCREMENT =  r'\+\+'
+t_PRE_DECREMENT =  r'\-\-'
+t_POS_DECREMENT = r'\-\-'
 t_ADD_ASSIGN = r'\+\='
 t_SUB_ASSIGN = r'\-\='
 t_MOD_ASSIGN = r'\%\='

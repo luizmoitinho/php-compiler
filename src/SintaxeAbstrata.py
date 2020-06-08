@@ -523,6 +523,12 @@ class Expr_Minus(Expr):
   def accept(self, Visitor):
     return Visitor.visitExpr_Minus(self)
 
+class Expr_Uminus(Expr):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_Uminus(self)
+
 class Expr_Times(Expr):
   def __init__(self, expr1,expr2):
     self.expr1 = expr1
@@ -599,6 +605,12 @@ class Expr_OrLogical(Expr):
     self.expr2 = expr2
   def accept(self, Visitor):
     return Visitor.visitExpr_OrLogical(self)
+  
+class Expr_NotLogical(Expr):
+  def __init__(self, expr):
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_NotLogical(self)
 
 class Expr_PreIncrement(Expr):
   def __init__(self, variable):
@@ -695,6 +707,23 @@ class Expr_TypeCastOp(Expr):
   def accept(self, Visitor):
     return Visitor.visitExpr_TypeCastOp(self)
 
+class Expr_NumberInt(Expr):
+  def __init__(self,numberInt):
+    self.numberInt =  numberInt
+  def accept(self, Visitor):
+    return Visitor.visitExpr_NumberInt(self)
+
+class Expr_NumberFloat(Expr):
+  def __init__(self,numberFloat):
+    self.numberFloat =  numberFloat
+  def accept(self, Visitor):
+    return Visitor.visitExpr_NumberFloat(self)
+
+class Expr_EncapsedString(Expr):
+  def __init__(self,encapsedString):
+    self.encapsedString =  encapsedString
+  def accept(self, Visitor):
+    return Visitor.visitExpr_EncapsedString(self)
 
 class TypeCastOp(metaclass=ABCMeta):
   @abstractmethod
@@ -781,17 +810,6 @@ class ArrayPair_Attr_Expr(ArrayPair):
     self.expr2 = expr2
   def accept(self, Visitor):
     return Visitor.visitArrayPair_Attr_Expr(self) 
-  
-class Scalar(metaclass=ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    pass
-  
-class Scalar_Token(Scalar):
-  def __init__(self, token):
-    self.token = token
-  def accept(self, Visitor):
-    return Visitor.visitScalar_Token(self)
     
 class FunctionCall(metaclass = ABCMeta):
   @abstractmethod
