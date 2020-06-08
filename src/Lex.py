@@ -8,7 +8,6 @@ reserved = {
     'if'        : 'IF',
     'else'      : 'ELSE',
     'elseif'    : 'ELSEIF',
-    'case'      : 'CASE',
     'break'     : 'BREAK',
     'continue'  : 'CONTINUE',
     'true'      : 'TRUE',
@@ -16,38 +15,25 @@ reserved = {
     'while'     : 'WHILE',
     'for'       : 'FOR',
     'foreach'   : 'FOREACH',
-    'declare'   : 'DECLARE',
-    'enddeclare': 'ENDDECLARE',
     'do'        : 'DO',
     'int'       : 'INT_TYPE',
-    'double'    : 'DOUBLE_TYPE',
     'float'     : 'FLOAT_TYPE',
-    'real'      : 'REAL_TYPE',
     'string'    : 'STRING_TYPE',
     'array'     : 'ARRAY_TYPE',
     'bool'      : 'BOOL_TYPE',
-    'boolean'   : 'BOOLEAN_TYPE',
-    'unset'     : 'UNSET',
     'exit'      : 'EXIT',
     'die'       : 'DIE',
-    'list'      : 'LIST',
-    'clone'     : 'CLONE',
     'return'    : 'RETURN',
     'global'    : 'GLOBAL',
-    'var'       : 'VAR' #Remover se não existir
 }
 
 tokens = [
     'ID',
-    'ASPAS',
-    'APOSTROFE',
-    'ARROBA',
     'AMPERSAND',
     'ATTR_ASSOC',
     'DOLAR',
     'COMMENT_SINGLE',
     'COMMENT_MULTI',
-    'CRASE',
     'BEGIN_PROGRAM',
     'END_PROGRAM',
     'PLUS',
@@ -57,7 +43,6 @@ tokens = [
     'DDOT',
     'PERCENT',
     'ASSIGN',
-    'CONCATENATE',
     'PRE_INCREMENT',
     'POS_INCREMENT',
     'INTE_DOT',
@@ -85,7 +70,6 @@ tokens = [
     'LEFT_LOGICAL',
     'RIGHT_LOGICAL',
     'IDENTATION',
-    'STRING',
     'NUMBER_REAL',
     'NUMBER_INTEGER',
     'VARIABLE',
@@ -105,7 +89,6 @@ t_TIMES = r'\*'
 t_DIVIDE = r'\/'
 t_PERCENT = r'\%'
 t_ASSIGN =  r'\='
-t_CONCATENATE =  r'\.\='
 t_PRE_INCREMENT = r'\+\+'
 t_POS_INCREMENT =  r'\+\+'
 t_PRE_DECREMENT =  r'\-\-'
@@ -135,13 +118,9 @@ t_AND = r'\&\&'
 t_OR = r'\|\|'
 t_AMPERSAND = r'\&'
 t_ATTR_ASSOC = r'\=\>'
-t_CRASE  = r'\`'
-t_APOSTROFE  = r'\''
-t_ASPAS =  r'\"'
 t_DDOT = r'\:'
 t_INTE_DOT = r'\?'
 t_EXC_DOT = r'\!'
-t_ARROBA = r'\@'
 t_CONSTANT_ENCAPSED_STRING = r'\'[^\']*\'|\"[^\"]*\"'
 
 ArrayTabulacao = [0]
