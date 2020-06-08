@@ -9,15 +9,15 @@ class Main(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
   
-class Main_MainInner(Main):
+class Main_MainProgram(Main):
   def __init__(self, mainInner):
     self.mainInner = mainInner
   def accept(self, Visitor):
-    return Visitor.visitMain_MainInner(self)
+    return Visitor.visitMain_MainProgram(self)
     
-class Main_MainInner_Empty(Main):
+class Main_Empty(Main):
   def accept(self, Visitor):
-    return Visitor.visitMain_MainInner_Empty(self)
+    return Visitor.visitMain_Empty()
 
 #MAIN_INNER ABSTRATA E CONCRETAS  
 class MainInner(metaclass=ABCMeta):
@@ -25,18 +25,18 @@ class MainInner(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
 
-class MainInner_InnerStatement_MainInner(MainInner):
+class MainProgram_InnerStatement_Recursive(MainInner):
   def __init__(self, innerStatement, mainInner):
     self.innerStatement = innerStatement
     self.mainInner = mainInner
   def accept(self, Visitor):
-    return Visitor.visitMainInner_InnerStatement_MainInner(self)
+    return Visitor.visitMainProgram_InnerStatement_Recursive(self)
 
-class MainInner_InnerStatement(MainInner):
+class MainProgram_InnerStatement(MainInner):
   def __init__(self, innerStatement):
     self.innerStatement = innerStatement
   def accept(self, Visitor):
-    return Visitor.visitMainInner_InnerStatement(self)
+    return Visitor.visitMainProgram_InnerStatement(self)
 
 class InnerStatement(metaclass = ABCMeta):
     @abstractmethod
@@ -692,13 +692,6 @@ class Expr_AssignExpr(Expr):
     self.expr = expr
   def accept(self, Visitor):
     return Visitor.visitExpr_AssignExpr(self)
-
-class Expr_AssignAmpersandExpr(Expr):
-  def __init__(self, variable,expr):
-    self.variable = variable
-    self.expr = expr
-  def accept(self, Visitor):
-    return Visitor.visitExpr_AssignAmpersandExpr(self)
 
 class Expr_TypeCastOp(Expr):
   def __init__(self, typeCast,expr):

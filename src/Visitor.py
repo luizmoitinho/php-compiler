@@ -3,21 +3,21 @@ from PrettyPrinter import PrettyPrinter as pp
 
 class Visitor():
 
-  def visitMain_MainInner(self, main):
+  def visitMain_MainProgram(self, main):
     print('<?php')
     pp.incrementTab()
     main.mainInner.accept(self)
     print('?>')
   
-  def visitMain_MainInner_Empty(self):
+  def visitMain_Empty(self):
     print('<?php', end=' ')
     print('?>', end=' ')
     
-  def visitMainInner_InnerStatement_MainInner(self, mainInner):
+  def visitMainProgram_InnerStatement_Recursive(self, mainInner):
     mainInner.innerStatement.accept(self)
     mainInner.mainInner.accept(self)
     
-  def visitMainInner_InnerStatement(self, mainInner):
+  def visitMainProgram_InnerStatement(self, mainInner):
     mainInner.innerStatement.accept(self)
 
   def visitInnerStatement_Statement(self, innerStatement):
