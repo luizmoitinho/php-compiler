@@ -1,7 +1,7 @@
 from AbstractVisitor import AbstractVisitor
 from PrettyPrinter import PrettyPrinter as pp
 
-class Visitor():
+class Visitor(AbstractVisitor):
 
   def visitMain_MainProgram(self, main):
     print('<?php')
@@ -266,7 +266,7 @@ class Visitor():
     print(')',end='')
 
   def visitArrayDec_NoPairList(self, ArrayDec):
-    print('( )',end='')
+    print('()',end='')
     
   def visitArrayPair_Expr(self, arrayPair):
     arrayPair.expr.accept(self)
@@ -493,22 +493,6 @@ class Visitor():
     print('return', end='')
     print(';')
 
-  def visitCompoundVariableSingle(self, singleVariable):
-    print(singleVariable.variable, end='')
-    
-  def visitCompoundVariableMul(self, compoundVariable):
-      print('$', end='')
-      print('{', end='')
-      compoundVariable.expr.accept(self)
-      print('}', end='')
-
-  def visitReferenceVariableSelectorSingle(self, referenceVariableSelector):
-      referenceVariableSelector.selector.accept(self)
-
-  def visitReferenceVariableSelectorMul(self, referenceVariableSelector):
-      referenceVariableSelector.selector.accept(self)
-      referenceVariableSelector.referencevariableselector.accept(self)
-
   def visitSelectorWithExpr(self, selector):
       print('[', end='')
       selector.expr.accept(self)
@@ -684,13 +668,10 @@ class Visitor():
   def visitExpr_Scalar(self, exprScalar):
     exprScalar.scalar.accept(self) 
 
-  def visitExpr_True(self,exprtrue):
-    print('true',end='')
+  def visitExpr_Boolean(self,exprBoolean):
+    print(exprBoolean.token, end='')
   
-  def visitExpr_False(self, exprTrue):
-    print('false',end='')
-  
-  def visitExpr_TerciaryOp(self, exprTerciary):
+  def visitExpr_TerciaryOp(self, exprTernary):
     exprTerciary.expr1.accept(self)
     print(' ? ',end='')
     exprTerciary.expr2.accept(self)

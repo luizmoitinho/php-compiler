@@ -666,25 +666,19 @@ class Expr_Scalar(Expr):
   def accept(self, Visitor):
     return Visitor.visitExpr_Scalar(self)
 
-class Expr_True(Expr):
+class Expr_Boolean(Expr):
+  def __init__(self, token):
+    self.token = token
   def accept(self, Visitor):
-    return Visitor.visitExpr_True(self)
+    return Visitor.visitExpr_Boolean(self)
 
-class Expr_True(Expr):
-  def accept(self, Visitor):
-    return Visitor.visitExpr_True(self)
-
-class Expr_False(Expr):
-  def accept(self, Visitor):
-    return Visitor.visitExpr_False(self)
-
-class Expr_TerciaryOp(Expr):
+class Expr_TernaryOp(Expr):
   def __init__(self, expr1,expr2,expr3):
     self.expr1 = expr1
     self.expr2 = expr2
     self.expr3 = expr3
   def accept(self, Visitor):
-    return Visitor.visitExpr_TerciaryOp(self)
+    return Visitor.visitExpr_TernaryOp(self)
 
 class Expr_AssignExpr(Expr):
   def __init__(self, variable,expr):

@@ -145,17 +145,15 @@ def p_expr(p):
   elif isinstance(p[1], sa.FunctionCall):
     p[0] = sa.Expr_FunctionCall(p[1])
   elif len(p) == 6 and isinstance(p[1], sa.Expr) and isinstance(p[3], sa.Expr) and  isinstance(p[5], sa.Expr):
-    p[0] = sa.Expr_TerciaryOp(p[1],p[3],p[5])
+    p[0] = sa.Expr_TernaryOp(p[1],p[3],p[5])
   elif len(p) == 4 and isinstance(p[1], sa.Variable) and isinstance(p[3], sa.Expr): #SEPARA REGRA PARA CADA TOKEN DE ASSIGN
     p[0] = sa.Expr_AssignExpr(p[1],p[3])
   elif p[1] == '(' and isinstance(p[2], sa.TypeCastOp) and p[3] ==')':
     p[0] = sa.Expr_TypeCastOp(p[2],p[4])
   elif isinstance(p[1], sa.Variable):
     p[0] = sa.Expr_Variable(p[1])
-  elif p[1] == 'true':
-    p[0] = sa.Expr_True()
-  elif p[1] == 'false':
-    p[0] = sa.Expr_False()
+  elif p[1] == 'true' or p[1] == 'false':
+    p[0] = sa.Expr_Boolean(p[1])
   elif int(p[1]):
     p[0] = sa.Expr_NumberInt(p[1])
   elif float(p[1]): 
@@ -727,14 +725,14 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  (int) $valor;
+  $valor;
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
-result = parser.parse(debug=True)
-#visitor = sv.SemanticVisitor()
-v = vis.Visitor()
+result = parser.parse(debug=False)
+visitor = sv.SemanticVisitor()
+#v = vis.Visitor()
 #for r in result:
-result.accept(v)
+result.accept(visitor)

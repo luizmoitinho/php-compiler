@@ -24,17 +24,17 @@ class SemanticVisitor(AbstractVisitor):
     self.printer = Visitor()
     st.beginScope('global')
     
-  def visitMain_MainInner(self, main):
+  def visitMain_MainProgram(self, main):
     main.mainInner.accept(self)
     
-  def visitMain_MainInner_Empty(self, main):
+  def visitMain_Empty(self, main):
     st.endScope()
     
-  def visitMainInner_InnerStatement_MainInner(self, mainInner):
+  def visitMainProgram_InnerStatement_Recursive(self, mainInner):
     mainInner.innerStatement.accept(self)
     mainInner.mainInner.accept(self)
     
-  def visitMainInner_InnerStatement(self, mainInner):
+  def visitMainProgram_InnerStatement(self, mainInner):
     mainInner.innerStatement.accept(self)
     
   def visitInnerStatement_FuncDecStatement(self, innerStatement):
@@ -164,7 +164,17 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitStatement_Expr(self, statement):
     return statement.expr.accept(self)
+  
+  def visitExpr_Variable(self, exprVariable):
+    return exprVariable.variable.accept(self)
     
+  def visitVariable_Single(self, variable):
+    bindable = st.getBindable(variable.token)
+    if(bindable == None):
+      return st.addVar(variable.token)
+    return bindable
+  
+  '''
   def visitExpr_Expr1(self, expr):
     return expr.expr1.accept(self)
   
@@ -268,6 +278,8 @@ class SemanticVisitor(AbstractVisitor):
       return st.addVar(singleVariable.variable)
     return variable
   
+  '''
+  
   def visitFunctionCall_NoParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
     if bindable == None:
@@ -300,6 +312,7 @@ class SemanticVisitor(AbstractVisitor):
   def visitFunctionCallParameter_AmpersandVariable(self, functionCallParameter):
     return functionCallParameter.variable
   
+  '''
   def visitScalar_Token(self, scalar):
     if isinstance(scalar.token, int):
       return st.INT
@@ -307,12 +320,10 @@ class SemanticVisitor(AbstractVisitor):
       return st.FLOAT
     elif isinstance(scalar.token, str):
       return st.STRING
-    
+  '''
+  
   def visitAssignOperator_Token(self, assignOp):
     return assignOp.token
-
-  def visitArithmeticOperator_Token(self, arithmeticOp):
-    return arithmeticOp.token
   
   def visitArrayDec_NoPairList(self, arrayDec):
     return
@@ -423,4 +434,3 @@ class SemanticVisitor(AbstractVisitor):
   
   def visitBreak_Empty(self):
     return
-
