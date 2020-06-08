@@ -17,8 +17,8 @@ precedence = (
   ('left', 'TIMES', 'DIVIDE','PERCENT'),
   ('right', 'EXC_DOT'),
   ('left', 'POS_INCREMENT','POS_DECREMENT'),
-  ('right', 'PRE_INCREMENT', 'PRE_DECREMENT', 'INT_TYPE', 'FLOAT_TYPE', 'ARRAY_TYPE', 'STRING_TYPE', 'BOOL_TYPE'),
-  ('right', 'UMINUS')
+  ('right', 'PRE_INCREMENT', 'PRE_DECREMENT', 'RPAREN'),
+  ('right', 'UMINUS'),
 )
 
 def p_main(p):
@@ -61,7 +61,6 @@ def p_inner_statement_MUL(p):
   else:
     p[0] = sa.InnerStatementMul_Single(p[1])
     
-# VERIFICAR A REGRA DE ATRIBUIÇÃO - PODE SER FATORADA!
 def p_expr(p):
   '''
   expr : expr PLUS expr
@@ -86,6 +85,7 @@ def p_expr(p):
     | variable
     | LPAREN expr RPAREN
     | ARRAY_TYPE array_declaration
+    | LPAREN typecast_operator RPAREN expr 
     | function_call
     | expr INTE_DOT expr DDOT expr
     | variable ADD_ASSIGN expr
@@ -94,11 +94,6 @@ def p_expr(p):
     | variable PLUS_ASSIGN expr
     | variable DIVIDE_ASSIGN expr
     | variable ASSIGN expr
-    | LPAREN INT_TYPE RPAREN expr
-    | LPAREN FLOAT_TYPE RPAREN expr
-    | LPAREN STRING_TYPE RPAREN expr 
-    | LPAREN ARRAY_TYPE RPAREN expr
-    | LPAREN BOOL_TYPE RPAREN expr
     | NUMBER_INTEGER
     | NUMBER_REAL
     | CONSTANT_ENCAPSED_STRING
@@ -151,7 +146,7 @@ def p_expr(p):
     p[0] = sa.Expr_FunctionCall(p[1])
   elif len(p) == 6 and isinstance(p[1], sa.Expr) and isinstance(p[3], sa.Expr) and  isinstance(p[5], sa.Expr):
     p[0] = sa.Expr_TerciaryOp(p[1],p[3],p[5])
-  elif len(p) == 4 and isinstance(p[1], sa.Variable) and isinstance(p[3], sa.Expr):
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and isinstance(p[3], sa.Expr): #SEPARA REGRA PARA CADA TOKEN DE ASSIGN
     p[0] = sa.Expr_AssignExpr(p[1],p[3])
   elif p[1] == '(' and isinstance(p[2], sa.TypeCastOp) and p[3] ==')':
     p[0] = sa.Expr_TypeCastOp(p[2],p[4])
@@ -168,6 +163,14 @@ def p_expr(p):
   elif str(p[1]): 
     p[0] = sa.Expr_EncapsedString(p[1]) 
     
+def p_typecast_operator(p):
+  '''
+  typecast_operator : INT_TYPE
+    | FLOAT_TYPE
+    | ARRAY_TYPE
+    | STRING_TYPE
+    | BOOL_TYPE
+  '''
 
 def p_exit_statement(p):
   '''
@@ -564,7 +567,7 @@ def p_fds_parameter(p):
 
 def p_parameter_list(p):  
   '''
-  parameter_list : parameter parameter_list_COLON_PARAMETER 
+  parameter_list : parameter parameter_list_colon_parameter 
     | parameter
   '''  
   if len(p) == 3:
@@ -684,9 +687,9 @@ def p_statement_block_optional(p):
   elif len(p) == 3:
     p[0] = sa.StatementBlockOpt_Empty()
 
-def p_parameter_list_COLON_PARAMETER(p):
+def p_parameter_list_colon_parameter(p):
   '''
-  parameter_list_COLON_PARAMETER : COLON parameter parameter_list_COLON_PARAMETER
+  parameter_list_colon_parameter : COLON parameter parameter_list_colon_parameter
     | COLON parameter
   '''
   if len(p) == 4:
@@ -723,7 +726,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  !1 + -1;
+  $valor += 1;
 ?>
 '''
 
