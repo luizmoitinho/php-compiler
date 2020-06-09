@@ -14,7 +14,7 @@ def isValidNumber(number):
         return False
       
 def isTypePrimitive(type):
-  if(type in st.Number or type == st.BOOL):
+  if(type in st.Number or type == st.BOOL or type == st.ARRAY):
     return True
   return False
 
@@ -90,7 +90,6 @@ class SemanticVisitor(AbstractVisitor):
     st.beginScope('while')
     exprBool = whileStatement.exprparentheses.accept(self)
     whileStatement.statement.accept(self)
-    print(exprBool)
     st.endScope()
 
   def visitFuncDecStatement_Function(self, funcDecStatement):
@@ -153,6 +152,10 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr_Plus(self, exprPlus):
     type1 = exprPlus.expr1.accept(self)
     type2 = exprPlus.expr2.accept(self)
+    
+    type1 = isVariable(self, type1)
+    type2 = isVariable(self, type2)
+    
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprPlus, type1, type2)
@@ -161,6 +164,10 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr_Minus(self, exprMinus):
     type1 = exprMinus.expr1.accept(self)
     type2 = exprMinus.expr2.accept(self)
+    
+    type1 = isVariable(self, type1)
+    type2 = isVariable(self, type2)
+    
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprMinus, type1, type2)
@@ -169,6 +176,10 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr_Times(self, exprTimes):
     type1 = exprTimes.expr1.accept(self)
     type2 = exprTimes.expr2.accept(self)
+    
+    type1 = isVariable(self, type1)
+    type2 = isVariable(self, type2)
+    
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprTimes, type1, type2)
@@ -177,6 +188,10 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr_Divide(self, exprDivide):
     type1 = exprDivide.expr1.accept(self)
     type2 = exprDivide.expr2.accept(self)
+    
+    type1 = isVariable(self, type1)
+    type2 = isVariable(self, type2)
+    
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprDivide, type1, type2)
@@ -197,17 +212,17 @@ class SemanticVisitor(AbstractVisitor):
     type1 = exprEqual.expr1.accept(self)
     type2 = exprEqual.expr2.accept(self)
     
-    type1 = isVariable(self,type1)
-    type2 = isVariable(self,type2)
+    type1 = isVariable(self, type1)
+    type2 = isVariable(self, type2)
     
     if isTypePrimitive(type1) and isTypePrimitive(type2):
       return st.BOOL
     else:
-      print('ERROR: Invalid boolean expression:', end='') 
+      print('ERROR: Invalid boolean expression: ', end='') 
       exprEqual.expr1.accept(self.printer)
       print(' == ',end='')
       exprEqual.expr2.accept(self.printer)
-    
+      print('')
     
   def visitExpr_AssignExpr(self, assignExpr):
     bindable = assignExpr.variable.accept(self)
@@ -230,10 +245,7 @@ class SemanticVisitor(AbstractVisitor):
       el.AttributionTypeError(self, assignExpr, exprType)
       
     if bindable[st.TYPE] not in st.Number:
-      print('ERROR: Invalid atribution of type ', exprType, end='') 
-      print('on variable ', end='') 
-      assignExpr.variable.accept(self.printer)
-      print(' that has type', bindable[st.TYPE])
+      el.AttributionInvalidTypeError(self, exprType, assignExpr, bindable)
 
     st.updateBindableType(bindable[st.NAME], exprType)
   
@@ -245,7 +257,6 @@ class SemanticVisitor(AbstractVisitor):
   
   def visitExpr_EncapsedString(self, exprEncapsed):
     return st.STRING
-
   
   def visitExpr_Boolean(self, exprBoolean):
     return st.BOOL
@@ -387,7 +398,6 @@ class SemanticVisitor(AbstractVisitor):
     arrayPairList.arrayPairListArr.accept(self)
   
   def visitArrayPairListArr_Single(self, arrayPairList):
-    print('single')
     arrayPairList.arrayPair.accept(self)
     
   def visitArrayPair_Expr(self, arrayPair):

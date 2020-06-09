@@ -687,11 +687,9 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-
-  while(10 == $x){
-    $valor = 1;
-    $valor2 = $valor;
-  }
+    $valor = 1.5;
+    
+    $v = $valor + $valor - $valor / $valor * $valor;
 
 ?>
 '''
