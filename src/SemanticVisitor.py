@@ -248,6 +248,26 @@ class SemanticVisitor(AbstractVisitor):
       el.AttributionInvalidTypeError(self, exprType, assignExpr, bindable)
 
     st.updateBindableType(bindable[st.NAME], exprType)
+    
+  def visitExpr_PreIncrement(self, exprPreIncrement):
+    variable = exprPreIncrement.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      el.IncrementVariableError(variable)
+
+  def visitExpr_PosIncrement(self, exprPosIncrement):
+    variable = exprPosIncrement.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      el.IncrementVariableError(variable)
+
+  def visitExpr_PreDecrement(self, exprPreDecrement):
+    variable = exprPreDecrement.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      el.DecrementVariableError(variable)
+
+  def visitExpr_PosDecrement(self, exprPosDecrement):
+    variable = exprPosDecrement.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      el.DecrementVariableError(variable)
   
   def visitExpr_NumberInt(self, exprNumber):
     return st.INT
@@ -271,75 +291,6 @@ class SemanticVisitor(AbstractVisitor):
     return bindable
 
   '''
-  def visitExpr_Expr1_Expr2(self, expr):
-    type1 = expr.expr1.accept(self)
-    type2 = expr.expr2.accept(self)
-    if type(type1) is dict:
-      type1 = type1[st.TYPE]
-      
-    c = coercion(type1, type2[1])
-    if (c == None):
-      print('ERROR: Expression ', end='')
-      expr.expr1.accept(self.printer)
-      print(' has type', type1, 'while expression ', end='')
-      expr.expr2.expr.accept(self.printer)
-      print(' has type', type2[1])
-    return c
-  
-  def visitExpr2_ArithmeticOp(self, expr2):
-    exprType = expr2.expr.accept(self)
-    
-    if type(exprType) is dict:
-      exprType = exprType[st.TYPE]
-    
-    return [st.ARITH, exprType]
-  
-  def visitExpr3_Var_Assign_Expr(self, expr3):   
-    bindable = expr3.variable.accept(self)
-    assignOp = expr3.assignOp.accept(self)
-    exprType = expr3.expr.accept(self)
-    
-    if exprType == None:
-      print('ERROR: Atribution to variable ', end='')
-      expr3.variable.accept(self.printer)
-      print(' returned type', exprType)
-      return
-    
-    if type(exprType) is dict:
-      exprType = exprType[st.TYPE] 
-    
-    if assignOp == '=':
-        st.updateBindableType(bindable[st.NAME], exprType)
-    elif bindable[st.TYPE] not in st.Number:
-        print('ERROR: Invalid atribution', assignOp, 'on variable ', end='') 
-        expr3.variable.accept(self.printer)
-        print(' that has type', bindable[st.TYPE]) 
-    else:
-        st.updateBindableType(bindable[st.NAME], exprType)
-  
-  def visitExpr1_Variable_Increment(self, expr1):
-    variable = expr1.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      print('ERROR: Cannot increment variable', variable[st.NAME], 'with type', variable[st.TYPE])
-      
-  def visitExpr1_Variable_Decrement(self, expr1):
-    variable = expr1.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      print('ERROR: Cannot decrement variable', variable[st.NAME], 'with type', variable[st.TYPE])
-    
-  def visitExpr1_Increment_Variable(self, expr1):
-    variable = expr1.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      print('ERROR: Cannot increment variable', variable[st.NAME], 'with type', variable[st.TYPE])
-    
-  def visitExpr1_Decrement_Variable(self, expr1):
-    variable = expr1.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      print('ERROR: Cannot decrement variable', variable[st.NAME], 'with type', variable[st.TYPE])
-    
-  def visitExpr1_FunctionCall(self, expr1):
-    return expr1.functionCall.accept(self)
-  
   def visitExpr1_ArrayDeclaration(self, expr1):
     expr1.arrayDeclaration.accept(self)
     return st.ARRAY

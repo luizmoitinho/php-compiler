@@ -83,10 +83,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitInnerStatementMul_Single(self, innerStatementMul):
     pass
 
-  @abstractmethod
-  def visitExpr_Equals(self, exprEqual):
-    pass
-
   # ================ P_EXPR ===============================
   
   @abstractmethod
@@ -111,6 +107,26 @@ class AbstractVisitor(metaclass = ABCMeta):
 
   @abstractmethod  
   def visitExpr_Divide(self, exprDivide):
+    pass
+  
+  @abstractmethod
+  def visitExpr_Equals(self, exprEqual):
+    pass
+  
+  @abstractmethod
+  def visitExpr_PreIncrement(self, exprPreIncrement):
+    pass
+
+  @abstractmethod
+  def visitExpr_PosIncrement(self, exprPosIncrement):
+    pass
+
+  @abstractmethod
+  def visitExpr_PreDecrement(self, exprPreDecrement):
+    pass
+
+  @abstractmethod
+  def visitExpr_PosDecrement(self, exprPosDecrement):
     pass
 
   @abstractmethod
@@ -382,22 +398,6 @@ class AbstractVisitor(metaclass = ABCMeta):
 
   @abstractmethod
   def visitExpr_NotLogical(self, exprNotLogical):
-    pass
-
-  @abstractmethod
-  def visitExpr_PreIncrement(self, exprPreIncrement):
-    pass
-
-  @abstractmethod
-  def visitExpr_PosIncrement(self, exprPosIncrement):
-    pass
-
-  @abstractmethod
-  def visitExpr_PreDecrement(self, exprPreDecrement):
-    pass
-
-  @abstractmethod
-  def visitExpr_PosDecrement(self, exprPosDecrement):
     pass
 
   @abstractmethod
