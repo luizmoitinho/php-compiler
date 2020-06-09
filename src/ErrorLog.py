@@ -11,6 +11,12 @@ def AttributionInvalidTypeError(self, exprType, assignExpr, bindable):
   assignExpr.variable.accept(self.printer)
   print(' that has type', bindable[st.TYPE])
   
+def IncrementVariableError(variable):
+  print('ERROR: Cannot increment variable', variable[st.NAME], 'with type', variable[st.TYPE])
+  
+def DecrementVariableError(variable):
+  print('ERROR: Cannot decrement variable', variable[st.NAME], 'with type', variable[st.TYPE])
+  
 def ExpressionTypeError(self, expr, type1, type2):
   print('ERROR: Expression ', end='')
   expr.expr1.accept(self.printer)
