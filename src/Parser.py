@@ -135,7 +135,7 @@ def p_expr(p):
     p[0] = sa.Expr_PosIncrement(p[1])
   elif len(p)==3 and p[1] =='--' and isinstance(p[2], sa.Variable):
     p[0] = sa.Expr_PreDecrement(p[2])
-  elif len(p)==3 and isinstance(p[2], sa.Variable) and p[1] =='--':
+  elif len(p)==3 and isinstance(p[1], sa.Variable) and p[2] =='--':
     p[0] = sa.Expr_PosDecrement(p[1])
   elif p[1]=='(' and isinstance(p[2], sa.Expr) and p[3]==')':
     p[0] = sa.Expr_ParenExpr(p[2])
@@ -686,9 +686,7 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-    $valor = 1.5;
-    
-    $v = $valor + $valor - $valor / $valor * $valor;
+    $valor--;
 
 ?>
 '''
