@@ -9,7 +9,7 @@ import Visitor as vis
 # ESQUERDA PARA DIREITA => ASSOC. ESQUERDA
 
 precedence = (
-  ('right', 'ADD_ASSIGN', 'SUB_ASSIGN', 'MOD_ASSIGN', 'PLUS_ASSIGN', 'DIVIDE_ASSIGN', 'ASSIGN'),
+  ('right', 'ADD_ASSIGN', 'SUB_ASSIGN', 'MOD_ASSIGN', 'TIMES_ASSIGN', 'DIVIDE_ASSIGN', 'ASSIGN'),
   ('left','INTE_DOT', 'DDOT'),
   ('left', 'AND', 'OR'),
   ('left', 'EQUALS','NOT_EQUAL', 'LESS_THAN', 'LESS_EQUAL', 'GREAT_THAN', 'GREAT_EQUAL'),
@@ -91,7 +91,7 @@ def p_expr(p):
     | variable ADD_ASSIGN expr
     | variable SUB_ASSIGN expr
     | variable MOD_ASSIGN expr
-    | variable PLUS_ASSIGN expr
+    | variable TIMES_ASSIGN expr
     | variable DIVIDE_ASSIGN expr
     | variable ASSIGN expr
     | NUMBER_INTEGER
@@ -145,20 +145,30 @@ def p_expr(p):
   elif isinstance(p[1], sa.FunctionCall):
     p[0] = sa.Expr_FunctionCall(p[1])
   elif len(p) == 6 and isinstance(p[1], sa.Expr) and isinstance(p[3], sa.Expr) and  isinstance(p[5], sa.Expr):
-    p[0] = sa.Expr_TernaryOp(p[1],p[3],p[5])
-  elif len(p) == 4 and isinstance(p[1], sa.Variable) and isinstance(p[3], sa.Expr): #SEPARA REGRA PARA CADA TOKEN DE ASSIGN
+    p[0] = sa.Expr_TernaryOp(p[1],p[3],p[5])  
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and p[2] == '=' and isinstance(p[3], sa.Expr): 
     p[0] = sa.Expr_AssignExpr(p[1],p[3])
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and p[2] == '+=' and isinstance(p[3], sa.Expr): 
+    p[0] = sa.Expr_AddAssignExpr(p[1],p[3])
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and p[2] == '-=' and isinstance(p[3], sa.Expr): 
+    p[0] = sa.Expr_SubAssignExpr(p[1],p[3])
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and p[2] == '%=' and isinstance(p[3], sa.Expr): 
+    p[0] = sa.Expr_ModAssignExpr(p[1],p[3])
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and p[2] =='/='and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_DivideAssignExpr(p[1],p[3])
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and p[2] =='*=' and isinstance(p[3], sa.Expr): 
+    p[0] = sa.Expr_TimesAssignExpr(p[1],p[3])
   elif p[1] == '(' and isinstance(p[2], sa.TypeCastOp) and p[3] ==')':
     p[0] = sa.Expr_TypeCastOp(p[2],p[4])
   elif isinstance(p[1], sa.Variable):
     p[0] = sa.Expr_Variable(p[1])
   elif p[1] == 'true' or p[1] == 'false':
     p[0] = sa.Expr_Boolean(p[1])
-  elif int(p[1]):
+  elif isinstance(p[1], int):
     p[0] = sa.Expr_NumberInt(p[1])
-  elif float(p[1]): 
-    p[0] = sa.Expr_NumberReal(p[1])
-  elif str(p[1]): 
+  elif isinstance(p[1], float): 
+    p[0] = sa.Expr_NumberFloat(p[1])
+  elif isinstance(p[1], str): 
     p[0] = sa.Expr_EncapsedString(p[1]) 
     
 def p_typecast_operator(p):
@@ -213,9 +223,9 @@ def p_array_declaration(p):
 
 def p_statement(p):
   '''
-  statement : expr SEMICOLON
-    | if_statement 
+  statement : expr SEMICOLON 
     | while_statement
+    | if_statement
     | do_statement
     | for_statement
     | foreach_statement
@@ -238,8 +248,8 @@ def p_statement(p):
     p[0] = sa.Statement_Continue(p[1])
   elif isinstance(p[1], sa.Return):
     p[0] = sa.Statement_Return(p[1])
-  elif isinstance(p[1], sa.IfStatement):
-    p[0] = sa.Statement_If(p[1])
+  #elif isinstance(p[1], sa.IfStatement):
+  #  p[0] = sa.Statement_If(p[1])
   elif isinstance(p[1], sa.WhileStatement):
     p[0] = sa.Statement_While(p[1])
   elif isinstance(p[1], sa.DoWhileStatement):
@@ -251,64 +261,17 @@ def p_statement(p):
   elif isinstance(p[1], sa.ForStatement):
     p[0] = sa.Statement_For(p[1])
 
-def p_IF(p):
-  '''
-  S : IF
-  '''
-  
-  '''
-  S1 
-    | IF expr_parentheses S3
-  S1 : IF expr_parentheses S2 ELSE S1
-    |
-  S2 : ELSEIF expr_parentheses S2
-    | S1
-  S3 : S
-    | S1 ELSE S3'''
-
 def p_if_statement(p):
   '''
-  if_statement : statement_if
-  | statement_if statement_else
-  | statement_if statement_elseif
-  | statement_if statement_elseif statement_else
+  if_statement : IF expr_parentheses statement_block_optional
   '''
-  if len(p)== 2:
-    p[0] = sa.IfStatement_statement_if(p[1])
-  elif len(p) == 3 and isinstance(p[2], sa.StatementElse):
-    p[0] = sa.IfStatement_statementIf_Else(p[1],p[2])
-  elif len(p)== 3 and isinstance(p[2], sa.StatementElseIf):
-    p[0] = sa.IfStatement_StatementIf_Elseif(p[1],p[2])
-  elif len(p)== 4:
-    p[0] = sa.IfStatement_StmIf_Elseif_Else(p[1],p[2],p[3])
+def p_if_statement1(p):
+  '''
   
-def p_statement_if(p):
-  ''' 
-  statement_if : IF expr_parentheses statement_block_optional statement_if
-   | IF expr_parentheses statement_block_optional
   '''
-  if len(p) ==5:
-    p[0] = sa.StatementIf_Mul(p[2],p[3],p[4])
-  elif len(p) ==4:
-    p[0] = sa.StatementIf_Single(p[2],p[3])
-
-def p_statement_elseif(p):
+def p_if_statement1(p):
   '''
-  statement_elseif : ELSEIF expr_parentheses statement_block_optional statement_elseif
-   | ELSEIF expr_parentheses statement_block_optional
   '''
-  if len(p) == 5:
-    p[0] = sa.StatementElseIf_Mul(p[2],p[3],p[4])
-  elif len(p) == 4:
-    p[0] = sa.StatementElseIf_Single(p[2],p[3])
-
-def p_statement_else(p):
-  '''
-  statement_else : ELSE statement_block_optional
-  '''
-  if len(p) == 3:
-    p[0] =  sa.StatementElse_Single(p[2])
-
 def p_global_statement(p):
   '''
   global_statement : GLOBAL global_var statement_COLON_GLOBAL 
@@ -721,18 +684,22 @@ def p_error(p):
     print(p)
     print("Syntax error in input!")
  
-
 lex.lex()
 arquivo = '''
 <?php
-  $valor;
+
+  while(10 == $x){
+    $valor = 1;
+    $valor2 = $valor;
+  }
+
 ?>
 '''
 
 lex.input(arquivo)
 parser = yacc.yacc()
 result = parser.parse(debug=False)
-visitor = sv.SemanticVisitor()
+v = sv.SemanticVisitor()
 #v = vis.Visitor()
 #for r in result:
-result.accept(visitor)
+result.accept(v)

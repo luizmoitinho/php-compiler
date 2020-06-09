@@ -82,13 +82,62 @@ class AbstractVisitor(metaclass = ABCMeta):
   @abstractmethod
   def visitInnerStatementMul_Single(self, innerStatementMul):
     pass
+
+  @abstractmethod
+  def visitExpr_Equals(self, exprEqual):
+    pass
+
+  # ================ P_EXPR ===============================
   
   @abstractmethod
   def visitStatement_Expr(self, statement):
     pass
   
+  @abstractmethod
+  def visitExpr_Plus(self, exprPlus):
+    pass
+
+  @abstractmethod
+  def visitExpr_Minus(self, exprMinus):
+    pass
   
+  @abstractmethod
+  def visitExpr_Uminus(self, exprUminus):
+    pass
   
+  @abstractmethod
+  def visitExpr_Times(self, exprTimes):
+    pass
+
+  @abstractmethod  
+  def visitExpr_Divide(self, exprDivide):
+    pass
+
+  @abstractmethod
+  def visitExpr_AssignExpr(self, assignExpr):
+    pass
+  
+  @abstractmethod
+  def visitExpr_AddAssignExpr(self, assignExpr):
+    pass
+  
+  @abstractmethod
+  def visitExpr_NumberInt(self, exprNumber):
+    pass
+  
+  @abstractmethod
+  def visitExpr_NumberFloat(self, exprNumber):
+    pass
+
+  @abstractmethod
+  def visitExpr_EncapsedString(self, exprEncapsed):
+    pass
+  
+  @abstractmethod  
+  def visitExpr_Boolean(self, exprBoolean):
+    pass
+
+  # ================ END P_EXPR ===================
   
   @abstractmethod
   def visitFunctionCall_NoParameter(self, functionCall):
@@ -198,46 +247,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitDoWhileStatementSingle(self, whilestatement):
     pass
 
-  @abstractmethod 
-  def visitStatement_If(self, statementIf):
-    pass
-    
-  @abstractmethod
-  def visitIfStatement_statement_if(self, ifStatement):
-    pass
-
-  @abstractmethod
-  def visitStatementElseIf_Mul(self, statementElseIfMul):
-    pass
-
-  @abstractmethod
-  def visitStatementIf_Mul(self, statementIfMul):
-    pass
-
-  @abstractmethod
-  def visitStatementIf_Single(self, ifSingle):
-    pass
-  
-  @abstractmethod
-  def visitIfStatement_Else(self, IfStatementElse):
-    pass
-  
-  @abstractmethod
-  def visitStatementElse_Single(self, statementElse):
-    pass
-
-  @abstractmethod
-  def visitIfStatement_StatementIf_Elseif(self, statementIfElseif):
-    pass
-
-  @abstractmethod
-  def visitStatementElseIf_Single(self, StatementElseIf):
-    pass
-  
-  @abstractmethod
-  def visitIfStatement_Stm_If_Elseif_Else(self, ifConditional):
-    pass
-
   @abstractmethod
   def visitStatement_For(self, statement):
     pass
@@ -325,30 +334,19 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitBreak_Empty(self):
     pass
 
+  @abstractmethod
+  def visitStatement_Die(self, statement):
+    pass
+
+  @abstractmethod
+  def visitDie_ExitExpr(self, die):
+    pass
+
+  @abstractmethod
+  def visitDie_Empty(self):
+    pass
+
   '''  
-  @abstractmethod
-  def visitExpr_Plus(self, exprPlus):
-    pass
-  
-  @abstractmethod
-  def visitExpr_Minus(self, exprMinus):
-    pass
-
-  @abstractmethod
-  def visitExpr_Uminus(self, exprUminus):
-    pass
-  
-  @abstractmethod
-  def visitExpr_Times(self, exprTimes):
-    pass
-
-  @abstractmethod  
-  def visitExpr_Divide(self, exprDivide):
-    pass
-
-  @abstractmethod
-  def visitExpr_Mod(self, exprMod):
-    pass
 
   @abstractmethod
   def visitExpr_Equals(self, exprEqual):
@@ -415,42 +413,12 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
 
   @abstractmethod
-  def visitExpr_Scalar(self, exprScalar):
+  def visitExpr_TernaryOp(self, exprTernary):
     pass
-
-  @abstractmethod  
-  def visitExpr_Boolean(self,exprBoolean):
-    pass
-
-  @abstractmethod
-  def visitExpr_TerciaryOp(self, exprTernary):
-    pass
-
-  @abstractmethod
-  def visitExpr_AssignExpr(self, assignExpr):
-    pass
-
-  @abstractmethod
-  def visitExpr_AssignAmpersandExpr(self, assignAmpersandExpr):
-    pass
-
+    
   @abstractmethod
   def visitExpr_TypeCastOp(self, typeCastOp):
     pass
-
-  @abstractmethod
-  def visitExpr_NumberInt(self, exprNumber):
-    pass
-
-  @abstractmethod
-  def visitExpr_NumberFloat(self, exprNumber):
-    pass
-
-  @abstractmethod
-  def visitExpr_EncapsedString(self, exprEncapsed):
-    pass
-
-
 
   @abstractmethod
   def visitStatementBlockOpt_ParenEmpty():

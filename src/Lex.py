@@ -51,7 +51,7 @@ tokens = [
     'ADD_ASSIGN',
     'SUB_ASSIGN',
     'MOD_ASSIGN',
-    'PLUS_ASSIGN',
+    'TIMES_ASSIGN',
     'DIVIDE_ASSIGN',
     'LPAREN',
     'RPAREN',
@@ -96,7 +96,7 @@ t_POS_DECREMENT = r'\-\-'
 t_ADD_ASSIGN = r'\+\='
 t_SUB_ASSIGN = r'\-\='
 t_MOD_ASSIGN = r'\%\='
-t_PLUS_ASSIGN = r'\*\='
+t_TIMES_ASSIGN = r'\*\='
 t_DIVIDE_ASSIGN =  r'\/\='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'

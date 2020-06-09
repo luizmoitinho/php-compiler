@@ -142,12 +142,6 @@ class Statement_Exit(Statement):
   def accept(self, Visitor):
     return Visitor.visitStatement_Exit(self)
 
-class Statement_If(Statement):
-  def __init__(self,_if):
-    self._if = _if
-  def accept(self, Visitor):
-    return Visitor.visitStatement_If(self)
-
 class Statement_While(Statement):
   def __init__(self, whilee):
     self.whilee = whilee
@@ -199,94 +193,6 @@ class ExprParentheses_Expr(ExprParentheses):
     self.expr = expr
   def accept(self, Visitor):
     return Visitor.visitExprParentheses_Expr(self)
-
-class IfStatement(metaclass =  ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    pass
-
-class IfStatement_statement_if(IfStatement):
-  def __init__(self, statement_if):
-    self.statement_if = statement_if
-  def accept(self, Visitor):
-    return Visitor.visitIfStatement_statement_if(self)
-
-class IfStatement_statementIf_Else(IfStatement):
-  def __init__(self, statement_if, statement_else):
-    self.statement_if =  statement_if
-    self.statement_else =  statement_else
-  def accept(self, Visitor):
-    return Visitor.visitIfStatement_Else(self)
-
-
-class IfStatement_StatementIf_Elseif(IfStatement):
-  def __init__ (self,statement_if, statement_elseif):
-    self.statement_if = statement_if
-    self.statement_elseif = statement_elseif
-  def accept(self, Visitor):
-    return Visitor.visitIfStatement_StatementIf_Elseif(self)
-
-class IfStatement_StmIf_Elseif_Else(IfStatement):
-  def __init__(self,statement_if,statement_elseif,statement_else):
-    self.statement_if = statement_if 
-    self.statement_elseif = statement_elseif
-    self.statement_else =  statement_else
-  def accept(self, Visitor):
-    return Visitor.visitIfStatement_Stm_If_Elseif_Else(self)
-
-class StatementIf_Mul(IfStatement):
-  def __init__(self, expr_parentheses,statement_BLOCK_OPT,statement_if):
-    self.expr_parentheses = expr_parentheses
-    self.statement_BLOCK_OPT=statement_BLOCK_OPT
-    self.statement_if = statement_if
-  def accept(self,Visitor):
-    return Visitor.visitStatementIf_Mul(self)
-
-class StatementIf_Single(IfStatement):
-  def __init__(self, expr_parentheses,statement_BLOCK_OPT):
-    self.expr_parentheses = expr_parentheses
-    self.statement_BLOCK_OPT=statement_BLOCK_OPT
-  def accept(self,Visitor):
-    Visitor.visitStatementIf_Single(self)
-
-class ElseIf_ifStatement(metaclass = ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    return Visitor.visitIfStatement_Single(self)
-
-class StatementElseIf(metaclass = ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    pass
-
-class StatementElseIf_Mul(StatementElseIf):
-  def __init__(self, expr_parentheses,statement_BLOCK_OPT, statement_elseif):
-    self.expr_parentheses =  expr_parentheses
-    self.statement_BLOCK_OPT = statement_BLOCK_OPT
-    self.statement_elseif =  statement_elseif
-  def accept(self, Visitor):
-    return Visitor.visitStatementElseIf_Mul(self)
-
-class StatementElseIf_Single(StatementElseIf):
-  def __init__(self, expr_parentheses,statement_BLOCK_OPT):
-    self.expr_parentheses =  expr_parentheses
-    self.statement_BLOCK_OPT = statement_BLOCK_OPT
-
-  def accept(self, Visitor):
-    return Visitor.visitStatementElseIf_Single(self)
-
-
-class StatementElse(metaclass =  ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    pass
-
-class StatementElse_Single(StatementElse):
-  def __init__(self, statement_BLOCK_OPT):
-    self.statement_BLOCK_OPT = statement_BLOCK_OPT
-
-  def accept(self,Visitor):
-    return Visitor.visitStatementElse_Single(self)
 
 class funcDecStatement_Function(FuncDecStatement):
   def __init__(self, fds_id, fds_parameter, fds_statements):
@@ -686,6 +592,41 @@ class Expr_AssignExpr(Expr):
     self.expr = expr
   def accept(self, Visitor):
     return Visitor.visitExpr_AssignExpr(self)
+
+class Expr_AddAssignExpr(Expr):
+  def __init__(self, variable,expr):
+    self.variable = variable
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_AddAssignExpr(self)
+
+class Expr_SubAssignExpr(Expr):
+  def __init__(self, variable,expr):
+    self.variable = variable
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_SubAssignExpr(self)
+
+class Expr_ModAssignExpr(Expr):
+  def __init__(self, variable,expr):
+    self.variable = variable
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_ModAssignExpr(self)
+
+class Expr_DivideAssignExpr(Expr):
+  def __init__(self, variable,expr):
+    self.variable = variable
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_DivideAssignExpr(self)
+
+class Expr_TimesAssignExpr(Expr):
+  def __init__(self, variable,expr):
+    self.variable = variable
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_TimesAssignExpr(self)
 
 class Expr_TypeCastOp(Expr):
   def __init__(self, typeCast,expr):
