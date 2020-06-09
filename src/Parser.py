@@ -16,8 +16,7 @@ precedence = (
   ('left', 'PLUS', 'MINUS'),
   ('left', 'TIMES', 'DIVIDE','PERCENT'),
   ('right', 'EXC_DOT'),
-  ('left', 'POS_INCREMENT','POS_DECREMENT'),
-  ('right', 'PRE_INCREMENT', 'PRE_DECREMENT', 'RPAREN'),
+  ('right', 'INCREMENT', 'DECREMENT', 'RPAREN'),
   ('right', 'UMINUS'),
 )
 
@@ -78,10 +77,10 @@ def p_expr(p):
     | expr AND expr
     | expr OR expr
     | EXC_DOT expr
-    | PRE_INCREMENT variable
-    | variable POS_INCREMENT
-    | PRE_DECREMENT variable
-    | variable POS_DECREMENT
+    | INCREMENT variable
+    | variable INCREMENT
+    | DECREMENT variable
+    | variable DECREMENT
     | variable
     | LPAREN expr RPAREN
     | ARRAY_TYPE array_declaration

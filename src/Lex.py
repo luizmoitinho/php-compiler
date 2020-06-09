@@ -43,11 +43,9 @@ tokens = [
     'DDOT',
     'PERCENT',
     'ASSIGN',
-    'PRE_INCREMENT',
-    'POS_INCREMENT',
+    'INCREMENT',
     'INTE_DOT',
-    'PRE_DECREMENT',
-    'POS_DECREMENT',
+    'DECREMENT',
     'ADD_ASSIGN',
     'SUB_ASSIGN',
     'MOD_ASSIGN',
@@ -89,10 +87,8 @@ t_TIMES = r'\*'
 t_DIVIDE = r'\/'
 t_PERCENT = r'\%'
 t_ASSIGN =  r'\='
-t_PRE_INCREMENT = r'\+\+'
-t_POS_INCREMENT =  r'\+\+'
-t_PRE_DECREMENT =  r'\-\-'
-t_POS_DECREMENT = r'\-\-'
+t_INCREMENT = r'\+\+'
+t_DECREMENT = r'\-\-'
 t_ADD_ASSIGN = r'\+\='
 t_SUB_ASSIGN = r'\-\='
 t_MOD_ASSIGN = r'\%\='
