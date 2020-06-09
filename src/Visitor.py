@@ -591,7 +591,7 @@ class Visitor(AbstractVisitor):
     exprPreDecrement.variable.accept(self)
   
   def visitExpr_PosDecrement(self, exprPosDecrement):
-    exprPosIncrement.variable.accept(self)
+    exprPosDecrement.variable.accept(self)
     print('--',end='')
 
   def visitExpr_Variable(self, exprVariable):
