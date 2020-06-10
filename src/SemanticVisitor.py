@@ -346,11 +346,40 @@ class SemanticVisitor(AbstractVisitor):
       return st.addVar(variable.token)
     return bindable
 
-  '''
-  def visitExpr1_ArrayDeclaration(self, expr1):
-    expr1.arrayDeclaration.accept(self)
-    return st.ARRAY
-  '''
+  def visitVariable_Array(self, variable):
+    bindable = st.getBindable(variable.token)
+    if(bindable == None):
+      print('ERROR: Undefined variable', variable.token, '. Trying to access array offset on value of type null')
+      return None
+
+    if bindable[st.TYPE] == st.ARRAY or bindable[st.TYPE] == st.STRING:
+      print('é array')
+    else:
+      print('Trying to access array offset on value of type', bindable[st.TYPE])
+      
+  def visitArrayDec_NoPairList(self, arrayDec):
+    return
+  
+  def visitArrayDec_WithPairList(self, arrayDec):
+    arrayDec.arrayPairList.accept(self)
+    
+  def visitArrayPairList_ArrayPair_Single(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    
+  def visitArrayPairList_ArrayPair_Mul(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    arrayPairList.arrayPairListArrPair.accept(self)
+    
+  def visitArrayPairList_Mul(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    arrayPairList.arrayPairListArr.accept(self)
+  
+  def visitArrayPairListArr_Single(self, arrayPairList):
+    print('single')
+    arrayPairList.arrayPair.accept(self)
+    
+  def visitArrayPair_Expr(self, arrayPair):
+    arrayPair.expr.accept(self)
   
   def visitFunctionCall_NoParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
