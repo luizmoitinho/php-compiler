@@ -249,6 +249,62 @@ class SemanticVisitor(AbstractVisitor):
 
     st.updateBindableType(bindable[st.NAME], exprType)
     
+  def visitExpr_SubAssignExpr(self, subAssignExpr):
+    bindable = subAssignExpr.variable.accept(self)
+    exprType = subAssignExpr.expr.accept(self)
+    
+    exprType = getTypeIfVariable(self, exprType)
+    
+    if exprType == None:
+      el.AttributionTypeError(self, subAssignExpr, exprType)
+      
+    if bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, subAssignExpr, bindable)
+
+    st.updateBindableType(bindable[st.NAME], exprType)
+    
+  def visitExpr_ModAssignExpr(self, modAssignExpr):
+    bindable = modAssignExpr.variable.accept(self)
+    exprType = modAssignExpr.expr.accept(self)
+    
+    exprType = getTypeIfVariable(self, exprType)
+    
+    if exprType == None:
+      el.AttributionTypeError(self, modAssignExpr, exprType)
+      
+    if bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, modAssignExpr, bindable)
+
+    st.updateBindableType(bindable[st.NAME], exprType)
+    
+  def visitExpr_TimesAssignExpr(self, timesAssignExpr):
+    bindable = timesAssignExpr.variable.accept(self)
+    exprType = timesAssignExpr.expr.accept(self)
+    
+    exprType = getTypeIfVariable(self, exprType)
+    
+    if exprType == None:
+      el.AttributionTypeError(self, timesAssignExpr, exprType)
+      
+    if bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, timesAssignExpr, bindable)
+
+    st.updateBindableType(bindable[st.NAME], exprType)
+    
+  def visitExpr_DivideAssignExpr(self, divAssignExpr):
+    bindable = divAssignExpr.variable.accept(self)
+    exprType = divAssignExpr.expr.accept(self)
+    
+    exprType = getTypeIfVariable(self, exprType)
+    
+    if exprType == None:
+      el.AttributionTypeError(self, divAssignExpr, exprType)
+      
+    if bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, divAssignExpr, bindable)
+
+    st.updateBindableType(bindable[st.NAME], exprType)
+    
   def visitExpr_PreIncrement(self, exprPreIncrement):
     variable = exprPreIncrement.variable.accept(self)
     if variable[st.TYPE] not in st.Number:
