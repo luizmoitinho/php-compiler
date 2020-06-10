@@ -826,7 +826,7 @@ class Variable_Array(Variable):
     self.token = token
     self.selector = selector
   def accept(self, Visitor):
-    pass
+    return Visitor.visitVariable_Array(self)
 
 class AmpersandVariable(metaclass = ABCMeta):
   @abstractmethod
@@ -1097,6 +1097,24 @@ class Return_Expr(Return):
 class Return_Empty(Return):
   def accept(self, Visitor):
     return Visitor.visitReturn_Empty()
+  
+class VariableArraySelector(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+  
+class VariableArraySelector_Mul(VariableArraySelector):
+  def __init__(self, selector, variableArray):
+    self.selector = selector
+    self.variableArray = variableArray
+  def accept(self, Visitor):
+    return Visitor.visitVariableArraySelector_Mul(self)
+  
+class VariableArraySelector_Single(VariableArraySelector):
+  def __init__(self, selector):
+    self.selector = selector
+  def accept(self, Visitor):
+    return Visitor.visitVariableArraySelector_Single(self)
 
 class Selector(metaclass = ABCMeta):
   @abstractmethod
