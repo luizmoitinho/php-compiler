@@ -14,11 +14,11 @@ def isValidNumber(number):
         return False
       
 def isTypePrimitive(type):
-  if(type in st.Number or type == st.BOOL or type == st.ARRAY):
+  if(type in st.Number or type == st.BOOL or type == st.ARRAY or type == st.STRING):
     return True
   return False
 
-def isVariable(self, exprType):
+def getTypeIfVariable(self, exprType):
   if type(exprType) is dict:
       return exprType[st.TYPE] 
   return exprType
@@ -158,8 +158,8 @@ class SemanticVisitor(AbstractVisitor):
     type1 = exprPlus.expr1.accept(self)
     type2 = exprPlus.expr2.accept(self)
     
-    type1 = isVariable(self, type1)
-    type2 = isVariable(self, type2)
+    type1 = getTypeIfVariable(self, type1)
+    type2 = getTypeIfVariable(self, type2)
     
     c = coercion(type1, type2) 
     if (c == None):
@@ -170,8 +170,8 @@ class SemanticVisitor(AbstractVisitor):
     type1 = exprMinus.expr1.accept(self)
     type2 = exprMinus.expr2.accept(self)
     
-    type1 = isVariable(self, type1)
-    type2 = isVariable(self, type2)
+    type1 = getTypeIfVariable(self, type1)
+    type2 = getTypeIfVariable(self, type2)
     
     c = coercion(type1, type2) 
     if (c == None):
@@ -182,8 +182,8 @@ class SemanticVisitor(AbstractVisitor):
     type1 = exprTimes.expr1.accept(self)
     type2 = exprTimes.expr2.accept(self)
     
-    type1 = isVariable(self, type1)
-    type2 = isVariable(self, type2)
+    type1 = getTypeIfVariable(self, type1)
+    type2 = getTypeIfVariable(self, type2)
     
     c = coercion(type1, type2) 
     if (c == None):
@@ -194,14 +194,14 @@ class SemanticVisitor(AbstractVisitor):
     type1 = exprDivide.expr1.accept(self)
     type2 = exprDivide.expr2.accept(self)
     
-    type1 = isVariable(self, type1)
-    type2 = isVariable(self, type2)
+    type1 = getTypeIfVariable(self, type1)
+    type2 = getTypeIfVariable(self, type2)
     
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprDivide, type1, type2)
     return c
-
+  
   def visitExpr_Mod(self, exprMod):
     type1 = exprMod.expr1.accept(self)
     type2 = exprMod.expr2.accept(self)
@@ -216,8 +216,9 @@ class SemanticVisitor(AbstractVisitor):
 
   def visitExpr_Uminus(self, exprUminus):
     exprType = exprUminus.expr.accept(self)
-    if type(exprType) is dict:
-      exprType = exprType[st.TYPE]
+    
+    exprType = getTypeIfVariable(self, exprType)
+      
     if(exprType in st.Number):
       return exprType
     else:
@@ -303,7 +304,7 @@ class SemanticVisitor(AbstractVisitor):
     bindable = assignExpr.variable.accept(self)
     exprType = assignExpr.expr.accept(self)
     
-    exprType = isVariable(self, exprType)
+    exprType = getTypeIfVariable(self, exprType)
     
     if exprType == None:
       el.AttributionTypeError(self, assignExpr, exprType)
@@ -314,7 +315,7 @@ class SemanticVisitor(AbstractVisitor):
     bindable = assignExpr.variable.accept(self)
     exprType = assignExpr.expr.accept(self)
     
-    exprType = isVariable(self, exprType)
+    exprType = getTypeIfVariable(self, exprType)
     
     if exprType == None:
       el.AttributionTypeError(self, assignExpr, exprType)
@@ -399,7 +400,7 @@ class SemanticVisitor(AbstractVisitor):
     variable = exprPosDecrement.variable.accept(self)
     if variable[st.TYPE] not in st.Number:
       el.DecrementVariableError(variable)
-  
+      
   def visitExpr_ArrayDeclaration(self, exprArrayDecl):
     exprArrayDecl.arrayDecl.accept(self)
     return st.ARRAY
@@ -424,7 +425,7 @@ class SemanticVisitor(AbstractVisitor):
     if(bindable == None):
       return st.addVar(variable.token)
     return bindable
-
+  
   def visitVariable_Array(self, variable):
     bindable = st.getBindable(variable.token)
     if(bindable == None):
