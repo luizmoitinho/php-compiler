@@ -23,3 +23,10 @@ def ExpressionTypeError(self, expr, type1, type2):
   print(' has type', type1, 'while expression ', end='')
   expr.expr2.accept(self.printer)
   print(' has type', type2)
+
+def ExpressionBoolError(self, exprBoolean, opComp, arrInvalid):
+  print('ERROR: Expected boolean expression, but got type:', arrInvalid, end=' ') 
+  exprBoolean.expr1.accept(self.printer)
+  print(opComp,end='')
+  exprBoolean.expr2.accept(self.printer)
+  print('')
