@@ -611,3 +611,21 @@ class SemanticVisitor(AbstractVisitor):
   
   def visitDie_Empty(self):
     return
+
+  def visitStatement_Continue(self, statement):
+    statement._continue.accept(self)
+  
+  def visitContinue_Expr(self, _continue):
+    return _continue.expr.accept(self)
+  
+  def visitContinue_Empty(self):
+    return
+  
+  def visitStatement_Return(self, statement):
+    statement._return.accept(self)
+  
+  def visitReturn_Expr(self, _return):
+    return _return.expr.accept(self)
+
+  def visitReturn_Empty(self):
+    return
