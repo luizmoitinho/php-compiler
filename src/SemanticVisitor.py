@@ -23,6 +23,11 @@ def isVariable(self, exprType):
       return exprType[st.TYPE] 
   return exprType
 
+def getTypeExprBool(self,exprBool):
+    type1 = exprBool.expr1.accept(self)
+    type2 = exprBool.expr2.accept(self)
+    return [getTypeIfVariable(self, type1),getTypeIfVariable(self, type2)]
+
 def coercion(type1, type2):
     if (type1 in st.Number and type2 in st.Number):
         if (type1 == st.FLOAT or type2 == st.FLOAT):
@@ -197,6 +202,18 @@ class SemanticVisitor(AbstractVisitor):
       el.ExpressionTypeError(self, exprDivide, type1, type2)
     return c
 
+  def visitExpr_Mod(self, exprMod):
+    type1 = exprMod.expr1.accept(self)
+    type2 = exprMod.expr2.accept(self)
+     
+    type1 = getTypeIfVariable(self, type1)
+    type2 = getTypeIfVariable(self, type2)
+    
+    c = coercion(type1, type2) 
+    if (c == None):
+      el.ExpressionTypeError(self, exprTimes, type1, type2)
+    return c
+
   def visitExpr_Uminus(self, exprUminus):
     exprType = exprUminus.expr.accept(self)
     if type(exprType) is dict:
@@ -209,20 +226,78 @@ class SemanticVisitor(AbstractVisitor):
       print('')
 
   def visitExpr_Equals(self, exprEqual):
-    type1 = exprEqual.expr1.accept(self)
-    type2 = exprEqual.expr2.accept(self)
-    
-    type1 = isVariable(self, type1)
-    type2 = isVariable(self, type2)
-    
-    if isTypePrimitive(type1) and isTypePrimitive(type2):
+    types = getTypeExprBool(self, exprEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
       return st.BOOL
     else:
-      print('ERROR: Invalid boolean expression: ', end='') 
-      exprEqual.expr1.accept(self.printer)
-      print(' == ',end='')
-      exprEqual.expr2.accept(self.printer)
-      print('')
+      el.ExpressionBoolError(self,exprEqual," == ", types)
+
+  def visitExpr_NotEqual(self, exprNotEqual):
+    types = getTypeExprBool(self, exprNotEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprNotEqual," != ",types)
+
+  def visitExpr_GreatThan(self, exprGreatThan):
+    types = getTypeExprBool(self, exprGreatThan)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprGreatThan," > ",types)
+  
+  def visitExpr_GreatEqual(self, exprGreatEqual):
+    types = getTypeExprBool(self, exprGreatEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprGreatEqual," >= ",types)
+
+  def visitExpr_LessThan(self, exprLessThan):
+    types = getTypeExprBool(self, exprLessThan)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprLessThan," < ",types)
+
+  def visitExpr_LessEqual(self, exprLessEqual):
+    types = getTypeExprBool(self, exprLessEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprLessEqual," <= ",types)   
+      
+  def visitExpr_AndLogical(self, exprAndLogical):
+    types = getTypeExprBool(self, exprAndLogical)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprAndLogical," *&& ",types)   
+
+  def visitExpr_OrLogical(self, exprOrLogical):
+    types = getTypeExprBool(self, exprEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprOrLogical," || ",types)
+
+  def visitExpr_NotLogical(self, exprNotLogical):
+    typeExpr = exprNotLogical.expr.accept(self) 
+    if isTypePrimitive(typeExpr):
+      return st.BOOL
+    else:
+     print('ERROR: Expected boolean expression, but got type: !%s'%typeExpr[st.NAME]) 
+
+  def visitExpr_ParenExpr(self, parenExpr):
+    parenExpr.expr.accept(self)
+
+  def visitExpr_TernaryOp(self, exprTernary):
+    exprTernary.expr1.accept(self)
+    exprTernary.expr2.accept(self)
+    exprTernary.expr3.accept(self)
+
+  def visitExpr_FunctionCall(self, exprFunctionCall):
+    exprFunctionCall.functionCall.accept(self) 
     
   def visitExpr_AssignExpr(self, assignExpr):
     bindable = assignExpr.variable.accept(self)
@@ -324,6 +399,10 @@ class SemanticVisitor(AbstractVisitor):
     variable = exprPosDecrement.variable.accept(self)
     if variable[st.TYPE] not in st.Number:
       el.DecrementVariableError(variable)
+  
+  def visitExpr_ArrayDeclaration(self, exprArrayDecl):
+    exprArrayDecl.arrayDecl.accept(self)
+    return st.ARRAY
   
   def visitExpr_NumberInt(self, exprNumber):
     return st.INT
