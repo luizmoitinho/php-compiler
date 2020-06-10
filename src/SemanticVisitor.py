@@ -579,7 +579,41 @@ class SemanticVisitor(AbstractVisitor):
   def visitForExprColonExpr_Mul(self, forExprColonExpr):
     forExprColonExpr.forExprColonExpr.accept(self)
     return forExprColonExpr.expr.accept(self)
+
+  def visitStatement_Foreach(self, statement):
+    statement.foreach.accept(self)
   
+  def visitForeachStatement_NoAssoc(self, foreachStatement):
+    varArray = foreachStatement.expr.accept(self)
+    valor = foreachStatement.ampVariable.accept(self)
+    foreachStatement.statementBlockOpt.accept(self)
+
+    if varArray[st.TYPE] != st.ARRAY:
+     print('ERROR: Expected a array declaration, but got type:', varArray[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer)
+
+    if not isTypePrimitive(valor[st.TYPE]):
+     print('ERROR: Expected valid type, but got type:', valor[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer)
+  
+  def visitForeachStatement_WithAssoc(self, foreachStatement):
+    varArray = foreachStatement.expr.accept(self)
+    chaveArray = foreachStatement.ampVariableKey.accept(self)
+    valorChaveArray = foreachStatement.ampVariableValue.accept(self)
+    foreachStatement.statementBlockOpt.accept(self)
+
+    if array[st.TYPE] != st.ARRAY:
+     print('ERROR: Expected a array declaration, but got type:', array[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer)
+
+    if chaveArray[st.TYPE] not in st.Number or chaveArray [st.TYPE] != st.STRING:
+     print('ERROR: Expected valid key, but got type:', chaveArray[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer)
+
+    if not isTypePrimitive(valorChaveArray[st.TYPE]):
+     print('ERROR: Expected valid type, but got type:', valor[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer)
+
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
   
