@@ -436,6 +436,13 @@ class Visitor(AbstractVisitor):
   def visitReturn_Empty(self):
     print('return', end='')
     print(';')
+    
+  def visitVariableArraySelector_Mul(self, variableArraySelector):
+    variableArraySelector.selector.accept(self)
+    variableArraySelector.variableArray.accept(self)
+    
+  def visitVariableArraySelector_Single(self, variableArraySelector):
+    variableArraySelector.selector.accept(self)
 
   def visitSelectorWithExpr(self, selector):
       print('[', end='')
@@ -612,12 +619,12 @@ class Visitor(AbstractVisitor):
   def visitExpr_Boolean(self,exprBoolean):
     print(exprBoolean.token, end='')
   
-  def visitExpr_TerciaryOp(self, exprTernary):
-    exprTerciary.expr1.accept(self)
+  def visitExpr_TernaryOp(self, exprTernary):
+    exprTernary.expr1.accept(self)
     print(' ? ',end='')
-    exprTerciary.expr2.accept(self)
+    exprTernary.expr2.accept(self)
     print(' : ',end='')
-    exprTerciary.expr3.accept(self)  
+    exprTernary.expr3.accept(self)  
   
   def visitExpr_AssignExpr(self, assignExpr):
     assignExpr.variable.accept(self)
@@ -648,12 +655,6 @@ class Visitor(AbstractVisitor):
     timesAssignExpr.variable.accept(self)
     print(' *= ',end='')
     timesAssignExpr.expr.accept(self)
-
-  def visitExpr_AssignAmpersandExpr(self, assignAmpersandExpr):
-    assignAmpersandExpr.variable.accept(self)
-    print(' = ',end='')
-    print('&',end='')
-    assignAmpersandExpr.expr.accept(self)
 
   def visitExpr_TypeCastOp(self, typeCastOp):
     print('(',end='')
