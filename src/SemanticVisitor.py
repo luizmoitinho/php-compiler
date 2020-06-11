@@ -10,10 +10,12 @@ def isValidNumber(number):
     try:
         if(int(number)):
           return st.INT
-        if(float(number)):
-          return st.FLOAT
     except ValueError:
-        return False
+        try:
+          if(float(number)):
+            return st.FLOAT
+        except ValueError:
+          return False
       
 def isTypePrimitive(type):
   if(type in st.Number or type == st.BOOL or type == st.ARRAY or type == st.STRING):
@@ -163,14 +165,16 @@ class SemanticVisitor(AbstractVisitor):
     type1 = None
     type2 = None
 
+    
     type1 = getTypeIfVariable(self, expr1)
     type2 = getTypeIfVariable(self, expr2)    
 
-    if(expr1[st.TYPE] == st.STRING):
+    if(expr1[st.TYPE] == st.STRING ):
       type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
     if(expr2[st.TYPE] == st.STRING):
       type2 = isValidNumber(expr2[st.VALUE].strip('\''))
 
+    print([type1,type2])
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprPlus, type1, type2)

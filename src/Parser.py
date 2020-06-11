@@ -680,18 +680,10 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
-  $valor1 = array();
-  $valor2 = true;
-  
-  function add($v){
-    1;
-  }
-  
-  add(1);
+  $valor = 10;
+  $valor1= '11.0';
 
-  foreach($valor1 as $valor2){
-
-  }
+  $soma =$valor+$valor1;
 ?>
 '''
 
