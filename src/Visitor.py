@@ -68,13 +68,6 @@ class Visitor(AbstractVisitor):
     print('{')
     pp.printTab()
     print('}')
-
-  def visitStatementBlockOpt_ParenEmpty(self, statementBlockOpt):
-    statementBlockOpt.statement.accept(self)
-  
-  def StatementBlockOpt_ParenEmpty(self, StatementBlockOpt):
-    print('(',end='')
-    print(')',end='')
   
   def visitStatementMul_Mul(self, StatementMul):
     StatementMul.statement.accept(self)
@@ -369,16 +362,6 @@ class Visitor(AbstractVisitor):
   def visitGlobalVar_Var(self, globalVar):
     print(globalVar.variable, end='')
     
-  def visitGlobalVar_DolarVar(self, globalVar):
-    print('$', end='')
-    print(globalVar.variable, end='')
-    
-  def visitGlobalVar_DolarExpr(self, globalVar):
-    print('$', end='')
-    print('{', end=' ')
-    globalVar.expr.accept(self)
-    print('', '}', end='')
-    
   def visitGlobalVarMul_Single(self, globalVarMul):
     print(',', end=' ')
     globalVarMul.globalVar.accept(self)
@@ -449,7 +432,7 @@ class Visitor(AbstractVisitor):
       selector.expr.accept(self)
       print(']', end='')
 
-  def SelectorWithoutExpr(self, selector):
+  def visitSelectorWithoutExpr(self, selector):
       print('[', end='')
       print(']', end='')
       

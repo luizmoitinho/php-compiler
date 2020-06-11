@@ -106,8 +106,8 @@ class SemanticVisitor(AbstractVisitor):
     if functionExists == None:
       st.addFunction(funcId, params)
       st.beginScope(funcId)
-      for i in range(0, len(params)):
-        st.addVar(params[i])
+      for i in range(0, len(params), 2):
+        st.addVar(params[i], params[i+1])
       funcDecStatement.fds_statements.accept(self)
       st.endScope()
     else:
@@ -138,8 +138,8 @@ class SemanticVisitor(AbstractVisitor):
     return parameterListColonParameter.parameter.accept(self)
     
   def visitParameter_Var(self, parameter):
-    return [parameter.variable]
-  
+    return [parameter.variable, None]
+ 
   def visitFds_statements_withStatements(self, fds_statements):
     return fds_statements.inner_statement_MUL.accept(self)
     
@@ -283,7 +283,7 @@ class SemanticVisitor(AbstractVisitor):
     if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
       return st.BOOL
     else:
-      el.ExpressionBoolError(self, exprAndLogical," *&& ",types)   
+      el.ExpressionBoolError(self, exprAndLogical," && ",types)   
 
   def visitExpr_OrLogical(self, exprOrLogical):
     types = getTypeExprBool(self, exprEqual)
@@ -412,7 +412,19 @@ class SemanticVisitor(AbstractVisitor):
 
   def visitExpr_PosDecrement(self, exprPosDecrement):
     variable = exprPosDecrement.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:True
+    if variable[st.TYPE] not in st.Number:
+      el.DecrementVariableError(variable)
+      
+  def visitExpr_ArrayDeclaration(self, exprArrayDecl):
+    exprArrayDecl.arrayDecl.accept(self)
+    return st.ARRAY
+  
+  def visitExpr_TypeCastOp(self, typeCastOp):
+    Type = typeCastOp.typeCast.accept(self)
+    Expr = typeCastOp.expr.accept(self)
+  
+  def visitTypeCastOp_Token(self, typeCastOp):
+    return typeCastOp.token
   
   def visitExpr_NumberInt(self, exprNumber):
     return st.INT
@@ -421,7 +433,7 @@ class SemanticVisitor(AbstractVisitor):
     return st.FLOAT
   
   def visitExpr_EncapsedString(self, exprEncapsed):
-    return  {st.TYPE:st.STRING,st.VALUE:exprEncapsed.encapsedString}
+    return { st.TYPE: st.STRING, st.VALUE: exprEncapsed.encapsedString }
   
   def visitExpr_Boolean(self, exprBoolean):
     return st.BOOL
@@ -438,11 +450,11 @@ class SemanticVisitor(AbstractVisitor):
   def visitVariable_Array(self, variable):
     bindable = st.getBindable(variable.token)
     if(bindable == None):
-      print('ERROR: Undefined variable', variable.token, '. Trying to access array offset on value of type null')
+      print('ERROR: Undefined variable', variable.token, '. Trying to access array offset on value of type None')
       return None
 
     if bindable[st.TYPE] == st.ARRAY or bindable[st.TYPE] == st.STRING:
-      print('é array')
+      variable.selector.accept(self)
     else:
       print('Trying to access array offset on value of type', bindable[st.TYPE])
       
@@ -477,27 +489,30 @@ class SemanticVisitor(AbstractVisitor):
       
   def visitFunctionCall_WithParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
+    st.updateParamsTypes(bindable[st.NAME], 'a')
     if bindable == None:
       print('ERROR: Function', functionCall.id, 'called but never defined.')
+    
     if bindable != None and bindable[st.BINDABLE] == st.FUNCTION:
       params = functionCall.parameterList.accept(self)
-      if len(params) != len(bindable[st.PARAMS]):
+      if len(params) != (len(bindable[st.PARAMS]) / 2):
         print('ERROR: Number of parameters of function', functionCall.id, 'differs from declaration.')
         
   def visitFCParameterList_Single(self, fcParameterList):
     return fcParameterList.fcParameter.accept(self) 
 
   def visitFCParameterList_Mul(self, fcParameterList):
-    return fcParameterList.fcParameter.accept(self), fcParameterList.fcColonParameter.accept(self)
+    return fcParameterList.fcParameter.accept(self) + fcParameterList.fcColonParameter.accept(self)
     
   def visitFCParameterListColonParameter_Single(self, fcParameterListColonParameter):
-    return [fcParameterListColonParameter.fcParameter.accept(self)]
+    return fcParameterListColonParameter.fcParameter.accept(self)
     
   def visitFCParameterListColonParameter_Mul(self, fcParameterListColonParameter):
-    return [fcParameterListColonParameter.fcParameter.accept(self)] + fcParameterListColonParameter.fcplColonParameter.accept(self)
+    return fcParameterListColonParameter.fcParameter.accept(self) + fcParameterListColonParameter.fcplColonParameter.accept(self)
   
   def visitFunctionCallParameter_Expr(self, functionCallParameter):
-    return functionCallParameter.expr.accept(self)
+    exprType = functionCallParameter.expr.accept(self)
+    return [getTypeIfVariable(self, exprType)]
     
   def visitFunctionCallParameter_AmpersandVariable(self, functionCallParameter):
     return functionCallParameter.variable
@@ -523,10 +538,29 @@ class SemanticVisitor(AbstractVisitor):
     arrayPairList.arrayPairListArr.accept(self)
   
   def visitArrayPairListArr_Single(self, arrayPairList):
-    arrayPairList.arrayPair.accept(self)
+    return arrayPairList.arrayPair.accept(self)
     
   def visitArrayPair_Expr(self, arrayPair):
-    arrayPair.expr.accept(self)
+    return arrayPair.expr.accept(self)
+    
+  def visitVariableArraySelector_Mul(self, variableArraySelector):
+    variableArraySelector.selector.accept(self)
+    variableArraySelector.variableArray.accept(self)
+  
+  def visitVariableArraySelector_Single(self, variableArraySelector):
+    variableArraySelector.selector.accept(self)
+  
+  def visitSelectorWithExpr(self, selector):
+    exprType = selector.expr.accept(self)
+    
+    exprType = getTypeIfVariable(self, exprType) 
+    
+    if exprType != st.INT and exprType != st.STRING:
+      print('ERROR: Trying to access array offset with type', exprType, end='')
+      print('. Valid types are int and string')
+  
+  def visitSelectorWithoutExpr(self, selector):
+    return 
 
   def visitStatement_Do_While(self, statement):
     statement.dowhilee.accept(self)
@@ -598,12 +632,13 @@ class SemanticVisitor(AbstractVisitor):
     foreachStatement.statementBlockOpt.accept(self)
 
     if varArray[st.TYPE] != st.ARRAY:
-     print('ERROR: Expected a array declaration, but got type:', varArray[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer)
-
-    if not isTypePrimitive(valor[st.TYPE]):
+     print('ERROR: Expected a array declaration, but got type:', varArray[st.TYPE], end='')
+     foreachStatement.expr.accept(self.printer, '\n')
+    
+    if valor[st.TYPE] != st.INT or valor[st.TYPE] != st.ARRAY or valor[st.TYPE] != st.STRING:
      print('ERROR: Expected valid type, but got type:', valor[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer)
+     foreachStatement.expr.accept(self.printer, '\n')
+    
   
   def visitForeachStatement_WithAssoc(self, foreachStatement):
     varArray = foreachStatement.expr.accept(self)
@@ -613,16 +648,30 @@ class SemanticVisitor(AbstractVisitor):
 
     if array[st.TYPE] != st.ARRAY:
      print('ERROR: Expected a array declaration, but got type:', array[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer)
+     foreachStatement.expr.accept(self.printer, '\n')
 
-    if chaveArray[st.TYPE] not in st.Number or chaveArray [st.TYPE] != st.STRING:
-     print('ERROR: Expected valid key, but got type:', chaveArray[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer)
+    if chaveArray[st.TYPE] != st.INT or chaveArray[st.TYPE] != st.STRING:
+     print('ERROR: Expected valid type, but got type:', chaveArray[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer, '\n')
 
-    if not isTypePrimitive(valorChaveArray[st.TYPE]):
+    if valorChaveArray[st.TYPE] != st.INT or valorChaveArray[st.TYPE] != st.ARRAY or valorChaveArray[st.TYPE] != st.STRING:
      print('ERROR: Expected valid type, but got type:', valor[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer)
-
+     foreachStatement.expr.accept(self.printer, '\n')
+  
+  def visitAmpersandVariable_WithAmp(self, ampersandVariable):
+    bindable = st.getBindable(ampersandVariable.variable_token)
+    if bindable == None:
+      print('ERROR: Foreach', ampersandVariable.variable_token,'variable never defined.')
+    else:
+      return bindable
+  
+  def visitAmpersandVariable_NoAmp(self, ampersandVariable):
+    bindable = ampersandVariable.variable_token
+    if bindable == None:
+      print('ERROR: Foreach', ampersandVariable.variable_token,'variable never defined.')
+    else:
+      return bindable
+    
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
   
@@ -672,4 +721,25 @@ class SemanticVisitor(AbstractVisitor):
     return _return.expr.accept(self)
 
   def visitReturn_Empty(self):
+    return
+  
+  def visitStatement_Global(self, statement):
+    globalvar = statement._global.accept(self)
+  
+  def visitGlobalStatement_Single(self, globalStatement):
+    return globalStatement.globalVar.accept(self)
+  
+  def visitGlobalVar_Var(self, globalVar):
+    return [globalVar.variable]
+
+  def visitGlobalStatement_Mul(self, globalStatement):
+    return [globalStatement.globalVar.accept(self)] + globalStatement.colonGlobal.accept(self)
+
+  def visitGlobalVarMul_Single(self, globalVarMul):
+    return [globalVarMul.globalVar.accept(self)]
+  
+  def visitGlobalVarMul_Mul(self, globalVarMul):
+    return [globalVarMul.globalVar.accept(self)] + globalVarMul.globalVarMul.accept(self)
+  
+  def visitStatementBlockOpt_Empty(self, statementblockopt):
     return

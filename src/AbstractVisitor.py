@@ -62,7 +62,7 @@ class AbstractVisitor(metaclass = ABCMeta):
   @abstractmethod
   def visitParameterListColonParameter_Single(self, parameterListColonParameter):
     pass
-  
+ 
   @abstractmethod
   def visitFds_statements_withStatements(self, fds_statements):
     pass
@@ -214,9 +214,17 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitExpr_FunctionCall(self, exprFunctionCall):
     pass
   
-  #@abstractmethod
-  #def visitExpr_TypeCastOp(self, typeCastOp):
-    #pass
+  @abstractmethod
+  def visitExpr_ArrayDeclaration(self, exprArrayDecl):
+    pass
+
+  @abstractmethod
+  def visitExpr_TypeCastOp(self, typeCastOp):
+    pass
+
+  @abstractmethod
+  def visitTypeCastOp_Token(self, typeCastOp):
+    pass
   
   # ================ END P_EXPR ===================
   
@@ -282,6 +290,22 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitArrayPairListArr_Single(self, arrayPairList):
+    pass
+  
+  @abstractmethod
+  def visitVariableArraySelector_Mul(self, variableArraySelector):
+    pass
+  
+  @abstractmethod
+  def visitVariableArraySelector_Single(self, variableArraySelector):
+    pass
+  
+  @abstractmethod
+  def visitSelectorWithExpr(self, selector):
+    pass
+  
+  @abstractmethod
+  def visitSelectorWithoutExpr(self, selector):
     pass
   
   @abstractmethod
@@ -499,12 +523,44 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitForeachStatement_WithAssoc(self, foreachStatement):
     pass
 
-
-  '''      
   @abstractmethod
-  def visitStatementBlockOpt_ParenEmpty():
-  pass
-  
+  def visitStatement_Global(self, statement):
+    pass
+
+  @abstractmethod
+  def visitGlobalStatement_Single(self, globalStatement):
+    pass
+
+  @abstractmethod
+  def visitGlobalVar_Var(self, globalVar):
+    pass
+
+  @abstractmethod
+  def visitGlobalStatement_Mul(self, globalStatement):
+    pass
+
+  @abstractmethod
+  def visitGlobalVarMul_Single(self, globalVarMul):
+    pass
+
+  @abstractmethod
+  def visitGlobalVarMul_Single(self, globalVarMul):
+    pass
+
+  @abstractmethod
+  def visitStatementBlockOpt_Empty(self, statementblockopt):
+    pass
+
+  @abstractmethod
+  def visitAmpersandVariable_WithAmp(self, ampersandVariable):
+    pass
+
+  @abstractmethod
+  def visitAmpersandVariable_NoAmp(self, ampersandVariable):
+    pass
+
+
+  ''' 
   @abstractmethod
   def visitParameter_Prefix_Var():
     pass
@@ -549,37 +605,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitCommonScalar_Token():
     pass
   
-  @abstractmethod
-  def visitStatementElse_Else():
-    pass
-  
-  @abstractmethod
-  def visitStatement_Global():
-    pass
-  
-  @abstractmethod
-  def visitIfStatement_Single():
-    pass
-  
-  @abstractmethod
-  def visitIfStatement_Complement():
-    pass
-  
-  @abstractmethod
-  def visitStatementIf_ExprParen():
-    pass
-  
-  @abstractmethod
-  def visitExprParentheses_Expr():
-    pass
-  
-  @abstractmethod
-  def visitIfStatemnet_Else():
-    pass
-  
-  @abstractmethod
-  def visitTypeCastOp_Token():
-    pass
   
   @abstractmethod
   def visitArrayPair_Variable():
@@ -591,49 +616,5 @@ class AbstractVisitor(metaclass = ABCMeta):
   
   @abstractmethod
   def visitArrayPair_Attr_Expr():
-    pass
-  
-  @abstractmethod
-  def visitAmpersandVariable_WithAmp():
-    pass
-  
-  @abstractmethod
-  def visitAmpersandVariable_NoAmp():
-    pass
-  
-  @abstractmethod
-  def visitGlobalStatement_Mul():
-    pass
-  
-  @abstractmethod
-  def visitGlobalVar_Var():
-    pass
-  
-  @abstractmethod
-  def visitGlobalVar_DolarVar():
-    pass
-  
-  @abstractmethod
-  def visitGlobalVar_DolarExpr():
-    pass
-  
-  @abstractmethod
-  def visitGlobalVarMul_Single():
-    pass
-  
-  @abstractmethod
-  def visitGlobalVarMul_Mul():
-    pass
-
-  @abstractmethod
-  def visitSelectorWithExpr():
-    pass
-  
-  @abstractmethod
-  def visitWhileStatementSingle():
-    pass
-  
-  @abstractmethod
-  def visitStatementBlockOpt_Empty():
-    pass
+    pass  
 '''

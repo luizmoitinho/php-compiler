@@ -89,10 +89,6 @@ class StatementBlockOpt_Statement(StatementBlockOpt):
   def accept(self, Visitor):
     return Visitor.visitStatementBlockOpt_Statement(self)
 
-class StatementBlockOpt_ParenEmpty(StatementBlockOpt):
-  def accept(self, Visitor):
-    return Visitor.visitStatementBlockOpt_ParenEmpty(self)
-
 class StatementBlockOpt_StatementMul(StatementBlockOpt):
   def __init__(self, statementmul):
     self.statementmul = statementmul
@@ -995,18 +991,6 @@ class GlobalVar_Var(GlobalVar):
     self.variable = variable
   def accept(self, Visitor):
     return Visitor.visitGlobalVar_Var(self)
-    
-class GlobalVar_DolarVar(GlobalVar):
-  def __init__(self, variable):
-    self.variable = variable
-  def accept(self, Visitor):
-    return Visitor.visitGlobalVar_DolarVar(self)
-    
-class GlobalVar_DolarExpr(GlobalVar):
-  def __init__(self, expr):
-    self.expr = expr
-  def accept(self, Visitor):
-    return Visitor.visitGlobalVar_DolarExpr(self)
     
 class Exit(metaclass = ABCMeta):
   @abstractmethod

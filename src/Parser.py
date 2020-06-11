@@ -363,15 +363,9 @@ def p_for_parameters(p):
 def p_global_var(p):
   '''
   global_var : VARIABLE
-    | DOLAR VARIABLE
-    | DOLAR LKEY expr RKEY 
   '''
   if len(p) == 2:
     p[0] = sa.GlobalVar_Var(p[1])
-  elif len(p) == 3:
-    p[0] = sa.GlobalVar_DolarVar(p[2])
-  else: 
-    p[0] = sa.GlobalVar_DolarExpr(p[3])
 
 def p_statement_COLON_GLOBAL(p):
   '''
@@ -664,9 +658,9 @@ def p_variable_array_selector(p):
     | selector
   '''
   if len(p) == 3:
-    p[0] = sa.ReferenceVariableSelectorMul(p[1], p[2])
+    p[0] = sa.VariableArraySelector_Mul(p[1], p[2])
   else :
-    p[0] = sa.ReferenceVariableSelectorSingle(p[1])
+    p[0] = sa.VariableArraySelector_Single(p[1])
 
 def p_array_pair_list_ARR_PAIR(p):
   '''
@@ -681,14 +675,23 @@ def p_array_pair_list_ARR_PAIR(p):
 
 def p_error(p):
     print(p)
-    print("Syntax error in input!")
+    print("ERROR: INVALID INPUT.")
  
 lex.lex()
 arquivo = '''
 <?php
-    $a = 10;
-    $b='2';
-    $a+$b;
+  $valor1 = array();
+  $valor2 = true;
+  
+  function add($v){
+    1;
+  }
+  
+  add(1);
+
+  foreach($valor1 as $valor2){
+
+  }
 ?>
 '''
 
