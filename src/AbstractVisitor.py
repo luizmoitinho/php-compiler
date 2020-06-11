@@ -191,10 +191,6 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitExpr_ArrayDeclaration(self, exprArrayDecl):
-    pass
-  
-  @abstractmethod
   def visitExpr_NumberInt(self, exprNumber):
     pass
   

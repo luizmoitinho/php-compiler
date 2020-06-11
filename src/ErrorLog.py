@@ -10,7 +10,13 @@ def AttributionInvalidTypeError(self, exprType, assignExpr, bindable):
   print(' on variable ', end='') 
   assignExpr.variable.accept(self.printer)
   print(' that has type', bindable[st.TYPE])
-  
+
+def UnresolvedArithError(self, expr,op):
+  print('ERRRO: Cannot resolve this arithmetic expression: ',end='')
+  expr.expr1.accept(self.printer)
+  print(op,end='')
+  expr.expr2.accept(self.printer)
+
 def IncrementVariableError(variable):
   print('ERROR: Cannot increment variable', variable[st.NAME], 'with type', variable[st.TYPE])
   

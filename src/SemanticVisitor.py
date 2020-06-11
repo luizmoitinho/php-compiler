@@ -8,8 +8,10 @@ import SintaxeAbstrata as sa
 
 def isValidNumber(number):
     try:
-        if(number in st.Number and int(number) or float(number) ):
-            return True
+        if(int(number)):
+          return st.INT
+        if(float(number)):
+          return st.FLOAT
     except ValueError:
         return False
       
@@ -155,12 +157,20 @@ class SemanticVisitor(AbstractVisitor):
     return statement.expr.accept(self)
   
   def visitExpr_Plus(self, exprPlus):
-    type1 = exprPlus.expr1.accept(self)
-    type2 = exprPlus.expr2.accept(self)
+    expr1 = exprPlus.expr1.accept(self)
+    expr2 = exprPlus.expr2.accept(self)
     
-    type1 = getTypeIfVariable(self, type1)
-    type2 = getTypeIfVariable(self, type2)
-    
+    type1 = None
+    type2 = None
+
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprPlus, type1, type2)
@@ -302,14 +312,18 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitExpr_AssignExpr(self, assignExpr):
     bindable = assignExpr.variable.accept(self)
-    exprType = assignExpr.expr.accept(self)
+    expr = assignExpr.expr.accept(self)
     
-    exprType = getTypeIfVariable(self, exprType)
-    
-    if exprType == None:
-      el.AttributionTypeError(self, assignExpr, exprType)
+    if(isinstance(expr, dict) and expr[st.TYPE] == st.STRING):
+      st.updateBindableType(bindable[st.NAME], expr[st.TYPE],expr[st.VALUE])
 
-    st.updateBindableType(bindable[st.NAME], exprType)
+    else:
+      exprType = getTypeIfVariable(self, expr)
+      if exprType == None:
+        expr = getTypeIfVariable(self, expr)
+      if expr == None:
+        el.AttributionTypeError(self, assignExpr, expr)
+      st.updateBindableType(bindable[st.NAME], exprType)
   
   def visitExpr_AddAssignExpr(self, assignExpr):
     bindable = assignExpr.variable.accept(self)
@@ -398,12 +412,7 @@ class SemanticVisitor(AbstractVisitor):
 
   def visitExpr_PosDecrement(self, exprPosDecrement):
     variable = exprPosDecrement.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      el.DecrementVariableError(variable)
-      
-  def visitExpr_ArrayDeclaration(self, exprArrayDecl):
-    exprArrayDecl.arrayDecl.accept(self)
-    return st.ARRAY
+    if variable[st.TYPE] not in st.Number:True
   
   def visitExpr_NumberInt(self, exprNumber):
     return st.INT
@@ -412,7 +421,7 @@ class SemanticVisitor(AbstractVisitor):
     return st.FLOAT
   
   def visitExpr_EncapsedString(self, exprEncapsed):
-    return st.STRING
+    return  {st.TYPE:st.STRING,st.VALUE:exprEncapsed.encapsedString}
   
   def visitExpr_Boolean(self, exprBoolean):
     return st.BOOL

@@ -36,10 +36,10 @@ Rule 20    expr -> expr LESS_EQUAL expr
 Rule 21    expr -> expr AND expr
 Rule 22    expr -> expr OR expr
 Rule 23    expr -> EXC_DOT expr
-Rule 24    expr -> PRE_INCREMENT variable
-Rule 25    expr -> variable POS_INCREMENT
-Rule 26    expr -> PRE_DECREMENT variable
-Rule 27    expr -> variable POS_DECREMENT
+Rule 24    expr -> INCREMENT variable
+Rule 25    expr -> variable INCREMENT
+Rule 26    expr -> DECREMENT variable
+Rule 27    expr -> variable DECREMENT
 Rule 28    expr -> variable
 Rule 29    expr -> LPAREN expr RPAREN
 Rule 30    expr -> ARRAY_TYPE array_declaration
@@ -191,6 +191,7 @@ COMMENT_SINGLE       :
 CONSTANT_ENCAPSED_STRING : 42 142
 CONTINUE             : 77 78
 DDOT                 : 33
+DECREMENT            : 26 27
 DIE                  : 52 53
 DIVIDE               : 12
 DIVIDE_ASSIGN        : 38
@@ -213,6 +214,7 @@ GREAT_THAN           : 17
 ID                   : 104 105 119 120
 IDENTATION           : 
 IF                   : 70
+INCREMENT            : 24 25
 INTE_DOT             : 33
 INT_TYPE             : 45 132
 LBRACKET             : 114 115
@@ -229,10 +231,6 @@ NUMBER_REAL          : 41 140
 OR                   : 22
 PERCENT              : 13
 PLUS                 : 9 138
-POS_DECREMENT        : 27
-POS_INCREMENT        : 25
-PRE_DECREMENT        : 26
-PRE_INCREMENT        : 24
 RBRACKET             : 114 115
 RETURN               : 79 80
 RIGHT_LOGICAL        : 
@@ -355,10 +353,10 @@ state 2
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -403,8 +401,8 @@ state 2
     FUNCTION        shift and go to state 8
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -495,10 +493,10 @@ state 5
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -543,8 +541,8 @@ state 5
     FUNCTION        shift and go to state 8
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -592,8 +590,8 @@ state 6
     FUNCTION        reduce using rule 5 (inner_statement -> function_declaration_statement .)
     MINUS           reduce using rule 5 (inner_statement -> function_declaration_statement .)
     EXC_DOT         reduce using rule 5 (inner_statement -> function_declaration_statement .)
-    PRE_INCREMENT   reduce using rule 5 (inner_statement -> function_declaration_statement .)
-    PRE_DECREMENT   reduce using rule 5 (inner_statement -> function_declaration_statement .)
+    INCREMENT       reduce using rule 5 (inner_statement -> function_declaration_statement .)
+    DECREMENT       reduce using rule 5 (inner_statement -> function_declaration_statement .)
     LPAREN          reduce using rule 5 (inner_statement -> function_declaration_statement .)
     ARRAY_TYPE      reduce using rule 5 (inner_statement -> function_declaration_statement .)
     NUMBER_INTEGER  reduce using rule 5 (inner_statement -> function_declaration_statement .)
@@ -625,8 +623,8 @@ state 7
     FUNCTION        reduce using rule 6 (inner_statement -> statement .)
     MINUS           reduce using rule 6 (inner_statement -> statement .)
     EXC_DOT         reduce using rule 6 (inner_statement -> statement .)
-    PRE_INCREMENT   reduce using rule 6 (inner_statement -> statement .)
-    PRE_DECREMENT   reduce using rule 6 (inner_statement -> statement .)
+    INCREMENT       reduce using rule 6 (inner_statement -> statement .)
+    DECREMENT       reduce using rule 6 (inner_statement -> statement .)
     LPAREN          reduce using rule 6 (inner_statement -> statement .)
     ARRAY_TYPE      reduce using rule 6 (inner_statement -> statement .)
     NUMBER_INTEGER  reduce using rule 6 (inner_statement -> statement .)
@@ -704,8 +702,8 @@ state 10
     FUNCTION        reduce using rule 59 (statement -> while_statement .)
     MINUS           reduce using rule 59 (statement -> while_statement .)
     EXC_DOT         reduce using rule 59 (statement -> while_statement .)
-    PRE_INCREMENT   reduce using rule 59 (statement -> while_statement .)
-    PRE_DECREMENT   reduce using rule 59 (statement -> while_statement .)
+    INCREMENT       reduce using rule 59 (statement -> while_statement .)
+    DECREMENT       reduce using rule 59 (statement -> while_statement .)
     LPAREN          reduce using rule 59 (statement -> while_statement .)
     ARRAY_TYPE      reduce using rule 59 (statement -> while_statement .)
     NUMBER_INTEGER  reduce using rule 59 (statement -> while_statement .)
@@ -737,8 +735,8 @@ state 11
     FUNCTION        reduce using rule 60 (statement -> if_statement .)
     MINUS           reduce using rule 60 (statement -> if_statement .)
     EXC_DOT         reduce using rule 60 (statement -> if_statement .)
-    PRE_INCREMENT   reduce using rule 60 (statement -> if_statement .)
-    PRE_DECREMENT   reduce using rule 60 (statement -> if_statement .)
+    INCREMENT       reduce using rule 60 (statement -> if_statement .)
+    DECREMENT       reduce using rule 60 (statement -> if_statement .)
     LPAREN          reduce using rule 60 (statement -> if_statement .)
     ARRAY_TYPE      reduce using rule 60 (statement -> if_statement .)
     NUMBER_INTEGER  reduce using rule 60 (statement -> if_statement .)
@@ -770,8 +768,8 @@ state 12
     FUNCTION        reduce using rule 61 (statement -> do_statement .)
     MINUS           reduce using rule 61 (statement -> do_statement .)
     EXC_DOT         reduce using rule 61 (statement -> do_statement .)
-    PRE_INCREMENT   reduce using rule 61 (statement -> do_statement .)
-    PRE_DECREMENT   reduce using rule 61 (statement -> do_statement .)
+    INCREMENT       reduce using rule 61 (statement -> do_statement .)
+    DECREMENT       reduce using rule 61 (statement -> do_statement .)
     LPAREN          reduce using rule 61 (statement -> do_statement .)
     ARRAY_TYPE      reduce using rule 61 (statement -> do_statement .)
     NUMBER_INTEGER  reduce using rule 61 (statement -> do_statement .)
@@ -803,8 +801,8 @@ state 13
     FUNCTION        reduce using rule 62 (statement -> for_statement .)
     MINUS           reduce using rule 62 (statement -> for_statement .)
     EXC_DOT         reduce using rule 62 (statement -> for_statement .)
-    PRE_INCREMENT   reduce using rule 62 (statement -> for_statement .)
-    PRE_DECREMENT   reduce using rule 62 (statement -> for_statement .)
+    INCREMENT       reduce using rule 62 (statement -> for_statement .)
+    DECREMENT       reduce using rule 62 (statement -> for_statement .)
     LPAREN          reduce using rule 62 (statement -> for_statement .)
     ARRAY_TYPE      reduce using rule 62 (statement -> for_statement .)
     NUMBER_INTEGER  reduce using rule 62 (statement -> for_statement .)
@@ -836,8 +834,8 @@ state 14
     FUNCTION        reduce using rule 63 (statement -> foreach_statement .)
     MINUS           reduce using rule 63 (statement -> foreach_statement .)
     EXC_DOT         reduce using rule 63 (statement -> foreach_statement .)
-    PRE_INCREMENT   reduce using rule 63 (statement -> foreach_statement .)
-    PRE_DECREMENT   reduce using rule 63 (statement -> foreach_statement .)
+    INCREMENT       reduce using rule 63 (statement -> foreach_statement .)
+    DECREMENT       reduce using rule 63 (statement -> foreach_statement .)
     LPAREN          reduce using rule 63 (statement -> foreach_statement .)
     ARRAY_TYPE      reduce using rule 63 (statement -> foreach_statement .)
     NUMBER_INTEGER  reduce using rule 63 (statement -> foreach_statement .)
@@ -869,8 +867,8 @@ state 15
     FUNCTION        reduce using rule 64 (statement -> break_statement .)
     MINUS           reduce using rule 64 (statement -> break_statement .)
     EXC_DOT         reduce using rule 64 (statement -> break_statement .)
-    PRE_INCREMENT   reduce using rule 64 (statement -> break_statement .)
-    PRE_DECREMENT   reduce using rule 64 (statement -> break_statement .)
+    INCREMENT       reduce using rule 64 (statement -> break_statement .)
+    DECREMENT       reduce using rule 64 (statement -> break_statement .)
     LPAREN          reduce using rule 64 (statement -> break_statement .)
     ARRAY_TYPE      reduce using rule 64 (statement -> break_statement .)
     NUMBER_INTEGER  reduce using rule 64 (statement -> break_statement .)
@@ -902,8 +900,8 @@ state 16
     FUNCTION        reduce using rule 65 (statement -> continue_statement .)
     MINUS           reduce using rule 65 (statement -> continue_statement .)
     EXC_DOT         reduce using rule 65 (statement -> continue_statement .)
-    PRE_INCREMENT   reduce using rule 65 (statement -> continue_statement .)
-    PRE_DECREMENT   reduce using rule 65 (statement -> continue_statement .)
+    INCREMENT       reduce using rule 65 (statement -> continue_statement .)
+    DECREMENT       reduce using rule 65 (statement -> continue_statement .)
     LPAREN          reduce using rule 65 (statement -> continue_statement .)
     ARRAY_TYPE      reduce using rule 65 (statement -> continue_statement .)
     NUMBER_INTEGER  reduce using rule 65 (statement -> continue_statement .)
@@ -935,8 +933,8 @@ state 17
     FUNCTION        reduce using rule 66 (statement -> return_statement .)
     MINUS           reduce using rule 66 (statement -> return_statement .)
     EXC_DOT         reduce using rule 66 (statement -> return_statement .)
-    PRE_INCREMENT   reduce using rule 66 (statement -> return_statement .)
-    PRE_DECREMENT   reduce using rule 66 (statement -> return_statement .)
+    INCREMENT       reduce using rule 66 (statement -> return_statement .)
+    DECREMENT       reduce using rule 66 (statement -> return_statement .)
     LPAREN          reduce using rule 66 (statement -> return_statement .)
     ARRAY_TYPE      reduce using rule 66 (statement -> return_statement .)
     NUMBER_INTEGER  reduce using rule 66 (statement -> return_statement .)
@@ -1000,10 +998,10 @@ state 21
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -1028,8 +1026,8 @@ state 21
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -1062,10 +1060,10 @@ state 22
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -1090,8 +1088,8 @@ state 22
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -1108,7 +1106,7 @@ state 22
 
 state 23
 
-    (24) expr -> PRE_INCREMENT . variable
+    (24) expr -> INCREMENT . variable
     (112) variable -> . VARIABLE variable_array_selector
     (113) variable -> . VARIABLE
 
@@ -1118,8 +1116,8 @@ state 23
 
 state 24
 
-    (25) expr -> variable . POS_INCREMENT
-    (27) expr -> variable . POS_DECREMENT
+    (25) expr -> variable . INCREMENT
+    (27) expr -> variable . DECREMENT
     (28) expr -> variable .
     (34) expr -> variable . ADD_ASSIGN expr
     (35) expr -> variable . SUB_ASSIGN expr
@@ -1128,8 +1126,8 @@ state 24
     (38) expr -> variable . DIVIDE_ASSIGN expr
     (39) expr -> variable . ASSIGN expr
 
-    POS_INCREMENT   shift and go to state 73
-    POS_DECREMENT   shift and go to state 74
+    INCREMENT       shift and go to state 73
+    DECREMENT       shift and go to state 74
     SEMICOLON       reduce using rule 28 (expr -> variable .)
     PLUS            reduce using rule 28 (expr -> variable .)
     MINUS           reduce using rule 28 (expr -> variable .)
@@ -1162,7 +1160,7 @@ state 24
 
 state 25
 
-    (26) expr -> PRE_DECREMENT . variable
+    (26) expr -> DECREMENT . variable
     (112) variable -> . VARIABLE variable_array_selector
     (113) variable -> . VARIABLE
 
@@ -1189,10 +1187,10 @@ state 26
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -1222,8 +1220,8 @@ state 26
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 84
     NUMBER_INTEGER  shift and go to state 29
@@ -1472,10 +1470,10 @@ state 36
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -1519,8 +1517,8 @@ state 36
     LKEY            shift and go to state 96
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -1593,10 +1591,10 @@ state 39
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -1622,8 +1620,8 @@ state 39
     SEMICOLON       shift and go to state 100
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -1657,10 +1655,10 @@ state 40
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -1686,8 +1684,8 @@ state 40
     SEMICOLON       shift and go to state 102
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -1721,10 +1719,10 @@ state 41
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -1750,8 +1748,8 @@ state 41
     SEMICOLON       shift and go to state 104
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -1812,8 +1810,8 @@ state 45
     (114) selector -> . LBRACKET expr RBRACKET
     (115) selector -> . LBRACKET RBRACKET
 
-    POS_INCREMENT   reduce using rule 113 (variable -> VARIABLE .)
-    POS_DECREMENT   reduce using rule 113 (variable -> VARIABLE .)
+    INCREMENT       reduce using rule 113 (variable -> VARIABLE .)
+    DECREMENT       reduce using rule 113 (variable -> VARIABLE .)
     ADD_ASSIGN      reduce using rule 113 (variable -> VARIABLE .)
     SUB_ASSIGN      reduce using rule 113 (variable -> VARIABLE .)
     MOD_ASSIGN      reduce using rule 113 (variable -> VARIABLE .)
@@ -1900,8 +1898,8 @@ state 52
     FUNCTION        reduce using rule 58 (statement -> expr SEMICOLON .)
     MINUS           reduce using rule 58 (statement -> expr SEMICOLON .)
     EXC_DOT         reduce using rule 58 (statement -> expr SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 58 (statement -> expr SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 58 (statement -> expr SEMICOLON .)
+    INCREMENT       reduce using rule 58 (statement -> expr SEMICOLON .)
+    DECREMENT       reduce using rule 58 (statement -> expr SEMICOLON .)
     LPAREN          reduce using rule 58 (statement -> expr SEMICOLON .)
     ARRAY_TYPE      reduce using rule 58 (statement -> expr SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 58 (statement -> expr SEMICOLON .)
@@ -1944,10 +1942,10 @@ state 53
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -1972,8 +1970,8 @@ state 53
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2006,10 +2004,10 @@ state 54
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2034,8 +2032,8 @@ state 54
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2068,10 +2066,10 @@ state 55
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2096,8 +2094,8 @@ state 55
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2130,10 +2128,10 @@ state 56
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2158,8 +2156,8 @@ state 56
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2192,10 +2190,10 @@ state 57
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2220,8 +2218,8 @@ state 57
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2254,10 +2252,10 @@ state 58
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2282,8 +2280,8 @@ state 58
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2316,10 +2314,10 @@ state 59
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2344,8 +2342,8 @@ state 59
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2378,10 +2376,10 @@ state 60
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2406,8 +2404,8 @@ state 60
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2440,10 +2438,10 @@ state 61
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2468,8 +2466,8 @@ state 61
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2502,10 +2500,10 @@ state 62
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2530,8 +2528,8 @@ state 62
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2564,10 +2562,10 @@ state 63
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2592,8 +2590,8 @@ state 63
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2626,10 +2624,10 @@ state 64
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2654,8 +2652,8 @@ state 64
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2688,10 +2686,10 @@ state 65
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2716,8 +2714,8 @@ state 65
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2750,10 +2748,10 @@ state 66
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -2778,8 +2776,8 @@ state 66
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -2801,8 +2799,8 @@ state 67
     FUNCTION        reduce using rule 67 (statement -> exit_statement SEMICOLON .)
     MINUS           reduce using rule 67 (statement -> exit_statement SEMICOLON .)
     EXC_DOT         reduce using rule 67 (statement -> exit_statement SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 67 (statement -> exit_statement SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 67 (statement -> exit_statement SEMICOLON .)
+    INCREMENT       reduce using rule 67 (statement -> exit_statement SEMICOLON .)
+    DECREMENT       reduce using rule 67 (statement -> exit_statement SEMICOLON .)
     LPAREN          reduce using rule 67 (statement -> exit_statement SEMICOLON .)
     ARRAY_TYPE      reduce using rule 67 (statement -> exit_statement SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 67 (statement -> exit_statement SEMICOLON .)
@@ -2834,8 +2832,8 @@ state 68
     FUNCTION        reduce using rule 68 (statement -> die_statement SEMICOLON .)
     MINUS           reduce using rule 68 (statement -> die_statement SEMICOLON .)
     EXC_DOT         reduce using rule 68 (statement -> die_statement SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 68 (statement -> die_statement SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 68 (statement -> die_statement SEMICOLON .)
+    INCREMENT       reduce using rule 68 (statement -> die_statement SEMICOLON .)
+    DECREMENT       reduce using rule 68 (statement -> die_statement SEMICOLON .)
     LPAREN          reduce using rule 68 (statement -> die_statement SEMICOLON .)
     ARRAY_TYPE      reduce using rule 68 (statement -> die_statement SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 68 (statement -> die_statement SEMICOLON .)
@@ -2867,8 +2865,8 @@ state 69
     FUNCTION        reduce using rule 69 (statement -> global_statement SEMICOLON .)
     MINUS           reduce using rule 69 (statement -> global_statement SEMICOLON .)
     EXC_DOT         reduce using rule 69 (statement -> global_statement SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 69 (statement -> global_statement SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 69 (statement -> global_statement SEMICOLON .)
+    INCREMENT       reduce using rule 69 (statement -> global_statement SEMICOLON .)
+    DECREMENT       reduce using rule 69 (statement -> global_statement SEMICOLON .)
     LPAREN          reduce using rule 69 (statement -> global_statement SEMICOLON .)
     ARRAY_TYPE      reduce using rule 69 (statement -> global_statement SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 69 (statement -> global_statement SEMICOLON .)
@@ -3009,86 +3007,86 @@ state 71
 
 state 72
 
-    (24) expr -> PRE_INCREMENT variable .
+    (24) expr -> INCREMENT variable .
 
-    SEMICOLON       reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    PLUS            reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    MINUS           reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    DIVIDE          reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    PERCENT         reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    TIMES           reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    EQUALS          reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    NOT_EQUAL       reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    GREAT_THAN      reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    GREAT_EQUAL     reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    LESS_THAN       reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    LESS_EQUAL      reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    AND             reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    OR              reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    INTE_DOT        reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    RPAREN          reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    DDOT            reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    ATTR_ASSOC      reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    COLON           reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    AS              reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    RBRACKET        reduce using rule 24 (expr -> PRE_INCREMENT variable .)
-    RKEY            reduce using rule 24 (expr -> PRE_INCREMENT variable .)
+    SEMICOLON       reduce using rule 24 (expr -> INCREMENT variable .)
+    PLUS            reduce using rule 24 (expr -> INCREMENT variable .)
+    MINUS           reduce using rule 24 (expr -> INCREMENT variable .)
+    DIVIDE          reduce using rule 24 (expr -> INCREMENT variable .)
+    PERCENT         reduce using rule 24 (expr -> INCREMENT variable .)
+    TIMES           reduce using rule 24 (expr -> INCREMENT variable .)
+    EQUALS          reduce using rule 24 (expr -> INCREMENT variable .)
+    NOT_EQUAL       reduce using rule 24 (expr -> INCREMENT variable .)
+    GREAT_THAN      reduce using rule 24 (expr -> INCREMENT variable .)
+    GREAT_EQUAL     reduce using rule 24 (expr -> INCREMENT variable .)
+    LESS_THAN       reduce using rule 24 (expr -> INCREMENT variable .)
+    LESS_EQUAL      reduce using rule 24 (expr -> INCREMENT variable .)
+    AND             reduce using rule 24 (expr -> INCREMENT variable .)
+    OR              reduce using rule 24 (expr -> INCREMENT variable .)
+    INTE_DOT        reduce using rule 24 (expr -> INCREMENT variable .)
+    RPAREN          reduce using rule 24 (expr -> INCREMENT variable .)
+    DDOT            reduce using rule 24 (expr -> INCREMENT variable .)
+    ATTR_ASSOC      reduce using rule 24 (expr -> INCREMENT variable .)
+    COLON           reduce using rule 24 (expr -> INCREMENT variable .)
+    AS              reduce using rule 24 (expr -> INCREMENT variable .)
+    RBRACKET        reduce using rule 24 (expr -> INCREMENT variable .)
+    RKEY            reduce using rule 24 (expr -> INCREMENT variable .)
 
 
 state 73
 
-    (25) expr -> variable POS_INCREMENT .
+    (25) expr -> variable INCREMENT .
 
-    SEMICOLON       reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    PLUS            reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    MINUS           reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    DIVIDE          reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    PERCENT         reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    TIMES           reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    EQUALS          reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    NOT_EQUAL       reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    GREAT_THAN      reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    GREAT_EQUAL     reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    LESS_THAN       reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    LESS_EQUAL      reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    AND             reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    OR              reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    INTE_DOT        reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    RPAREN          reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    DDOT            reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    ATTR_ASSOC      reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    COLON           reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    AS              reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    RBRACKET        reduce using rule 25 (expr -> variable POS_INCREMENT .)
-    RKEY            reduce using rule 25 (expr -> variable POS_INCREMENT .)
+    SEMICOLON       reduce using rule 25 (expr -> variable INCREMENT .)
+    PLUS            reduce using rule 25 (expr -> variable INCREMENT .)
+    MINUS           reduce using rule 25 (expr -> variable INCREMENT .)
+    DIVIDE          reduce using rule 25 (expr -> variable INCREMENT .)
+    PERCENT         reduce using rule 25 (expr -> variable INCREMENT .)
+    TIMES           reduce using rule 25 (expr -> variable INCREMENT .)
+    EQUALS          reduce using rule 25 (expr -> variable INCREMENT .)
+    NOT_EQUAL       reduce using rule 25 (expr -> variable INCREMENT .)
+    GREAT_THAN      reduce using rule 25 (expr -> variable INCREMENT .)
+    GREAT_EQUAL     reduce using rule 25 (expr -> variable INCREMENT .)
+    LESS_THAN       reduce using rule 25 (expr -> variable INCREMENT .)
+    LESS_EQUAL      reduce using rule 25 (expr -> variable INCREMENT .)
+    AND             reduce using rule 25 (expr -> variable INCREMENT .)
+    OR              reduce using rule 25 (expr -> variable INCREMENT .)
+    INTE_DOT        reduce using rule 25 (expr -> variable INCREMENT .)
+    RPAREN          reduce using rule 25 (expr -> variable INCREMENT .)
+    DDOT            reduce using rule 25 (expr -> variable INCREMENT .)
+    ATTR_ASSOC      reduce using rule 25 (expr -> variable INCREMENT .)
+    COLON           reduce using rule 25 (expr -> variable INCREMENT .)
+    AS              reduce using rule 25 (expr -> variable INCREMENT .)
+    RBRACKET        reduce using rule 25 (expr -> variable INCREMENT .)
+    RKEY            reduce using rule 25 (expr -> variable INCREMENT .)
 
 
 state 74
 
-    (27) expr -> variable POS_DECREMENT .
+    (27) expr -> variable DECREMENT .
 
-    SEMICOLON       reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    PLUS            reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    MINUS           reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    DIVIDE          reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    PERCENT         reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    TIMES           reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    EQUALS          reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    NOT_EQUAL       reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    GREAT_THAN      reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    GREAT_EQUAL     reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    LESS_THAN       reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    LESS_EQUAL      reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    AND             reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    OR              reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    INTE_DOT        reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    RPAREN          reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    DDOT            reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    ATTR_ASSOC      reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    COLON           reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    AS              reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    RBRACKET        reduce using rule 27 (expr -> variable POS_DECREMENT .)
-    RKEY            reduce using rule 27 (expr -> variable POS_DECREMENT .)
+    SEMICOLON       reduce using rule 27 (expr -> variable DECREMENT .)
+    PLUS            reduce using rule 27 (expr -> variable DECREMENT .)
+    MINUS           reduce using rule 27 (expr -> variable DECREMENT .)
+    DIVIDE          reduce using rule 27 (expr -> variable DECREMENT .)
+    PERCENT         reduce using rule 27 (expr -> variable DECREMENT .)
+    TIMES           reduce using rule 27 (expr -> variable DECREMENT .)
+    EQUALS          reduce using rule 27 (expr -> variable DECREMENT .)
+    NOT_EQUAL       reduce using rule 27 (expr -> variable DECREMENT .)
+    GREAT_THAN      reduce using rule 27 (expr -> variable DECREMENT .)
+    GREAT_EQUAL     reduce using rule 27 (expr -> variable DECREMENT .)
+    LESS_THAN       reduce using rule 27 (expr -> variable DECREMENT .)
+    LESS_EQUAL      reduce using rule 27 (expr -> variable DECREMENT .)
+    AND             reduce using rule 27 (expr -> variable DECREMENT .)
+    OR              reduce using rule 27 (expr -> variable DECREMENT .)
+    INTE_DOT        reduce using rule 27 (expr -> variable DECREMENT .)
+    RPAREN          reduce using rule 27 (expr -> variable DECREMENT .)
+    DDOT            reduce using rule 27 (expr -> variable DECREMENT .)
+    ATTR_ASSOC      reduce using rule 27 (expr -> variable DECREMENT .)
+    COLON           reduce using rule 27 (expr -> variable DECREMENT .)
+    AS              reduce using rule 27 (expr -> variable DECREMENT .)
+    RBRACKET        reduce using rule 27 (expr -> variable DECREMENT .)
+    RKEY            reduce using rule 27 (expr -> variable DECREMENT .)
 
 
 state 75
@@ -3109,10 +3107,10 @@ state 75
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3137,8 +3135,8 @@ state 75
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3171,10 +3169,10 @@ state 76
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3199,8 +3197,8 @@ state 76
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3233,10 +3231,10 @@ state 77
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3261,8 +3259,8 @@ state 77
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3295,10 +3293,10 @@ state 78
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3323,8 +3321,8 @@ state 78
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3357,10 +3355,10 @@ state 79
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3385,8 +3383,8 @@ state 79
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3419,10 +3417,10 @@ state 80
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3447,8 +3445,8 @@ state 80
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3465,30 +3463,30 @@ state 80
 
 state 81
 
-    (26) expr -> PRE_DECREMENT variable .
+    (26) expr -> DECREMENT variable .
 
-    SEMICOLON       reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    PLUS            reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    MINUS           reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    DIVIDE          reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    PERCENT         reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    TIMES           reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    EQUALS          reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    NOT_EQUAL       reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    GREAT_THAN      reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    GREAT_EQUAL     reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    LESS_THAN       reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    LESS_EQUAL      reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    AND             reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    OR              reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    INTE_DOT        reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    RPAREN          reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    DDOT            reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    ATTR_ASSOC      reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    COLON           reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    AS              reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    RBRACKET        reduce using rule 26 (expr -> PRE_DECREMENT variable .)
-    RKEY            reduce using rule 26 (expr -> PRE_DECREMENT variable .)
+    SEMICOLON       reduce using rule 26 (expr -> DECREMENT variable .)
+    PLUS            reduce using rule 26 (expr -> DECREMENT variable .)
+    MINUS           reduce using rule 26 (expr -> DECREMENT variable .)
+    DIVIDE          reduce using rule 26 (expr -> DECREMENT variable .)
+    PERCENT         reduce using rule 26 (expr -> DECREMENT variable .)
+    TIMES           reduce using rule 26 (expr -> DECREMENT variable .)
+    EQUALS          reduce using rule 26 (expr -> DECREMENT variable .)
+    NOT_EQUAL       reduce using rule 26 (expr -> DECREMENT variable .)
+    GREAT_THAN      reduce using rule 26 (expr -> DECREMENT variable .)
+    GREAT_EQUAL     reduce using rule 26 (expr -> DECREMENT variable .)
+    LESS_THAN       reduce using rule 26 (expr -> DECREMENT variable .)
+    LESS_EQUAL      reduce using rule 26 (expr -> DECREMENT variable .)
+    AND             reduce using rule 26 (expr -> DECREMENT variable .)
+    OR              reduce using rule 26 (expr -> DECREMENT variable .)
+    INTE_DOT        reduce using rule 26 (expr -> DECREMENT variable .)
+    RPAREN          reduce using rule 26 (expr -> DECREMENT variable .)
+    DDOT            reduce using rule 26 (expr -> DECREMENT variable .)
+    ATTR_ASSOC      reduce using rule 26 (expr -> DECREMENT variable .)
+    COLON           reduce using rule 26 (expr -> DECREMENT variable .)
+    AS              reduce using rule 26 (expr -> DECREMENT variable .)
+    RBRACKET        reduce using rule 26 (expr -> DECREMENT variable .)
+    RKEY            reduce using rule 26 (expr -> DECREMENT variable .)
 
 
 state 82
@@ -3626,10 +3624,10 @@ state 90
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3656,8 +3654,8 @@ state 90
     AMPERSAND       shift and go to state 144
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3707,10 +3705,10 @@ state 91
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3754,8 +3752,8 @@ state 91
     LKEY            shift and go to state 96
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3812,10 +3810,10 @@ state 92
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3840,8 +3838,8 @@ state 92
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3889,10 +3887,10 @@ state 93
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -3936,8 +3934,8 @@ state 93
     LKEY            shift and go to state 96
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -3991,8 +3989,8 @@ state 95
     FUNCTION        reduce using rule 151 (statement_block_optional -> statement .)
     MINUS           reduce using rule 151 (statement_block_optional -> statement .)
     EXC_DOT         reduce using rule 151 (statement_block_optional -> statement .)
-    PRE_INCREMENT   reduce using rule 151 (statement_block_optional -> statement .)
-    PRE_DECREMENT   reduce using rule 151 (statement_block_optional -> statement .)
+    INCREMENT       reduce using rule 151 (statement_block_optional -> statement .)
+    DECREMENT       reduce using rule 151 (statement_block_optional -> statement .)
     LPAREN          reduce using rule 151 (statement_block_optional -> statement .)
     ARRAY_TYPE      reduce using rule 151 (statement_block_optional -> statement .)
     NUMBER_INTEGER  reduce using rule 151 (statement_block_optional -> statement .)
@@ -4049,10 +4047,10 @@ state 96
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -4096,8 +4094,8 @@ state 96
     RKEY            shift and go to state 150
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -4164,10 +4162,10 @@ state 97
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -4193,8 +4191,8 @@ state 97
     SEMICOLON       shift and go to state 153
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -4230,10 +4228,10 @@ state 98
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -4258,8 +4256,8 @@ state 98
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -4316,8 +4314,8 @@ state 100
     FUNCTION        reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
     MINUS           reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
     EXC_DOT         reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
+    INCREMENT       reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
+    DECREMENT       reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
     LPAREN          reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
     ARRAY_TYPE      reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 76 (break_statement -> BREAK SEMICOLON .)
@@ -4384,8 +4382,8 @@ state 102
     FUNCTION        reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
     MINUS           reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
     EXC_DOT         reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
+    INCREMENT       reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
+    DECREMENT       reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
     LPAREN          reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
     ARRAY_TYPE      reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 78 (continue_statement -> CONTINUE SEMICOLON .)
@@ -4452,8 +4450,8 @@ state 104
     FUNCTION        reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
     MINUS           reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
     EXC_DOT         reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
+    INCREMENT       reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
+    DECREMENT       reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
     LPAREN          reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
     ARRAY_TYPE      reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 80 (return_statement -> RETURN SEMICOLON .)
@@ -4504,10 +4502,10 @@ state 106
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -4533,8 +4531,8 @@ state 106
     RPAREN          shift and go to state 161
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -4589,8 +4587,8 @@ state 111
 
     (112) variable -> VARIABLE variable_array_selector .
 
-    POS_INCREMENT   reduce using rule 112 (variable -> VARIABLE variable_array_selector .)
-    POS_DECREMENT   reduce using rule 112 (variable -> VARIABLE variable_array_selector .)
+    INCREMENT       reduce using rule 112 (variable -> VARIABLE variable_array_selector .)
+    DECREMENT       reduce using rule 112 (variable -> VARIABLE variable_array_selector .)
     ADD_ASSIGN      reduce using rule 112 (variable -> VARIABLE variable_array_selector .)
     SUB_ASSIGN      reduce using rule 112 (variable -> VARIABLE variable_array_selector .)
     MOD_ASSIGN      reduce using rule 112 (variable -> VARIABLE variable_array_selector .)
@@ -4630,8 +4628,8 @@ state 112
     (114) selector -> . LBRACKET expr RBRACKET
     (115) selector -> . LBRACKET RBRACKET
 
-    POS_INCREMENT   reduce using rule 157 (variable_array_selector -> selector .)
-    POS_DECREMENT   reduce using rule 157 (variable_array_selector -> selector .)
+    INCREMENT       reduce using rule 157 (variable_array_selector -> selector .)
+    DECREMENT       reduce using rule 157 (variable_array_selector -> selector .)
     ADD_ASSIGN      reduce using rule 157 (variable_array_selector -> selector .)
     SUB_ASSIGN      reduce using rule 157 (variable_array_selector -> selector .)
     MOD_ASSIGN      reduce using rule 157 (variable_array_selector -> selector .)
@@ -4684,10 +4682,10 @@ state 113
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -4713,8 +4711,8 @@ state 113
     RBRACKET        shift and go to state 168
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -4752,10 +4750,10 @@ state 114
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -4782,8 +4780,8 @@ state 114
     AMPERSAND       shift and go to state 173
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -6014,10 +6012,10 @@ state 139
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -6042,8 +6040,8 @@ state 139
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -6161,8 +6159,8 @@ state 145
     FUNCTION        reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
     MINUS           reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
     EXC_DOT         reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
-    PRE_INCREMENT   reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
-    PRE_DECREMENT   reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
+    INCREMENT       reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
+    DECREMENT       reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
     LPAREN          reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
     ARRAY_TYPE      reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
     NUMBER_INTEGER  reduce using rule 73 (while_statement -> WHILE expr_parentheses statement_block_optional .)
@@ -6229,8 +6227,8 @@ state 147
     FUNCTION        reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
     MINUS           reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
     EXC_DOT         reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
-    PRE_INCREMENT   reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
-    PRE_DECREMENT   reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
+    INCREMENT       reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
+    DECREMENT       reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
     LPAREN          reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
     ARRAY_TYPE      reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
     NUMBER_INTEGER  reduce using rule 70 (if_statement -> IF expr_parentheses statement_block_optional .)
@@ -6279,8 +6277,8 @@ state 150
     FUNCTION        reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
     MINUS           reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
     EXC_DOT         reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
-    PRE_INCREMENT   reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
-    PRE_DECREMENT   reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
+    INCREMENT       reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
+    DECREMENT       reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
     LPAREN          reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
     ARRAY_TYPE      reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
     NUMBER_INTEGER  reduce using rule 153 (statement_block_optional -> LKEY RKEY .)
@@ -6337,10 +6335,10 @@ state 151
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -6384,8 +6382,8 @@ state 151
     RKEY            reduce using rule 150 (statement_MUL -> statement .)
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -6454,10 +6452,10 @@ state 153
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -6483,8 +6481,8 @@ state 153
     SEMICOLON       shift and go to state 200
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -6594,8 +6592,8 @@ state 157
     FUNCTION        reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
     MINUS           reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
     EXC_DOT         reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
+    INCREMENT       reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
+    DECREMENT       reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
     LPAREN          reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
     ARRAY_TYPE      reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 75 (break_statement -> BREAK expr SEMICOLON .)
@@ -6627,8 +6625,8 @@ state 158
     FUNCTION        reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
     MINUS           reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
     EXC_DOT         reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
+    INCREMENT       reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
+    DECREMENT       reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
     LPAREN          reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
     ARRAY_TYPE      reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 77 (continue_statement -> CONTINUE expr SEMICOLON .)
@@ -6660,8 +6658,8 @@ state 159
     FUNCTION        reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
     MINUS           reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
     EXC_DOT         reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
+    INCREMENT       reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
+    DECREMENT       reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
     LPAREN          reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
     ARRAY_TYPE      reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 79 (return_statement -> RETURN expr SEMICOLON .)
@@ -6774,10 +6772,10 @@ state 165
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -6802,8 +6800,8 @@ state 165
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -6822,8 +6820,8 @@ state 166
 
     (156) variable_array_selector -> selector variable_array_selector .
 
-    POS_INCREMENT   reduce using rule 156 (variable_array_selector -> selector variable_array_selector .)
-    POS_DECREMENT   reduce using rule 156 (variable_array_selector -> selector variable_array_selector .)
+    INCREMENT       reduce using rule 156 (variable_array_selector -> selector variable_array_selector .)
+    DECREMENT       reduce using rule 156 (variable_array_selector -> selector variable_array_selector .)
     ADD_ASSIGN      reduce using rule 156 (variable_array_selector -> selector variable_array_selector .)
     SUB_ASSIGN      reduce using rule 156 (variable_array_selector -> selector variable_array_selector .)
     MOD_ASSIGN      reduce using rule 156 (variable_array_selector -> selector variable_array_selector .)
@@ -6894,8 +6892,8 @@ state 168
     (115) selector -> LBRACKET RBRACKET .
 
     LBRACKET        reduce using rule 115 (selector -> LBRACKET RBRACKET .)
-    POS_INCREMENT   reduce using rule 115 (selector -> LBRACKET RBRACKET .)
-    POS_DECREMENT   reduce using rule 115 (selector -> LBRACKET RBRACKET .)
+    INCREMENT       reduce using rule 115 (selector -> LBRACKET RBRACKET .)
+    DECREMENT       reduce using rule 115 (selector -> LBRACKET RBRACKET .)
     ADD_ASSIGN      reduce using rule 115 (selector -> LBRACKET RBRACKET .)
     SUB_ASSIGN      reduce using rule 115 (selector -> LBRACKET RBRACKET .)
     MOD_ASSIGN      reduce using rule 115 (selector -> LBRACKET RBRACKET .)
@@ -7023,8 +7021,8 @@ state 174
     FUNCTION        reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
     MINUS           reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
     EXC_DOT         reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
-    PRE_INCREMENT   reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
-    PRE_DECREMENT   reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
+    INCREMENT       reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
+    DECREMENT       reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
     LPAREN          reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
     ARRAY_TYPE      reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
     NUMBER_INTEGER  reduce using rule 116 (function_declaration_statement -> FUNCTION fds_id fds_parameter fds_statements .)
@@ -7085,10 +7083,10 @@ state 175
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -7133,8 +7131,8 @@ state 175
     FUNCTION        shift and go to state 8
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -7293,10 +7291,10 @@ state 188
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -7321,8 +7319,8 @@ state 188
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -7452,10 +7450,10 @@ state 192
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -7481,8 +7479,8 @@ state 192
     AMPERSAND       shift and go to state 144
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -7517,10 +7515,10 @@ state 193
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -7546,8 +7544,8 @@ state 193
     AMPERSAND       shift and go to state 226
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -7577,8 +7575,8 @@ state 195
     LKEY            reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
     MINUS           reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
     EXC_DOT         reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
-    PRE_INCREMENT   reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
-    PRE_DECREMENT   reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
+    INCREMENT       reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
+    DECREMENT       reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
     LPAREN          reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
     ARRAY_TYPE      reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
     NUMBER_INTEGER  reduce using rule 97 (expr_parentheses -> LPAREN expr RPAREN .)
@@ -7617,8 +7615,8 @@ state 197
     FUNCTION        reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
     MINUS           reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
     EXC_DOT         reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
-    PRE_INCREMENT   reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
-    PRE_DECREMENT   reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
+    INCREMENT       reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
+    DECREMENT       reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
     LPAREN          reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
     ARRAY_TYPE      reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
     NUMBER_INTEGER  reduce using rule 152 (statement_block_optional -> LKEY statement_MUL RKEY .)
@@ -7682,10 +7680,10 @@ state 199
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -7729,8 +7727,8 @@ state 199
     LKEY            shift and go to state 96
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -7790,10 +7788,10 @@ state 200
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -7819,8 +7817,8 @@ state 200
     RPAREN          reduce using rule 82 (for_parameters -> SEMICOLON SEMICOLON .)
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -7867,10 +7865,10 @@ state 202
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -7896,8 +7894,8 @@ state 202
     SEMICOLON       shift and go to state 232
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -7940,10 +7938,10 @@ state 204
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -7968,8 +7966,8 @@ state 204
 
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -8055,8 +8053,8 @@ state 209
     (114) selector -> LBRACKET expr RBRACKET .
 
     LBRACKET        reduce using rule 114 (selector -> LBRACKET expr RBRACKET .)
-    POS_INCREMENT   reduce using rule 114 (selector -> LBRACKET expr RBRACKET .)
-    POS_DECREMENT   reduce using rule 114 (selector -> LBRACKET expr RBRACKET .)
+    INCREMENT       reduce using rule 114 (selector -> LBRACKET expr RBRACKET .)
+    DECREMENT       reduce using rule 114 (selector -> LBRACKET expr RBRACKET .)
     ADD_ASSIGN      reduce using rule 114 (selector -> LBRACKET expr RBRACKET .)
     SUB_ASSIGN      reduce using rule 114 (selector -> LBRACKET expr RBRACKET .)
     MOD_ASSIGN      reduce using rule 114 (selector -> LBRACKET expr RBRACKET .)
@@ -8143,10 +8141,10 @@ state 212
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -8172,8 +8170,8 @@ state 212
     AMPERSAND       shift and go to state 173
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -8211,8 +8209,8 @@ state 215
     FUNCTION        reduce using rule 118 (fds_statements -> LKEY RKEY .)
     MINUS           reduce using rule 118 (fds_statements -> LKEY RKEY .)
     EXC_DOT         reduce using rule 118 (fds_statements -> LKEY RKEY .)
-    PRE_INCREMENT   reduce using rule 118 (fds_statements -> LKEY RKEY .)
-    PRE_DECREMENT   reduce using rule 118 (fds_statements -> LKEY RKEY .)
+    INCREMENT       reduce using rule 118 (fds_statements -> LKEY RKEY .)
+    DECREMENT       reduce using rule 118 (fds_statements -> LKEY RKEY .)
     LPAREN          reduce using rule 118 (fds_statements -> LKEY RKEY .)
     ARRAY_TYPE      reduce using rule 118 (fds_statements -> LKEY RKEY .)
     NUMBER_INTEGER  reduce using rule 118 (fds_statements -> LKEY RKEY .)
@@ -8273,10 +8271,10 @@ state 216
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -8321,8 +8319,8 @@ state 216
     FUNCTION        shift and go to state 8
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -8564,8 +8562,8 @@ state 227
     FUNCTION        reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
     MINUS           reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
     EXC_DOT         reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
-    PRE_INCREMENT   reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
-    PRE_DECREMENT   reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
+    INCREMENT       reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
+    DECREMENT       reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
     LPAREN          reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
     ARRAY_TYPE      reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
     NUMBER_INTEGER  reduce using rule 74 (do_statement -> DO statement_block_optional WHILE expr_parentheses SEMICOLON .)
@@ -8597,8 +8595,8 @@ state 228
     FUNCTION        reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
     MINUS           reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
     EXC_DOT         reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
-    PRE_INCREMENT   reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
-    PRE_DECREMENT   reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
+    INCREMENT       reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
+    DECREMENT       reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
     LPAREN          reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
     ARRAY_TYPE      reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
     NUMBER_INTEGER  reduce using rule 81 (for_statement -> FOR LPAREN for_parameters RPAREN statement_block_optional .)
@@ -8651,10 +8649,10 @@ state 230
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -8680,8 +8678,8 @@ state 230
     RPAREN          reduce using rule 86 (for_parameters -> SEMICOLON for_expr_OPT SEMICOLON .)
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -8726,10 +8724,10 @@ state 232
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -8755,8 +8753,8 @@ state 232
     RPAREN          reduce using rule 83 (for_parameters -> for_expr_OPT SEMICOLON SEMICOLON .)
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -8871,8 +8869,8 @@ state 240
     FUNCTION        reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
     MINUS           reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
     EXC_DOT         reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
-    PRE_INCREMENT   reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
-    PRE_DECREMENT   reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
+    INCREMENT       reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
+    DECREMENT       reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
     LPAREN          reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
     ARRAY_TYPE      reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
     NUMBER_INTEGER  reduce using rule 117 (fds_statements -> LKEY inner_statement_MUL RKEY .)
@@ -9056,10 +9054,10 @@ state 254
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -9085,8 +9083,8 @@ state 254
     RPAREN          reduce using rule 84 (for_parameters -> for_expr_OPT SEMICOLON for_expr_OPT SEMICOLON .)
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -9150,10 +9148,10 @@ state 257
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -9197,8 +9195,8 @@ state 257
     LKEY            shift and go to state 96
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -9308,8 +9306,8 @@ state 266
     FUNCTION        reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
     MINUS           reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
     EXC_DOT         reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
-    PRE_INCREMENT   reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
-    PRE_DECREMENT   reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
+    INCREMENT       reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
+    DECREMENT       reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
     LPAREN          reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
     ARRAY_TYPE      reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
     NUMBER_INTEGER  reduce using rule 98 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable RPAREN statement_block_optional .)
@@ -9374,10 +9372,10 @@ state 268
     (21) expr -> . expr AND expr
     (22) expr -> . expr OR expr
     (23) expr -> . EXC_DOT expr
-    (24) expr -> . PRE_INCREMENT variable
-    (25) expr -> . variable POS_INCREMENT
-    (26) expr -> . PRE_DECREMENT variable
-    (27) expr -> . variable POS_DECREMENT
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
     (28) expr -> . variable
     (29) expr -> . LPAREN expr RPAREN
     (30) expr -> . ARRAY_TYPE array_declaration
@@ -9421,8 +9419,8 @@ state 268
     LKEY            shift and go to state 96
     MINUS           shift and go to state 21
     EXC_DOT         shift and go to state 22
-    PRE_INCREMENT   shift and go to state 23
-    PRE_DECREMENT   shift and go to state 25
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
     LPAREN          shift and go to state 26
     ARRAY_TYPE      shift and go to state 27
     NUMBER_INTEGER  shift and go to state 29
@@ -9468,8 +9466,8 @@ state 269
     FUNCTION        reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
     MINUS           reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
     EXC_DOT         reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
-    PRE_INCREMENT   reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
-    PRE_DECREMENT   reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
+    INCREMENT       reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
+    DECREMENT       reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
     LPAREN          reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
     ARRAY_TYPE      reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
     NUMBER_INTEGER  reduce using rule 99 (foreach_statement -> FOREACH LPAREN expr AS ampersand_variable ATTR_ASSOC ampersand_variable RPAREN statement_block_optional .)
