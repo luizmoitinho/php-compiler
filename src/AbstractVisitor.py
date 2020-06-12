@@ -602,11 +602,6 @@ class AbstractVisitor(metaclass = ABCMeta):
     pass
   
   @abstractmethod
-  def visitCommonScalar_Token():
-    pass
-  
-  
-  @abstractmethod
   def visitArrayPair_Variable():
     pass
   
