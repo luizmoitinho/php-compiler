@@ -34,6 +34,7 @@ def endScope():
   printTable()
   print(symbolTable[-2][SCOPE], '- End scope:', symbolTable[-1][SCOPE])
   symbolTable = symbolTable[0:-1]
+  
 
 
 def addVar(name, type = None):

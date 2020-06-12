@@ -164,7 +164,6 @@ class SemanticVisitor(AbstractVisitor):
     
     type1 = None
     type2 = None
-
     
     type1 = getTypeIfVariable(self, expr1)
     type2 = getTypeIfVariable(self, expr2)    
@@ -174,71 +173,107 @@ class SemanticVisitor(AbstractVisitor):
     if(expr2[st.TYPE] == st.STRING):
       type2 = isValidNumber(expr2[st.VALUE].strip('\''))
 
-    print([type1,type2])
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprPlus, type1, type2)
     return c
     
   def visitExpr_Minus(self, exprMinus):
-    type1 = exprMinus.expr1.accept(self)
-    type2 = exprMinus.expr2.accept(self)
+    expr1 = exprMinus.expr1.accept(self)
+    expr2 = exprMinus.expr2.accept(self)
     
-    type1 = getTypeIfVariable(self, type1)
-    type2 = getTypeIfVariable(self, type2)
+    type1 = None
+    type2 = None
     
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprMinus, type1, type2)
     return c
 
   def visitExpr_Times(self, exprTimes):
-    type1 = exprTimes.expr1.accept(self)
-    type2 = exprTimes.expr2.accept(self)
+    expr1 = exprTimes.expr1.accept(self)
+    expr2 = exprTimes.expr2.accept(self)
     
-    type1 = getTypeIfVariable(self, type1)
-    type2 = getTypeIfVariable(self, type2)
+    type1 = None
+    type2 = None
     
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprTimes, type1, type2)
     return c
 
   def visitExpr_Divide(self, exprDivide):
-    type1 = exprDivide.expr1.accept(self)
-    type2 = exprDivide.expr2.accept(self)
+    expr1 = exprDivide.expr1.accept(self)
+    expr2 = exprDivide.expr2.accept(self)
     
-    type1 = getTypeIfVariable(self, type1)
-    type2 = getTypeIfVariable(self, type2)
+    type1 = None
+    type2 = None
     
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
     c = coercion(type1, type2) 
     if (c == None):
       el.ExpressionTypeError(self, exprDivide, type1, type2)
     return c
   
   def visitExpr_Mod(self, exprMod):
-    type1 = exprMod.expr1.accept(self)
-    type2 = exprMod.expr2.accept(self)
-     
-    type1 = getTypeIfVariable(self, type1)
-    type2 = getTypeIfVariable(self, type2)
+    expr1 = exprMod.expr1.accept(self)
+    expr2 = exprMod.expr2.accept(self)
     
+    type1 = None
+    type2 = None
+    
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
     c = coercion(type1, type2) 
     if (c == None):
-      el.ExpressionTypeError(self, exprTimes, type1, type2)
+      el.ExpressionTypeError(self, exprMod, type1, type2)
     return c
 
   def visitExpr_Uminus(self, exprUminus):
-    exprType = exprUminus.expr.accept(self)
+    expr1 = exprUminus.expr.accept(self)
+
+    type1 = None
+    type1 = getTypeIfVariable(self, expr1)
     
-    exprType = getTypeIfVariable(self, exprType)
-      
-    if(exprType in st.Number):
-      return exprType
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+
+    if(type1 in st.Number):
+      return expr1
     else:
       print('ERROR: Invalid unary expression: -',end='')
       exprUminus.expr.accept(self.printer)
       print('')
+
 
   def visitExpr_Equals(self, exprEqual):
     types = getTypeExprBool(self, exprEqual)
