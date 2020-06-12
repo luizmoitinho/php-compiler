@@ -681,8 +681,9 @@ lex.lex()
 arquivo = '''
 <?php
   $valor = 10;
-  $valor1= '11.0';
-  $soma =$valor/ -$valor1;
+  $valor1= 11;
+  $soma='0.0';
+  $soma /= $valor*$valor1;
 ?>
 '''
 
