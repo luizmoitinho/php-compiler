@@ -2,14 +2,35 @@ from AbstractVisitor import AbstractVisitor
 import SymbolTable as st
 from Visitor import Visitor
 
+import ErrorLog as el
+
 import SintaxeAbstrata as sa
 
 def isValidNumber(number):
     try:
-        if(number in st.Number and int(number) or float(number) ):
-            return True
+        if(int(number)):
+          return st.INT
     except ValueError:
-        return False
+        try:
+          if(float(number)):
+            return st.FLOAT
+        except ValueError:
+          return False
+      
+def isTypePrimitive(type):
+  if(type in st.Number or type == st.BOOL or type == st.ARRAY or type == st.STRING):
+    return True
+  return False
+
+def getTypeIfVariable(self, exprType):
+  if type(exprType) is dict:
+      return exprType[st.TYPE] 
+  return exprType
+
+def getTypeExprBool(self,exprBool):
+    type1 = exprBool.expr1.accept(self)
+    type2 = exprBool.expr2.accept(self)
+    return [getTypeIfVariable(self, type1),getTypeIfVariable(self, type2)]
 
 def coercion(type1, type2):
     if (type1 in st.Number and type2 in st.Number):
@@ -24,17 +45,17 @@ class SemanticVisitor(AbstractVisitor):
     self.printer = Visitor()
     st.beginScope('global')
     
-  def visitMain_MainInner(self, main):
+  def visitMain_MainProgram(self, main):
     main.mainInner.accept(self)
     
-  def visitMain_MainInner_Empty(self, main):
+  def visitMain_Empty(self, main):
     st.endScope()
     
-  def visitMainInner_InnerStatement_MainInner(self, mainInner):
+  def visitMainProgram_InnerStatement_Recursive(self, mainInner):
     mainInner.innerStatement.accept(self)
     mainInner.mainInner.accept(self)
     
-  def visitMainInner_InnerStatement(self, mainInner):
+  def visitMainProgram_InnerStatement(self, mainInner):
     mainInner.innerStatement.accept(self)
     
   def visitInnerStatement_FuncDecStatement(self, innerStatement):
@@ -71,34 +92,6 @@ class SemanticVisitor(AbstractVisitor):
     ifSingle.expr_parentheses.accept(self)
     ifSingle.statement_BLOCK_OPT.accept(self)
 
-  def visitIfStatement_Else(self, IfStatementElse):
-    IfStatementElse.statement_if.accept(self)
-    IfStatementElse.statement_else.accept(self)
-  
-  def visitStatementElse_Single(self, statementElse):
-    statementElse.statement_BLOCK_OPT.accept(self)
-
-  def visitIfStatement_StatementIf_Elseif(self,statementIfElseif):
-    statementIfElseif.statement_if.accept(self)
-    statementIfElseif.statement_elseif.accept(self)
-  
-  def visitStatementElseIf_Mul(self, statementElseIfMul):
-    statementElseIfMul.expr_parentheses.accept(self)
-    statementElseIfMul.statement_BLOCK_OPT.accept(self)
-    statementElseIfMul.statement_elseif.accept(self)
-
-  def visitIfStatement_Stm_If_Elseif_Else(self, ifConditional):
-    ifConditional.statement_if.accept(self)
-    ifConditional.statement_elseif.accept(self)
-    ifConditional.statement_else.accept(self)
-
-  def visitStatementElseIf_Single(self, StatementElseIf):
-    StatementElseIf.expr_parentheses.accept(self)
-    StatementElseIf.statement_BLOCK_OPT.accept(self)
-
-  def visitIfStatement_statement_if(self, ifStatement):
-    ifStatement.statement_if.accept(self)
-
   def visitStatement_While(self, statement):
     statement.whilee.accept(self)
 
@@ -115,8 +108,8 @@ class SemanticVisitor(AbstractVisitor):
     if functionExists == None:
       st.addFunction(funcId, params)
       st.beginScope(funcId)
-      for i in range(0, len(params)):
-        st.addVar(params[i])
+      for i in range(0, len(params), 2):
+        st.addVar(params[i], params[i+1])
       funcDecStatement.fds_statements.accept(self)
       st.endScope()
     else:
@@ -147,8 +140,8 @@ class SemanticVisitor(AbstractVisitor):
     return parameterListColonParameter.parameter.accept(self)
     
   def visitParameter_Var(self, parameter):
-    return [parameter.variable]
-  
+    return [parameter.variable, None]
+ 
   def visitFds_statements_withStatements(self, fds_statements):
     return fds_statements.inner_statement_MUL.accept(self)
     
@@ -164,156 +157,350 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitStatement_Expr(self, statement):
     return statement.expr.accept(self)
+  
+  def visitExpr_Plus(self, exprPlus):
+    expr1 = exprPlus.expr1.accept(self)
+    expr2 = exprPlus.expr2.accept(self)
     
-  def visitExpr_Expr1(self, expr):
-    return expr.expr1.accept(self)
-  
-  def visitExpr_Expr3(self, expr):
-    return expr.expr3.accept(self)
-  
-  def visitExpr_Expr1_Expr2(self, expr):
-    type1 = expr.expr1.accept(self)
-    type2 = expr.expr2.accept(self)
-    if type(type1) is dict:
-      type1 = type1[st.TYPE]
-      
-    c = coercion(type1, type2[1])
+    type1 = None
+    type2 = None
+    
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
+    c = coercion(type1, type2) 
     if (c == None):
-      print('ERROR: Expression ', end='')
-      expr.expr1.accept(self.printer)
-      print(' has type', type1, 'while expression ', end='')
-      expr.expr2.expr.accept(self.printer)
-      print(' has type', type2[1])
+      el.ExpressionTypeError(self, exprPlus, type1, type2)
+    return c
+    
+  def visitExpr_Minus(self, exprMinus):
+    expr1 = exprMinus.expr1.accept(self)
+    expr2 = exprMinus.expr2.accept(self)
+    
+    type1 = None
+    type2 = None
+    
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
+    c = coercion(type1, type2) 
+    if (c == None):
+      el.ExpressionTypeError(self, exprMinus, type1, type2)
+    return c
+
+  def visitExpr_Times(self, exprTimes):
+    expr1 = exprTimes.expr1.accept(self)
+    expr2 = exprTimes.expr2.accept(self)
+    
+    type1 = None
+    type2 = None
+    
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
+    c = coercion(type1, type2) 
+    if (c == None):
+      el.ExpressionTypeError(self, exprTimes, type1, type2)
+    return c
+
+  def visitExpr_Divide(self, exprDivide):
+    expr1 = exprDivide.expr1.accept(self)
+    expr2 = exprDivide.expr2.accept(self)
+    
+    type1 = None
+    type2 = None
+    
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
+    c = coercion(type1, type2) 
+    if (c == None):
+      el.ExpressionTypeError(self, exprDivide, type1, type2)
     return c
   
-  def visitExpr2_ArithmeticOp(self, expr2):
-    exprType = expr2.expr.accept(self)
+  def visitExpr_Mod(self, exprMod):
+    expr1 = exprMod.expr1.accept(self)
+    expr2 = exprMod.expr2.accept(self)
     
-    if type(exprType) is dict:
-      exprType = exprType[st.TYPE]
+    type1 = None
+    type2 = None
     
-    return [st.ARITH, exprType]
-  
-  def visitExpr3_Var_Assign_Expr(self, expr3):   
-    bindable = expr3.variable.accept(self)
-    assignOp = expr3.assignOp.accept(self)
-    exprType = expr3.expr.accept(self)
+    type1 = getTypeIfVariable(self, expr1)
+    type2 = getTypeIfVariable(self, expr2)    
+
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+    if(expr2[st.TYPE] == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+
+    c = coercion(type1, type2) 
+    if (c == None):
+      el.ExpressionTypeError(self, exprMod, type1, type2)
+    return c
+
+  def visitExpr_Uminus(self, exprUminus):
+    expr1 = exprUminus.expr.accept(self)
+
+    type1 = None
+    type1 = getTypeIfVariable(self, expr1)
     
-    if exprType == None:
-      print('ERROR: Atribution to variable ', end='')
-      expr3.variable.accept(self.printer)
-      print(' returned type', exprType)
-      return
-    
-    if type(exprType) is dict:
-      exprType = exprType[st.TYPE] 
-    
-    if assignOp == '=':
-        st.updateBindableType(bindable[st.NAME], exprType)
-    elif bindable[st.TYPE] not in st.Number:
-        print('ERROR: Invalid atribution', assignOp, 'on variable ', end='') 
-        expr3.variable.accept(self.printer)
-        print(' that has type', bindable[st.TYPE]) 
+    if(expr1[st.TYPE] == st.STRING ):
+      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+
+    if(type1 in st.Number):
+      return expr1
     else:
-        st.updateBindableType(bindable[st.NAME], exprType)
+      print('ERROR: Invalid unary expression: -',end='')
+      exprUminus.expr.accept(self.printer)
+      print('')
+
+
+  def visitExpr_Equals(self, exprEqual):
+    types = getTypeExprBool(self, exprEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self,exprEqual," == ", types)
+
+  def visitExpr_NotEqual(self, exprNotEqual):
+    types = getTypeExprBool(self, exprNotEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprNotEqual," != ",types)
+
+  def visitExpr_GreatThan(self, exprGreatThan):
+    types = getTypeExprBool(self, exprGreatThan)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprGreatThan," > ",types)
   
-  def visitExpr1_Variable(self, expr1):
-    return expr1.variable.accept(self) 
-  
-  def visitExpr1_Variable_Increment(self, expr1):
-    variable = expr1.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      print('ERROR: Cannot increment variable', variable[st.NAME], 'with type', variable[st.TYPE])
+  def visitExpr_GreatEqual(self, exprGreatEqual):
+    types = getTypeExprBool(self, exprGreatEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprGreatEqual," >= ",types)
+
+  def visitExpr_LessThan(self, exprLessThan):
+    types = getTypeExprBool(self, exprLessThan)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprLessThan," < ",types)
+
+  def visitExpr_LessEqual(self, exprLessEqual):
+    types = getTypeExprBool(self, exprLessEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprLessEqual," <= ",types)   
       
-  def visitExpr1_Variable_Decrement(self, expr1):
-    variable = expr1.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      print('ERROR: Cannot decrement variable', variable[st.NAME], 'with type', variable[st.TYPE])
+  def visitExpr_AndLogical(self, exprAndLogical):
+    types = getTypeExprBool(self, exprAndLogical)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprAndLogical," && ",types)   
+
+  def visitExpr_OrLogical(self, exprOrLogical):
+    types = getTypeExprBool(self, exprEqual)
+    if isTypePrimitive(types[0]) and isTypePrimitive(types[1]):
+      return st.BOOL
+    else:
+      el.ExpressionBoolError(self, exprOrLogical," || ",types)
+
+  def visitExpr_NotLogical(self, exprNotLogical):
+    typeExpr = exprNotLogical.expr.accept(self) 
+    if isTypePrimitive(typeExpr):
+      return st.BOOL
+    else:
+     print('ERROR: Expected boolean expression, but got type: !%s'%typeExpr[st.NAME]) 
+
+  def visitExpr_ParenExpr(self, parenExpr):
+    parenExpr.expr.accept(self)
+
+  def visitExpr_TernaryOp(self, exprTernary):
+    exprTernary.expr1.accept(self)
+    exprTernary.expr2.accept(self)
+    exprTernary.expr3.accept(self)
+
+  def visitExpr_FunctionCall(self, exprFunctionCall):
+    exprFunctionCall.functionCall.accept(self) 
     
-  def visitExpr1_Increment_Variable(self, expr1):
-    variable = expr1.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      print('ERROR: Cannot increment variable', variable[st.NAME], 'with type', variable[st.TYPE])
+
+  def visitExpr_AssignExpr(self, assignExpr):
+    bindable = assignExpr.variable.accept(self)
+    expr = assignExpr.expr.accept(self)
     
-  def visitExpr1_Decrement_Variable(self, expr1):
-    variable = expr1.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      print('ERROR: Cannot decrement variable', variable[st.NAME], 'with type', variable[st.TYPE])
-    
-  def visitExpr1_FunctionCall(self, expr1):
-    return expr1.functionCall.accept(self)
+    if(isinstance(expr, dict) and expr[st.TYPE] == st.STRING):
+      st.updateBindableType(bindable[st.NAME], expr[st.TYPE],expr[st.VALUE])
+    else:
+      exprType = getTypeIfVariable(self, expr)
+      if exprType == None:
+        expr = getTypeIfVariable(self, expr)
+      if expr == None:
+        el.AttributionTypeError(self, assignExpr, expr)
+      st.updateBindableType(bindable[st.NAME], exprType)
   
-  def visitExpr1_ArrayDeclaration(self, expr1):
-    expr1.arrayDeclaration.accept(self)
+
+  def visitExpr_AddAssignExpr(self, assignExpr):
+    bindable = assignExpr.variable.accept(self)
+    exprType = assignExpr.expr.accept(self)
+    
+    if(isinstance(bindable, dict) and bindable[st.TYPE] == st.STRING):
+      st.updateBindableType(bindable[st.NAME], bindable[st.TYPE],bindable[st.VALUE])
+    elif bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, assignExpr, bindable)
+    if not exprType in st.Number:
+      isVariable = getTypeIfVariable(self, exprType)
+      if isVariable == None:
+        el.AttributionTypeError(self, assignExpr, exprType)
+    st.updateBindableType(bindable[st.NAME], exprType)
+  
+  
+  def visitExpr_SubAssignExpr(self, subAssignExpr):
+    bindable = subAssignExpr.variable.accept(self)
+    exprType = subAssignExpr.expr.accept(self)
+    
+    if(isinstance(bindable, dict) and bindable[st.TYPE] == st.STRING):
+      st.updateBindableType(bindable[st.NAME], bindable[st.TYPE],bindable[st.VALUE])
+    elif bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, subAssignExpr, bindable)
+    if not exprType in st.Number:
+      isVariable = getTypeIfVariable(self, exprType)
+      if isVariable == None:
+        el.AttributionTypeError(self, subAssignExpr, exprType)
+    st.updateBindableType(bindable[st.NAME], exprType)
+    
+
+  def visitExpr_ModAssignExpr(self, modAssignExpr):
+    bindable = modAssignExpr.variable.accept(self)
+    exprType = modAssignExpr.expr.accept(self)
+    
+    if(isinstance(bindable, dict) and bindable[st.TYPE] == st.STRING):
+      st.updateBindableType(bindable[st.NAME], bindable[st.TYPE],bindable[st.VALUE])
+    elif bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, modAssignExpr, bindable)
+    if not exprType in st.Number:
+      isVariable = getTypeIfVariable(self, exprType)
+      if isVariable == None:
+        el.AttributionTypeError(self, modAssignExpr, exprType)
+    st.updateBindableType(bindable[st.NAME], exprType)
+    
+
+  def visitExpr_TimesAssignExpr(self, timesAssignExpr):
+    bindable = timesAssignExpr.variable.accept(self)
+    exprType = timesAssignExpr.expr.accept(self)
+    
+    if(isinstance(bindable, dict) and bindable[st.TYPE] == st.STRING):
+      st.updateBindableType(bindable[st.NAME], bindable[st.TYPE],bindable[st.VALUE])
+    elif bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, timesAssignExpr, bindable)
+    if not exprType in st.Number:
+      isVariable = getTypeIfVariable(self, exprType)
+      if isVariable == None:
+        el.AttributionTypeError(self, modAssignExpr, exprType)
+    st.updateBindableType(bindable[st.NAME], exprType)
+    
+  def visitExpr_DivideAssignExpr(self, divAssignExpr):
+    bindable = divAssignExpr.variable.accept(self)
+    exprType = divAssignExpr.expr.accept(self)
+    
+    if(isinstance(bindable, dict) and bindable[st.TYPE] == st.STRING):
+      st.updateBindableType(bindable[st.NAME], bindable[st.TYPE],bindable[st.VALUE])
+    elif bindable[st.TYPE] not in st.Number:
+      el.AttributionInvalidTypeError(self, exprType, divAssignExpr, bindable)
+    if not exprType in st.Number:
+      isVariable = getTypeIfVariable(self, exprType)
+      if isVariable == None:
+        el.AttributionTypeError(self, divAssignExpr, exprType)
+    st.updateBindableType(bindable[st.NAME], exprType)
+    
+  def visitExpr_PreIncrement(self, exprPreIncrement):
+    variable = exprPreIncrement.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      el.IncrementVariableError(variable)
+
+  def visitExpr_PosIncrement(self, exprPosIncrement):
+    variable = exprPosIncrement.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      el.IncrementVariableError(variable)
+
+  def visitExpr_PreDecrement(self, exprPreDecrement):
+    variable = exprPreDecrement.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      el.DecrementVariableError(variable)
+
+  def visitExpr_PosDecrement(self, exprPosDecrement):
+    variable = exprPosDecrement.variable.accept(self)
+    if variable[st.TYPE] not in st.Number:
+      el.DecrementVariableError(variable)
+      
+  def visitExpr_ArrayDeclaration(self, exprArrayDecl):
+    exprArrayDecl.arrayDecl.accept(self)
     return st.ARRAY
-    
-  def visitExpr1_True(self, expr1):
+  
+  def visitExpr_TypeCastOp(self, typeCastOp):
+    Type = typeCastOp.typeCast.accept(self)
+    Expr = typeCastOp.expr.accept(self)
+  
+  def visitTypeCastOp_Token(self, typeCastOp):
+    return typeCastOp.token
+  
+  def visitExpr_NumberInt(self, exprNumber):
+    return st.INT
+  
+  def visitExpr_NumberFloat(self, exprNumber):
+    return st.FLOAT
+  
+  def visitExpr_EncapsedString(self, exprEncapsed):
+    return { st.TYPE: st.STRING, st.VALUE: exprEncapsed.encapsedString }
+  
+  def visitExpr_Boolean(self, exprBoolean):
     return st.BOOL
   
-  def visitExpr1_False(self, expr1):
-    return st.BOOL
+  def visitExpr_Variable(self, exprVariable):
+    return exprVariable.variable.accept(self)
+    
+  def visitVariable_Single(self, variable):
+    bindable = st.getBindable(variable.token)
+    if(bindable == None):
+      return st.addVar(variable.token)
+    return bindable
   
-  def visitExpr1_Scalar(self, expr1):
-    return expr1.scalar.accept(self)
-    
-  def visitVariable_Reference_Variable(self, variable):
-    return variable.reference_variable.accept(self)
-    
-  def visitReferenceVariable_Compound(self, referenceVariable):
-    return referenceVariable.compoundvariable.accept(self)
+  def visitVariable_Array(self, variable):
+    bindable = st.getBindable(variable.token)
+    if(bindable == None):
+      print('ERROR: Undefined variable', variable.token, '. Trying to access array offset on value of type None')
+      return None
 
-  def visitCompoundVariableSingle(self, singleVariable):
-    variable = st.getBindable(singleVariable.variable)
-    if(variable == None):
-      return st.addVar(singleVariable.variable)
-    return variable
-  
-  def visitFunctionCall_NoParameter(self, functionCall):
-    bindable = st.getBindable(functionCall.id)
-    if bindable == None:
-      print('ERROR: Function', functionCall.id,'called but never defined.')
+    if bindable[st.TYPE] == st.ARRAY or bindable[st.TYPE] == st.STRING:
+      variable.selector.accept(self)
+    else:
+      print('Trying to access array offset on value of type', bindable[st.TYPE])
       
-  def visitFunctionCall_WithParameter(self, functionCall):
-    bindable = st.getBindable(functionCall.id)
-    if bindable == None:
-      print('ERROR: Function', functionCall.id, 'called but never defined.')
-    if bindable != None and bindable[st.BINDABLE] == st.FUNCTION:
-      params = functionCall.parameterList.accept(self)
-      if len(params) != len(bindable[st.PARAMS]):
-        print('ERROR: Number of parameters of function', functionCall.id, 'differs from declaration.')
-        
-  def visitFCParameterList_Single(self, fcParameterList):
-    return fcParameterList.fcParameter.accept(self) 
-
-  def visitFCParameterList_Mul(self, fcParameterList):
-    return fcParameterList.fcParameter.accept(self), fcParameterList.fcColonParameter.accept(self)
-    
-  def visitFCParameterListColonParameter_Single(self, fcParameterListColonParameter):
-    return [fcParameterListColonParameter.fcParameter.accept(self)]
-    
-  def visitFCParameterListColonParameter_Mul(self, fcParameterListColonParameter):
-    return [fcParameterListColonParameter.fcParameter.accept(self)] + fcParameterListColonParameter.fcplColonParameter.accept(self)
-  
-  def visitFunctionCallParameter_Expr(self, functionCallParameter):
-    return functionCallParameter.expr.accept(self)
-    
-  def visitFunctionCallParameter_AmpersandVariable(self, functionCallParameter):
-    return functionCallParameter.variable
-  
-  def visitScalar_Token(self, scalar):
-    if isinstance(scalar.token, int):
-      return st.INT
-    elif isinstance(scalar.token, float):
-      return st.FLOAT
-    elif isinstance(scalar.token, str):
-      return st.STRING
-    
-  def visitAssignOperator_Token(self, assignOp):
-    return assignOp.token
-
-  def visitArithmeticOperator_Token(self, arithmeticOp):
-    return arithmeticOp.token
-  
   def visitArrayDec_NoPairList(self, arrayDec):
     return
   
@@ -337,6 +524,86 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitArrayPair_Expr(self, arrayPair):
     arrayPair.expr.accept(self)
+  
+  def visitFunctionCall_NoParameter(self, functionCall):
+    bindable = st.getBindable(functionCall.id)
+    if bindable == None:
+      print('ERROR: Function', functionCall.id,'called but never defined.')
+      
+  def visitFunctionCall_WithParameter(self, functionCall):
+    bindable = st.getBindable(functionCall.id)
+    st.updateParamsTypes(bindable[st.NAME], 'a')
+    if bindable == None:
+      print('ERROR: Function', functionCall.id, 'called but never defined.')
+    
+    if bindable != None and bindable[st.BINDABLE] == st.FUNCTION:
+      params = functionCall.parameterList.accept(self)
+      if len(params) != (len(bindable[st.PARAMS]) / 2):
+        print('ERROR: Number of parameters of function', functionCall.id, 'differs from declaration.')
+        
+  def visitFCParameterList_Single(self, fcParameterList):
+    return fcParameterList.fcParameter.accept(self) 
+
+  def visitFCParameterList_Mul(self, fcParameterList):
+    return fcParameterList.fcParameter.accept(self) + fcParameterList.fcColonParameter.accept(self)
+    
+  def visitFCParameterListColonParameter_Single(self, fcParameterListColonParameter):
+    return fcParameterListColonParameter.fcParameter.accept(self)
+    
+  def visitFCParameterListColonParameter_Mul(self, fcParameterListColonParameter):
+    return fcParameterListColonParameter.fcParameter.accept(self) + fcParameterListColonParameter.fcplColonParameter.accept(self)
+  
+  def visitFunctionCallParameter_Expr(self, functionCallParameter):
+    exprType = functionCallParameter.expr.accept(self)
+    return [getTypeIfVariable(self, exprType)]
+    
+  def visitFunctionCallParameter_AmpersandVariable(self, functionCallParameter):
+    return functionCallParameter.variable
+  
+  def visitAssignOperator_Token(self, assignOp):
+    return assignOp.token
+  
+  def visitArrayDec_NoPairList(self, arrayDec):
+    return
+  
+  def visitArrayDec_WithPairList(self, arrayDec):
+    arrayDec.arrayPairList.accept(self)
+    
+  def visitArrayPairList_ArrayPair_Single(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    
+  def visitArrayPairList_ArrayPair_Mul(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    arrayPairList.arrayPairListArrPair.accept(self)
+    
+  def visitArrayPairList_Mul(self, arrayPairList):
+    arrayPairList.arrayPair.accept(self)
+    arrayPairList.arrayPairListArr.accept(self)
+  
+  def visitArrayPairListArr_Single(self, arrayPairList):
+    return arrayPairList.arrayPair.accept(self)
+    
+  def visitArrayPair_Expr(self, arrayPair):
+    return arrayPair.expr.accept(self)
+    
+  def visitVariableArraySelector_Mul(self, variableArraySelector):
+    variableArraySelector.selector.accept(self)
+    variableArraySelector.variableArray.accept(self)
+  
+  def visitVariableArraySelector_Single(self, variableArraySelector):
+    variableArraySelector.selector.accept(self)
+  
+  def visitSelectorWithExpr(self, selector):
+    exprType = selector.expr.accept(self)
+    
+    exprType = getTypeIfVariable(self, exprType) 
+    
+    if exprType != st.INT and exprType != st.STRING:
+      print('ERROR: Trying to access array offset with type', exprType, end='')
+      print('. Valid types are int and string')
+  
+  def visitSelectorWithoutExpr(self, selector):
+    return 
 
   def visitStatement_Do_While(self, statement):
     statement.dowhilee.accept(self)
@@ -398,7 +665,56 @@ class SemanticVisitor(AbstractVisitor):
   def visitForExprColonExpr_Mul(self, forExprColonExpr):
     forExprColonExpr.forExprColonExpr.accept(self)
     return forExprColonExpr.expr.accept(self)
+
+  def visitStatement_Foreach(self, statement):
+    statement.foreach.accept(self)
   
+  def visitForeachStatement_NoAssoc(self, foreachStatement):
+    varArray = foreachStatement.expr.accept(self)
+    valor = foreachStatement.ampVariable.accept(self)
+    foreachStatement.statementBlockOpt.accept(self)
+
+    if varArray[st.TYPE] != st.ARRAY:
+     print('ERROR: Expected a array declaration, but got type:', varArray[st.TYPE], end='')
+     foreachStatement.expr.accept(self.printer, '\n')
+    
+    if valor[st.TYPE] != st.INT or valor[st.TYPE] != st.ARRAY or valor[st.TYPE] != st.STRING:
+     print('ERROR: Expected valid type, but got type:', valor[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer, '\n')
+    
+  
+  def visitForeachStatement_WithAssoc(self, foreachStatement):
+    varArray = foreachStatement.expr.accept(self)
+    chaveArray = foreachStatement.ampVariableKey.accept(self)
+    valorChaveArray = foreachStatement.ampVariableValue.accept(self)
+    foreachStatement.statementBlockOpt.accept(self)
+
+    if array[st.TYPE] != st.ARRAY:
+     print('ERROR: Expected a array declaration, but got type:', array[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer, '\n')
+
+    if chaveArray[st.TYPE] != st.INT or chaveArray[st.TYPE] != st.STRING:
+     print('ERROR: Expected valid type, but got type:', chaveArray[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer, '\n')
+
+    if valorChaveArray[st.TYPE] != st.INT or valorChaveArray[st.TYPE] != st.ARRAY or valorChaveArray[st.TYPE] != st.STRING:
+     print('ERROR: Expected valid type, but got type:', valor[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer, '\n')
+  
+  def visitAmpersandVariable_WithAmp(self, ampersandVariable):
+    bindable = st.getBindable(ampersandVariable.variable_token)
+    if bindable == None:
+      print('ERROR: Foreach', ampersandVariable.variable_token,'variable never defined.')
+    else:
+      return bindable
+  
+  def visitAmpersandVariable_NoAmp(self, ampersandVariable):
+    bindable = ampersandVariable.variable_token
+    if bindable == None:
+      print('ERROR: Foreach', ampersandVariable.variable_token,'variable never defined.')
+    else:
+      return bindable
+    
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
   
@@ -415,7 +731,6 @@ class SemanticVisitor(AbstractVisitor):
     return
   
   def visitStatement_Break(self, statement):
-    print("Entrei Break")
     statement._break.accept(self)
   
   def visitBreak_Expr(self, _break):
@@ -423,4 +738,51 @@ class SemanticVisitor(AbstractVisitor):
   
   def visitBreak_Empty(self):
     return
+  
+  def visitStatement_Die(self, statement):
+    statement.die.accept(self)
+  
+  def visitDie_ExitExpr(self, die):
+    return die.exitExpr.accept(self)
+  
+  def visitDie_Empty(self):
+    return
 
+  def visitStatement_Continue(self, statement):
+    statement._continue.accept(self)
+  
+  def visitContinue_Expr(self, _continue):
+    return _continue.expr.accept(self)
+  
+  def visitContinue_Empty(self):
+    return
+  
+  def visitStatement_Return(self, statement):
+    statement._return.accept(self)
+  
+  def visitReturn_Expr(self, _return):
+    return _return.expr.accept(self)
+
+  def visitReturn_Empty(self):
+    return
+  
+  def visitStatement_Global(self, statement):
+    globalvar = statement._global.accept(self)
+  
+  def visitGlobalStatement_Single(self, globalStatement):
+    return globalStatement.globalVar.accept(self)
+  
+  def visitGlobalVar_Var(self, globalVar):
+    return [globalVar.variable]
+
+  def visitGlobalStatement_Mul(self, globalStatement):
+    return [globalStatement.globalVar.accept(self)] + globalStatement.colonGlobal.accept(self)
+
+  def visitGlobalVarMul_Single(self, globalVarMul):
+    return [globalVarMul.globalVar.accept(self)]
+  
+  def visitGlobalVarMul_Mul(self, globalVarMul):
+    return [globalVarMul.globalVar.accept(self)] + globalVarMul.globalVarMul.accept(self)
+  
+  def visitStatementBlockOpt_Empty(self, statementblockopt):
+    return

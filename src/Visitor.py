@@ -1,7 +1,7 @@
 from AbstractVisitor import AbstractVisitor
 from PrettyPrinter import PrettyPrinter as pp
 
-class Visitor():
+class Visitor(AbstractVisitor):
 
   def visitMain_MainProgram(self, main):
     print('<?php')
@@ -68,13 +68,6 @@ class Visitor():
     print('{')
     pp.printTab()
     print('}')
-
-  def visitStatementBlockOpt_ParenEmpty(self, statementBlockOpt):
-    statementBlockOpt.statement.accept(self)
-  
-  def StatementBlockOpt_ParenEmpty(self, StatementBlockOpt):
-    print('(',end='')
-    print(')',end='')
   
   def visitStatementMul_Mul(self, StatementMul):
     StatementMul.statement.accept(self)
@@ -193,66 +186,10 @@ class Visitor():
     pp.printTab()
     statement._for.accept(self)
 
-  def visitStatement_If(self, statement):
-    statement._if.accept(self)
-
-  def visitIfStatement_statement_if(self, IfStatement):
-    IfStatement.statement_if.accept(self)
-  
-  def vistIfStatement_statementIf_Else(self, statementIfElse):
-    statementIfElse.statement_if.accept(self)
-    statementIfElse.statement_else.accept(self)
-
-  def visitIfStatement_StatementIf_Elseif(self, statementIfElseif):
-    statementIfElseif.statement_if.accept(self)
-    statementIfElseif.statement_elseif.accept(self)
-
-  def visitIfStatement_Stm_If_Elseif_Else(self, statementIfElseifElse):
-    statementIfElseifElse.statement_if.accept(self)
-    statementIfElseifElse.statement_elseif.accept(self)
-    statementIfElseifElse.statement_else.accept(self)
-
-  def visitStatementIf_Mul(self, statementIfMul):
-    pp.printTab()
-    print('if',end='')
-    statementIfMul.expr_parentheses.accept(self)
-    statementIfMul.statement_BLOCK_OPT.accept(self)
-    statementIfMul.statement_if.accept(self)
-
-  def visitStatementIf_Single(self, statementIfSingle):
-    pp.printTab()
-    print('if',end='')
-    statementIfSingle.expr_parentheses.accept(self)
-    statementIfSingle.statement_BLOCK_OPT.accept(self)
-
-  def visitStatementElseIf_Mul(self, statementElseIfMul):
-    pp.printTab()
-    print('elseif',end='')
-    statementElseIfMul.expr_parentheses.accept(self)
-    statementElseIfMul.statement_BLOCK_OPT.accept(self)
-    statementElseIfMul.statement_elseif.accept(self)
-
-  def visitStatementElseIf_Single(self, statementElseIfSingle):
-    pp.printTab()
-    print('elseif',end='')
-    statementElseIfSingle.expr_parentheses.accept(self)
-    statementElseIfSingle.statement_BLOCK_OPT.accept(self)
-    
-  def visitStatementElse_Single(self, statementElse):
-    pp.printTab()
-    print('else',end='')
-    statementElse.statement_BLOCK_OPT.accept(self)
-
   def visitExprParentheses_Expr(self, exprParentheses_Expr):
     print('(',end='')
     exprParentheses_Expr.expr.accept(self)
     print(')',end='')
-
-  def visitIfStatement_Else(self, ifStatementElse):
-    ifStatementElse.statement_else.accept(self)
-  
-  def visitIfStatement_ElseIf(self, ifStatementElseif):
-    ifStatementElseif.statement_elseif.accept(self)
    
   def visitTypeCastOp_Token(self, typeCastOp):
     print(typeCastOp.token, end='')
@@ -266,7 +203,7 @@ class Visitor():
     print(')',end='')
 
   def visitArrayDec_NoPairList(self, ArrayDec):
-    print('( )',end='')
+    print('()',end='')
     
   def visitArrayPair_Expr(self, arrayPair):
     arrayPair.expr.accept(self)
@@ -425,16 +362,6 @@ class Visitor():
   def visitGlobalVar_Var(self, globalVar):
     print(globalVar.variable, end='')
     
-  def visitGlobalVar_DolarVar(self, globalVar):
-    print('$', end='')
-    print(globalVar.variable, end='')
-    
-  def visitGlobalVar_DolarExpr(self, globalVar):
-    print('$', end='')
-    print('{', end=' ')
-    globalVar.expr.accept(self)
-    print('', '}', end='')
-    
   def visitGlobalVarMul_Single(self, globalVarMul):
     print(',', end=' ')
     globalVarMul.globalVar.accept(self)
@@ -492,29 +419,20 @@ class Visitor():
   def visitReturn_Empty(self):
     print('return', end='')
     print(';')
-
-  def visitCompoundVariableSingle(self, singleVariable):
-    print(singleVariable.variable, end='')
     
-  def visitCompoundVariableMul(self, compoundVariable):
-      print('$', end='')
-      print('{', end='')
-      compoundVariable.expr.accept(self)
-      print('}', end='')
-
-  def visitReferenceVariableSelectorSingle(self, referenceVariableSelector):
-      referenceVariableSelector.selector.accept(self)
-
-  def visitReferenceVariableSelectorMul(self, referenceVariableSelector):
-      referenceVariableSelector.selector.accept(self)
-      referenceVariableSelector.referencevariableselector.accept(self)
+  def visitVariableArraySelector_Mul(self, variableArraySelector):
+    variableArraySelector.selector.accept(self)
+    variableArraySelector.variableArray.accept(self)
+    
+  def visitVariableArraySelector_Single(self, variableArraySelector):
+    variableArraySelector.selector.accept(self)
 
   def visitSelectorWithExpr(self, selector):
       print('[', end='')
       selector.expr.accept(self)
       print(']', end='')
 
-  def SelectorWithoutExpr(self, selector):
+  def visitSelectorWithoutExpr(self, selector):
       print('[', end='')
       print(']', end='')
       
@@ -663,7 +581,7 @@ class Visitor():
     exprPreDecrement.variable.accept(self)
   
   def visitExpr_PosDecrement(self, exprPosDecrement):
-    exprPosIncrement.variable.accept(self)
+    exprPosDecrement.variable.accept(self)
     print('--',end='')
 
   def visitExpr_Variable(self, exprVariable):
@@ -680,33 +598,46 @@ class Visitor():
 
   def visitExpr_FunctionCall(self, exprFunctionCall):
     exprFunctionCall.functionCall.accept(self)
-  
-  def visitExpr_Scalar(self, exprScalar):
-    exprScalar.scalar.accept(self) 
 
-  def visitExpr_True(self,exprtrue):
-    print('true',end='')
+  def visitExpr_Boolean(self,exprBoolean):
+    print(exprBoolean.token, end='')
   
-  def visitExpr_False(self, exprTrue):
-    print('false',end='')
-  
-  def visitExpr_TerciaryOp(self, exprTerciary):
-    exprTerciary.expr1.accept(self)
+  def visitExpr_TernaryOp(self, exprTernary):
+    exprTernary.expr1.accept(self)
     print(' ? ',end='')
-    exprTerciary.expr2.accept(self)
+    exprTernary.expr2.accept(self)
     print(' : ',end='')
-    exprTerciary.expr3.accept(self)  
+    exprTernary.expr3.accept(self)  
   
   def visitExpr_AssignExpr(self, assignExpr):
     assignExpr.variable.accept(self)
     print(' = ',end='')
     assignExpr.expr.accept(self)
 
-  def visitExpr_AssignAmpersandExpr(self, assignAmpersandExpr):
-    assignAmpersandExpr.variable.accept(self)
-    print(' = ',end='')
-    print('&',end='')
-    assignAmpersandExpr.expr.accept(self)
+  def visitExpr_AddAssignExpr(self, addAssignExpr):
+    addAssignExpr.variable.accept(self)
+    print(' += ',end='')
+    addAssignExpr.expr.accept(self)
+
+  def visitExpr_SubAssignExpr(self, subAssignExpr):
+    subAssignExpr.variable.accept(self)
+    print(' -= ',end='')
+    subAssignExpr.expr.accept(self)
+  
+  def visitExpr_ModAssignExpr(self, modAssignExpr):
+    modAssignExpr.variable.accept(self)
+    print(' %= ',end='')
+    modAssignExpr.expr.accept(self)
+
+  def visitExpr_DivideAssignExpr(self, divAssignExpr):
+    divAssignExpr.variable.accept(self)
+    print(' /= ',end='')
+    divAssignExpr.expr.accept(self)
+
+  def visitExpr_TimesAssignExpr(self, timesAssignExpr):
+    timesAssignExpr.variable.accept(self)
+    print(' *= ',end='')
+    timesAssignExpr.expr.accept(self)
 
   def visitExpr_TypeCastOp(self, typeCastOp):
     print('(',end='')

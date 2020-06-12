@@ -11,8 +11,9 @@ FUNCTION = 'function'
 PARAMS = 'params'
 
 VARIABLE = 'var'
-TYPE = 'type'
-NAME = 'name' 
+TYPE     = 'type'
+NAME     = 'name' 
+VALUE    = 'value'
 
 COMP = 'compOp'
 ARITH = 'arithOp'
@@ -30,26 +31,17 @@ def beginScope(nameScope):
   
 def endScope():
   global symbolTable
-  print(symbolTable[-2][SCOPE], '- End scope:', symbolTable[-1][SCOPE]) 
-  data = getDataBindable(symbolTable[-1][SCOPE])
-  if data != None and data[BINDABLE]!=FUNCTION:
-   updateVariableScope(-1,-2)
+  printTable()
+  print(symbolTable[-2][SCOPE], '- End scope:', symbolTable[-1][SCOPE])
   symbolTable = symbolTable[0:-1]
+  
 
-def updateVariableScope(indexScope1, indexScope2):
-  data=[]
-  for elemCurrentScope in symbolTable[indexScope1]:
-    info = getDataBindable(elemCurrentScope)
-    if info != None and (type(info) == dict and info[BINDABLE]==VARIABLE): 
-      for elemPreviousScope in symbolTable[indexScope2]:
-        if elemCurrentScope == elemPreviousScope:
-          symbolTable[indexScope2][elemPreviousScope][TYPE] = symbolTable[indexScope1][elemCurrentScope][TYPE]
 
 def addVar(name, type = None):
   global symbolTable
   symbolTable[-1][name] = {BINDABLE: VARIABLE, TYPE: type}
   print(symbolTable[-1][SCOPE], '- Create variable', name, 'with type', type)
-  return { NAME: name, TYPE: type }
+  return { NAME: name, TYPE: type}
   
 def getDataBindable(bindableName):
     global symbolTable
@@ -64,15 +56,16 @@ def addFunction(name, params, type = None):
   symbolTable[-1][name] = {BINDABLE: FUNCTION, PARAMS: params, TYPE: type}
 
 # ==== ANALISAR =====
-def updateBindableType(name, type):
+def updateBindableType(name, type,value=None):
   global symbolTable
   for i in reversed(range(len(symbolTable))):
     if(name in symbolTable[i].keys()):
       symbolTable[i][name][TYPE] = type
+      symbolTable[i][name][VALUE] = value
       print(symbolTable[i][SCOPE], '- Update bindable type of', symbolTable[i][name][BINDABLE], name, 'to', type)
       # Adicionar o nome do bindable ao dicionario para uso em certos casos
       bindableInfo = symbolTable[i][name].copy()
-      bindableInfo.update({ NAME: name })
+      bindableInfo.update({ NAME: name, VALUE:value})
       return bindableInfo 
   return None
 
