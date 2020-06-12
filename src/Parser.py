@@ -26,9 +26,9 @@ def p_main(p):
   | BEGIN_PROGRAM END_PROGRAM 
   '''
   if len(p) == 4:
-    p[0] = sa.Main_MainProgram(p[2])
+    p[0] = sa.Main_MainInner(p[2])
   else:
-    p[0] = sa.Main_Empty()
+    p[0] = sa.Main_MainInner_Empty()
     
 def p_main_program(p):
   '''
@@ -36,9 +36,9 @@ def p_main_program(p):
     | inner_statement
   '''
   if len(p) == 3:
-    p[0] = sa.MainProgram_InnerStatement_Recursive(p[1], p[2])
+    p[0] = sa.MainInner_InnerStatement_MainInner(p[1], p[2])
   else:
-    p[0] = sa.MainProgram_InnerStatement(p[1])
+    p[0] = sa.MainInner_InnerStatement(p[1])
 
 def p_inner_statement(p):
   '''
@@ -178,8 +178,7 @@ def p_typecast_operator(p):
     | STRING_TYPE
     | BOOL_TYPE
   '''
-  p[0] = sa.TypeCastOp_Token(p[1])
-  
+
 def p_exit_statement(p):
   '''
   exit_statement : EXIT exit_expr
@@ -680,10 +679,14 @@ def p_error(p):
 lex.lex()
 arquivo = '''
 <?php
+<<<<<<< HEAD
   $valor = 10;
   $valor1= 11;
   $soma='0.0';
   $soma /= $valor*$valor1;
+=======
+  $valor += 1;
+>>>>>>> parent of eb4c9d3... Renomear regras e adicionar regra de typecast
 ?>
 '''
 

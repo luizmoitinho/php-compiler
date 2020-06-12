@@ -9,15 +9,15 @@ class Main(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
   
-class Main_MainProgram(Main):
+class Main_MainInner(Main):
   def __init__(self, mainInner):
     self.mainInner = mainInner
   def accept(self, Visitor):
-    return Visitor.visitMain_MainProgram(self)
+    return Visitor.visitMain_MainInner(self)
     
-class Main_Empty(Main):
+class Main_MainInner_Empty(Main):
   def accept(self, Visitor):
-    return Visitor.visitMain_Empty()
+    return Visitor.visitMain_MainInner_Empty(self)
 
 #MAIN_INNER ABSTRATA E CONCRETAS  
 class MainInner(metaclass=ABCMeta):
@@ -25,18 +25,18 @@ class MainInner(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
 
-class MainProgram_InnerStatement_Recursive(MainInner):
+class MainInner_InnerStatement_MainInner(MainInner):
   def __init__(self, innerStatement, mainInner):
     self.innerStatement = innerStatement
     self.mainInner = mainInner
   def accept(self, Visitor):
-    return Visitor.visitMainProgram_InnerStatement_Recursive(self)
+    return Visitor.visitMainInner_InnerStatement_MainInner(self)
 
-class MainProgram_InnerStatement(MainInner):
+class MainInner_InnerStatement(MainInner):
   def __init__(self, innerStatement):
     self.innerStatement = innerStatement
   def accept(self, Visitor):
-    return Visitor.visitMainProgram_InnerStatement(self)
+    return Visitor.visitMainInner_InnerStatement(self)
 
 class InnerStatement(metaclass = ABCMeta):
     @abstractmethod
@@ -589,11 +589,16 @@ class Expr_AssignExpr(Expr):
   def accept(self, Visitor):
     return Visitor.visitExpr_AssignExpr(self)
 
+<<<<<<< HEAD
 class Expr_AddAssignExpr(Expr):
+=======
+class Expr_AssignAmpersandExpr(Expr):
+>>>>>>> parent of eb4c9d3... Renomear regras e adicionar regra de typecast
   def __init__(self, variable,expr):
     self.variable = variable
     self.expr = expr
   def accept(self, Visitor):
+<<<<<<< HEAD
     return Visitor.visitExpr_AddAssignExpr(self)
 
 class Expr_SubAssignExpr(Expr):
@@ -623,6 +628,9 @@ class Expr_TimesAssignExpr(Expr):
     self.expr = expr
   def accept(self, Visitor):
     return Visitor.visitExpr_TimesAssignExpr(self)
+=======
+    return Visitor.visitExpr_AssignAmpersandExpr(self)
+>>>>>>> parent of eb4c9d3... Renomear regras e adicionar regra de typecast
 
 class Expr_TypeCastOp(Expr):
   def __init__(self, typeCast,expr):
