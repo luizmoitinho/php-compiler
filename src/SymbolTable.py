@@ -31,12 +31,11 @@ def beginScope(nameScope):
   
 def endScope():
   global symbolTable
-  printTable()
   print(symbolTable[-2][SCOPE], '- End scope:', symbolTable[-1][SCOPE])
+  printTable()
   symbolTable = symbolTable[0:-1]
+
   
-
-
 def addVar(name, type = None):
   global symbolTable
   symbolTable[-1][name] = {BINDABLE: VARIABLE, TYPE: type}

@@ -164,15 +164,12 @@ class SemanticVisitor(AbstractVisitor):
     expr1 = exprPlus.expr1.accept(self)
     expr2 = exprPlus.expr2.accept(self)
     
-    type1 = None
-    type2 = None
-    
     type1 = getTypeIfVariable(self, expr1)
     type2 = getTypeIfVariable(self, expr2)    
 
-    if(expr1[st.TYPE] == st.STRING ):
+    if(type1 == st.STRING):
       type1 = isValidNumber(expr1[st.VALUE][1:-1])  
-    if(expr2[st.TYPE] == st.STRING):
+    if(type2 == st.STRING):
       type2 = isValidNumber(expr2[st.VALUE][1:-1])
 
     c = coercion(type1, type2) 
@@ -184,16 +181,13 @@ class SemanticVisitor(AbstractVisitor):
     expr1 = exprMinus.expr1.accept(self)
     expr2 = exprMinus.expr2.accept(self)
     
-    type1 = None
-    type2 = None
-    
     type1 = getTypeIfVariable(self, expr1)
     type2 = getTypeIfVariable(self, expr2)    
 
-    if(expr1[st.TYPE] == st.STRING ):
-      type1 = isValidNumber(expr1[st.VALUE][1:-1]  )  
-    if(expr2[st.TYPE] == st.STRING):
-      type2 = isValidNumber(expr2[st.VALUE][1:-1]  )
+    if(type1 == st.STRING):
+      type1 = isValidNumber(expr1[st.VALUE][1:-1])  
+    if(type2 == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE][1:-1])
 
     c = coercion(type1, type2) 
     if (c == None):
@@ -204,16 +198,13 @@ class SemanticVisitor(AbstractVisitor):
     expr1 = exprTimes.expr1.accept(self)
     expr2 = exprTimes.expr2.accept(self)
     
-    type1 = None
-    type2 = None
-    
     type1 = getTypeIfVariable(self, expr1)
     type2 = getTypeIfVariable(self, expr2)    
 
-    if(expr1[st.TYPE] == st.STRING ):
-      type1 = isValidNumber(expr1[st.VALUE][1:-1]  )  
-    if(expr2[st.TYPE] == st.STRING):
-      type2 = isValidNumber(expr2[st.VALUE][1:-1]  )
+    if(type1 == st.STRING):
+      type1 = isValidNumber(expr1[st.VALUE][1:-1])  
+    if(type2 == st.STRING):
+      type2 = isValidNumber(expr2[st.VALUE][1:-1])
 
     c = coercion(type1, type2) 
     if (c == None):
@@ -224,15 +215,12 @@ class SemanticVisitor(AbstractVisitor):
     expr1 = exprDivide.expr1.accept(self)
     expr2 = exprDivide.expr2.accept(self)
     
-    type1 = None
-    type2 = None
-    
     type1 = getTypeIfVariable(self, expr1)
     type2 = getTypeIfVariable(self, expr2)    
 
-    if(expr1[st.TYPE] == st.STRING ):
+    if(type1 == st.STRING):
       type1 = isValidNumber(expr1[st.VALUE][1:-1])  
-    if(expr2[st.TYPE] == st.STRING):
+    if(type2 == st.STRING):
       type2 = isValidNumber(expr2[st.VALUE][1:-1])
 
     c = coercion(type1, type2) 
@@ -244,15 +232,12 @@ class SemanticVisitor(AbstractVisitor):
     expr1 = exprMod.expr1.accept(self)
     expr2 = exprMod.expr2.accept(self)
     
-    type1 = None
-    type2 = None
-    
     type1 = getTypeIfVariable(self, expr1)
     type2 = getTypeIfVariable(self, expr2)    
 
-    if(expr1[st.TYPE] == st.STRING ):
+    if(type1 == st.STRING):
       type1 = isValidNumber(expr1[st.VALUE][1:-1])  
-    if(expr2[st.TYPE] == st.STRING):
+    if(type2 == st.STRING):
       type2 = isValidNumber(expr2[st.VALUE][1:-1])
 
     c = coercion(type1, type2) 
@@ -263,10 +248,8 @@ class SemanticVisitor(AbstractVisitor):
   def visitExpr_Uminus(self, exprUminus):
     expr1 = exprUminus.expr.accept(self)
 
-    type1 = None
     type1 = getTypeIfVariable(self, expr1)
-    
-    if(expr1[st.TYPE] == st.STRING ):
+    if(type1 == st.STRING):
       type1 = isValidNumber(expr1[st.VALUE][st.VALUE][1:-1])  
 
     if(type1 in st.Number):
@@ -717,43 +700,31 @@ class SemanticVisitor(AbstractVisitor):
     if varArray[st.TYPE] != st.ARRAY:
      print('ERROR: Expected a array declaration, but got type:', varArray[st.TYPE], end='')
      foreachStatement.expr.accept(self.printer, '\n')
-    
-    if valor[st.TYPE] != st.INT or valor[st.TYPE] != st.ARRAY or valor[st.TYPE] != st.STRING:
-     print('ERROR: Expected valid type, but got type:', valor[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer, '\n')
-    
-  
+
   def visitForeachStatement_WithAssoc(self, foreachStatement):
     varArray = foreachStatement.expr.accept(self)
     chaveArray = foreachStatement.ampVariableKey.accept(self)
     valorChaveArray = foreachStatement.ampVariableValue.accept(self)
     foreachStatement.statementBlockOpt.accept(self)
+    if varArray[st.TYPE] != st.ARRAY:
+     print('ERROR: Expected a array declaration, but got type:', varArray[st.TYPE], end=' ')
+     foreachStatement.expr.accept(self.printer)
+     print('')
 
-    if array[st.TYPE] != st.ARRAY:
-     print('ERROR: Expected a array declaration, but got type:', array[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer, '\n')
-
-    if chaveArray[st.TYPE] != st.INT or chaveArray[st.TYPE] != st.STRING:
-     print('ERROR: Expected valid type, but got type:', chaveArray[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer, '\n')
-
-    if valorChaveArray[st.TYPE] != st.INT or valorChaveArray[st.TYPE] != st.ARRAY or valorChaveArray[st.TYPE] != st.STRING:
-     print('ERROR: Expected valid type, but got type:', valor[st.TYPE], end=' ')
-     foreachStatement.expr.accept(self.printer, '\n')
   
   def visitAmpersandVariable_WithAmp(self, ampersandVariable):
     bindable = st.getBindable(ampersandVariable.variable_token)
     if bindable == None:
       print('ERROR: Foreach', ampersandVariable.variable_token,'variable never defined.')
     else:
-      return bindable
+      return st.addVar(bindable)
   
   def visitAmpersandVariable_NoAmp(self, ampersandVariable):
     bindable = ampersandVariable.variable_token
     if bindable == None:
       print('ERROR: Foreach', ampersandVariable.variable_token,'variable never defined.')
     else:
-      return bindable
+      return st.addVar(bindable)
     
   def visitStatement_Exit(self, statement):
     statement.exit.accept(self)
