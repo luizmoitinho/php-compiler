@@ -6,6 +6,8 @@ import ErrorLog as el
 
 import SintaxeAbstrata as sa
 
+
+
 def isValidNumber(number):
     try:
         if(int(number)):
@@ -169,9 +171,9 @@ class SemanticVisitor(AbstractVisitor):
     type2 = getTypeIfVariable(self, expr2)    
 
     if(expr1[st.TYPE] == st.STRING ):
-      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+      type1 = isValidNumber(expr1[st.VALUE][1:-1])  
     if(expr2[st.TYPE] == st.STRING):
-      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+      type2 = isValidNumber(expr2[st.VALUE][1:-1])
 
     c = coercion(type1, type2) 
     if (c == None):
@@ -189,9 +191,9 @@ class SemanticVisitor(AbstractVisitor):
     type2 = getTypeIfVariable(self, expr2)    
 
     if(expr1[st.TYPE] == st.STRING ):
-      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+      type1 = isValidNumber(expr1[st.VALUE][1:-1]  )  
     if(expr2[st.TYPE] == st.STRING):
-      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+      type2 = isValidNumber(expr2[st.VALUE][1:-1]  )
 
     c = coercion(type1, type2) 
     if (c == None):
@@ -209,9 +211,9 @@ class SemanticVisitor(AbstractVisitor):
     type2 = getTypeIfVariable(self, expr2)    
 
     if(expr1[st.TYPE] == st.STRING ):
-      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+      type1 = isValidNumber(expr1[st.VALUE][1:-1]  )  
     if(expr2[st.TYPE] == st.STRING):
-      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+      type2 = isValidNumber(expr2[st.VALUE][1:-1]  )
 
     c = coercion(type1, type2) 
     if (c == None):
@@ -229,9 +231,9 @@ class SemanticVisitor(AbstractVisitor):
     type2 = getTypeIfVariable(self, expr2)    
 
     if(expr1[st.TYPE] == st.STRING ):
-      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+      type1 = isValidNumber(expr1[st.VALUE][1:-1])  
     if(expr2[st.TYPE] == st.STRING):
-      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+      type2 = isValidNumber(expr2[st.VALUE][1:-1])
 
     c = coercion(type1, type2) 
     if (c == None):
@@ -249,9 +251,9 @@ class SemanticVisitor(AbstractVisitor):
     type2 = getTypeIfVariable(self, expr2)    
 
     if(expr1[st.TYPE] == st.STRING ):
-      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+      type1 = isValidNumber(expr1[st.VALUE][1:-1])  
     if(expr2[st.TYPE] == st.STRING):
-      type2 = isValidNumber(expr2[st.VALUE].strip('\''))
+      type2 = isValidNumber(expr2[st.VALUE][1:-1])
 
     c = coercion(type1, type2) 
     if (c == None):
@@ -265,7 +267,7 @@ class SemanticVisitor(AbstractVisitor):
     type1 = getTypeIfVariable(self, expr1)
     
     if(expr1[st.TYPE] == st.STRING ):
-      type1 = isValidNumber(expr1[st.VALUE].strip('\''))  
+      type1 = isValidNumber(expr1[st.VALUE][st.VALUE][1:-1])  
 
     if(type1 in st.Number):
       return expr1
@@ -440,23 +442,61 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitExpr_PreIncrement(self, exprPreIncrement):
     variable = exprPreIncrement.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
+    
+    if(variable[st.TYPE]==st.STRING):
+      stringFormat = variable[st.VALUE][1:-1]
+      validNumber = isValidNumber(stringFormat)  
+      if not validNumber in st.Number:
+        el.UnaryArithError(self,variable,'increment')
+        return
+      st.updateBindableType(variable[st.NAME], validNumber)
+      return
+    elif variable[st.TYPE] not in st.Number:
       el.IncrementVariableError(variable)
+
 
   def visitExpr_PosIncrement(self, exprPosIncrement):
     variable = exprPosIncrement.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
+
+    if(variable[st.TYPE]==st.STRING):
+      stringFormat = variable[st.VALUE][1:-1]
+      validNumber = isValidNumber(stringFormat)  
+      if not validNumber in st.Number:
+        el.UnaryArithError(self,variable,'increment')
+        return
+      st.updateBindableType(variable[st.NAME], validNumber)
+      return
+    elif variable[st.TYPE] not in st.Number:
       el.IncrementVariableError(variable)
 
+  
   def visitExpr_PreDecrement(self, exprPreDecrement):
     variable = exprPreDecrement.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      el.DecrementVariableError(variable)
+
+    if(variable[st.TYPE]==st.STRING):
+      stringFormat = variable[st.VALUE][1:-1]
+      validNumber = isValidNumber(stringFormat)  
+      if not validNumber in st.Number:
+        el.UnaryArithError(self,variable,'decrement')
+        return
+      st.updateBindableType(variable[st.NAME], validNumber)
+      return
+    elif variable[st.TYPE] not in st.Number:
+      el.IncrementVariableError(variable)
 
   def visitExpr_PosDecrement(self, exprPosDecrement):
     variable = exprPosDecrement.variable.accept(self)
-    if variable[st.TYPE] not in st.Number:
-      el.DecrementVariableError(variable)
+
+    if(variable[st.TYPE]==st.STRING):
+      stringFormat = variable[st.VALUE][1:-1]
+      validNumber = isValidNumber(stringFormat)  
+      if not validNumber in st.Number:
+        el.UnaryArithError(self,variable,'decrement')
+        return
+      st.updateBindableType(variable[st.NAME], validNumber)
+      return
+    elif variable[st.TYPE] not in st.Number:
+      el.IncrementVariableError(variable)
       
   def visitExpr_ArrayDeclaration(self, exprArrayDecl):
     exprArrayDecl.arrayDecl.accept(self)

@@ -23,6 +23,9 @@ def IncrementVariableError(variable):
 def DecrementVariableError(variable):
   print('ERROR: Cannot decrement variable', variable[st.NAME], 'with type', variable[st.TYPE])
   
+def UnaryArithError(self, variable, op):
+  print('ERRRO: Cannot ',op,' a variable: ', variable[st.NAME],', because is not contains valid number')
+
 def ExpressionTypeError(self, expr, type1, type2):
   print('ERROR: Expression ', end='')
   expr.expr1.accept(self.printer)
