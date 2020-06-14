@@ -559,57 +559,39 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitAmpersandVariable_NoAmp(self, ampersandVariable):
     pass
 
+  @abstractmethod
+  def visitParameter_Full(self, parameter):
+    pass
+    
+  @abstractmethod
+  def visitParameter_Prefix_Var(self,parameter):
+    pass
 
-  ''' 
   @abstractmethod
-  def visitParameter_Prefix_Var():
+  def visitParameterPrefix_PType(self, parameterPrefix):
     pass
   
   @abstractmethod
-  def visitParameter_Var_Sufix():
+  def visitParameterPrefix_PType_Amp(elf, parameterType):
+    pass
+
+  @abstractmethod
+  def visitParameterPrefix_Ampersand(self, parameter):
+    pass
+
+  @abstractmethod
+  def visitParameterType_Type(self, parameterType):
     pass
   
   @abstractmethod
-  def visitParameter_Full():
-    pass
-  
-  @abstractmethod
-  def visitParameterPrefix_PType_Amp():
-    pass
-  
-  @abstractmethod
-  def visitParameterPrefix_Ampersand():
-    pass
-  
-  @abstractmethod
-  def visitParameterPrefix_PType():
-    pass
-  
-  @abstractmethod
-  def visitParameterType_Type():
-    pass
-  
-  @abstractmethod
-  def visitStaticScalar_CommonScalar():
-    pass
-  
-  @abstractmethod
-  def visitStaticScalar_Plus_Static():
-    pass
-  
-  @abstractmethod
-  def visitStaticScalar_Minus_Static():
-    pass
-  
-  @abstractmethod
-  def visitArrayPair_Variable():
-    pass
-  
-  @abstractmethod
-  def visitArrayPair_Attr_AmpersandVariable():
-    pass
-  
-  @abstractmethod
-  def visitArrayPair_Attr_Expr():
+  def visitArrayPair_Attr_Expr(self, arrPair):
     pass  
-'''
+
+  @abstractmethod
+  def visitArrayPair_Variable(self, arrPair):
+    pass
+  
+  @abstractmethod
+  def visitArrayPair_Attr_AmpersandVariable(self, arrPair):
+    pass
+

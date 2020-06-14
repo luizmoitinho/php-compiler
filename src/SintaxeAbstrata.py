@@ -307,10 +307,10 @@ class Parameter_Var_Sufix(Parameter):
     return Visitor.visitParameter_Var_Sufix(self)
     
 class Parameter_Full(Parameter):
-  def __init__(self, prefix, variable, static_scalar):
+  def __init__(self, prefix, variable, expr):
     self.prefix = prefix
     self.variable = variable
-    self.static_scalar = static_scalar
+    self.expr = expr
   def accept(self, Visitor):
     return Visitor.visitParameter_Full(self)
     

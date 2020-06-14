@@ -535,7 +535,7 @@ def p_parameter(p):
   parameter : VARIABLE 
     | parameter_prefix VARIABLE
     | VARIABLE ASSIGN static_scalar
-    | parameter_prefix VARIABLE ASSIGN static_scalar
+    | parameter_prefix VARIABLE ASSIGN expr
   '''
   if len(p) == 5:
     p[0] = sa.Parameter_Full(p[1], p[2], p[4])
@@ -546,6 +546,7 @@ def p_parameter(p):
   else: 
     p[0] = sa.Parameter_Var(p[1])
   
+
 def p_parameter_prefix(p):
   '''
   parameter_prefix : parameter_type AMPERSAND
@@ -679,14 +680,16 @@ def p_error(p):
  
 lex.lex()
 arquivo = '''
-<?php
-  $y=10;
-  $ab='10';
-  $x = array();
-  foreach($x as $key => $a){
-    $y += 10*$ab;
-  }
+<?php 
+  $arr =  array(&$x,'luiz' => $nome, 'carlos'=>'sobrenome','soma'=>1+3);
+  $x = 10;
+  $y = '1';
+  $v = 1;
+  $v %= $x + $y;
 
+  function soma(int $x = 'luis' ){
+
+  }
 ?>
 '''
 
@@ -695,5 +698,4 @@ parser = yacc.yacc()
 result = parser.parse(debug=False)
 v = sv.SemanticVisitor()
 #v = vis.Visitor()
-#for r in result:
 result.accept(v)

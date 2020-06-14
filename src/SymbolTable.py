@@ -18,8 +18,7 @@ VALUE    = 'value'
 COMP = 'compOp'
 ARITH = 'arithOp'
 
-COMP = 'compOp'
-ARITH = 'arithOp'
+ISGLOBAL = 'isGlobal'
 
 Number = [INT, FLOAT]
 
@@ -32,50 +31,57 @@ def beginScope(nameScope):
 def endScope():
   global symbolTable
   print(symbolTable[-2][SCOPE], '- End scope:', symbolTable[-1][SCOPE])
-  printTable()
   symbolTable = symbolTable[0:-1]
 
-  
-def addVar(name, type = None):
+def addVar(name, type = None, isGlobal = False, value = None):
   global symbolTable
-  symbolTable[-1][name] = {BINDABLE: VARIABLE, TYPE: type}
+  varInfo = {}
+  if symbolTable[-1][SCOPE] == 'global':
+    symbolTable[-1][name] = { NAME: name, BINDABLE: VARIABLE, TYPE: type, ISGLOBAL: True, VALUE: value }
+    varInfo = { NAME: name, TYPE: type, ISGLOBAL: True, VALUE: value }
+  else:
+    symbolTable[-1][name] = { NAME: name, BINDABLE: VARIABLE, TYPE: type, ISGLOBAL: isGlobal, VALUE: value }
+    varInfo = { NAME: name, TYPE: type, ISGLOBAL: isGlobal, VALUE: value }
   print(symbolTable[-1][SCOPE], '- Create variable', name, 'with type', type)
-  return { NAME: name, TYPE: type}
-  
-def getDataBindable(bindableName):
-    global symbolTable
-    for i in reversed(range(len(symbolTable))):
-        if (bindableName in symbolTable[i].keys()):
-            return symbolTable[i][bindableName]
-    return None
+  return varInfo
 
 def addFunction(name, params, type = None):
   global symbolTable
   print(symbolTable[-1][SCOPE], '- Create function', name, 'with params', params, 'and type', type)
   symbolTable[-1][name] = {BINDABLE: FUNCTION, PARAMS: params, TYPE: type}
 
-# ==== ANALISAR =====
-def updateBindableType(name, type,value=None):
+def updateBindableType(name, type, value = None):
   global symbolTable
-  for i in reversed(range(len(symbolTable))):
+  for i in reversed(range(1, len(symbolTable))):
     if(name in symbolTable[i].keys()):
       symbolTable[i][name][TYPE] = type
       symbolTable[i][name][VALUE] = value
-      print(symbolTable[i][SCOPE], '- Update bindable type of', symbolTable[i][name][BINDABLE], name, 'to', type)
-      # Adicionar o nome do bindable ao dicionario para uso em certos casos
-      bindableInfo = symbolTable[i][name].copy()
-      bindableInfo.update({ NAME: name, VALUE:value})
-      return bindableInfo 
+      print(symbolTable[i][SCOPE], '- Update bindable type of', name, 'to', type)
+      return symbolTable[i][name] 
+  return None
+
+def updateGlobalBindableType(name, type, value = None):
+  global symbolTable
+  if (name in symbolTable[0].keys()):
+    symbolTable[0][name][TYPE] = type
+    symbolTable[0][name][VALUE] = value
+    print(symbolTable[0][SCOPE], '- Update global bindable type of', name, 'to', type)
+    return symbolTable[0][name] 
   return None
 
 def getBindable(name):
   global symbolTable
-  for i in reversed(range(len(symbolTable))):
+  if len(symbolTable) > 1:  
+    for i in reversed(range(1, len(symbolTable))):
       if (name in symbolTable[i].keys()):
-        # Adicionar o nome do bindable ao dicionario para uso em certos casos
-        bindableInfo = symbolTable[i][name].copy()
-        bindableInfo.update({ NAME: name })
-        return bindableInfo 
+        return symbolTable[i][name]
+  else:
+    return getGlobalBindable(name)
+
+def getGlobalBindable(name):
+  global symbolTable
+  if (name in symbolTable[0].keys()):
+    return symbolTable[0][name]
   return None
 
 def printTable():
