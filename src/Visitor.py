@@ -108,7 +108,7 @@ class Visitor(AbstractVisitor):
     parameter.prefix.accept(self)
     print(parameter.variable, end='')
     print('=', end='')
-    parameter.static_scalar.accept(self)
+    parameter.expr.accept(self)
   
   def visitParameterPrefix_PType_Amp(self, parameterPrefix):
     parameterPrefix.parameter_type.accept(self)
@@ -123,19 +123,7 @@ class Visitor(AbstractVisitor):
   def visitParameterType_Type(self, parameterType):
     print(parameterType.type, end=' ')
     
-  def visitStaticScalar_CommonScalar(self, staticScalar):
-    staticScalar.common_scalar.accept(self)
-  
-  def visitStaticScalar_Plus_Static(self, staticScalar):
-    print('+', end='')
-    staticScalar.static_scalar.accept(self)
-    
-  def visitStaticScalar_Minus_Static(self, staticScalar):
-    print('-', end='')
-    staticScalar.static_scalar.accept(self)
-    
-  def visitCommonScalar_Token(self, commonScalar):
-    print(commonScalar.token, end='')
+
   
   def visitStatement_Expr(self, statement):
     pp.printTab()
@@ -230,7 +218,7 @@ class Visitor(AbstractVisitor):
 
   def visitArrayPair_Attr_AmpersandVariable(self, arrayPair):
     arrayPair.expr1.accept(self)
-    print('=',end='')
+    print('=>',end='')
     print('&',end='')
     arrayPair.expr2.accept(self)
 

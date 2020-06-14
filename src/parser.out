@@ -139,7 +139,7 @@ Rule 122   parameter_list -> parameter
 Rule 123   parameter -> VARIABLE
 Rule 124   parameter -> parameter_prefix VARIABLE
 Rule 125   parameter -> VARIABLE ASSIGN static_scalar
-Rule 126   parameter -> parameter_prefix VARIABLE ASSIGN static_scalar
+Rule 126   parameter -> parameter_prefix VARIABLE ASSIGN expr
 Rule 127   parameter_prefix -> parameter_type AMPERSAND
 Rule 128   parameter_prefix -> AMPERSAND
 Rule 129   parameter_prefix -> parameter_type
@@ -259,7 +259,7 @@ die_statement        : 68
 do_statement         : 61
 exit_expr            : 50 52
 exit_statement       : 67
-expr                 : 9 9 10 10 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 29 31 33 33 33 34 35 36 37 38 39 54 58 75 77 79 95 96 97 98 99 100 101 108 112 143 145 145 146
+expr                 : 9 9 10 10 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 29 31 33 33 33 34 35 36 37 38 39 54 58 75 77 79 95 96 97 98 99 100 101 108 112 126 143 145 145 146
 expr_parentheses     : 70 73 74
 fc_parameter_list_COLON_PARAMETER : 104 106
 fds_id               : 114
@@ -292,7 +292,7 @@ statement            : 6 147 148 149
 statement_COLON_GLOBAL : 71 91
 statement_MUL        : 147 150
 statement_block_optional : 70 73 74 81 96 97
-static_scalar        : 125 126 136 137
+static_scalar        : 125 136 137
 typecast_operator    : 31
 variable             : 24 25 26 27 28 34 35 36 37 38 39 144 146
 variable_array_selector : 110 154
@@ -4787,7 +4787,7 @@ state 115
     (123) parameter -> . VARIABLE
     (124) parameter -> . parameter_prefix VARIABLE
     (125) parameter -> . VARIABLE ASSIGN static_scalar
-    (126) parameter -> . parameter_prefix VARIABLE ASSIGN static_scalar
+    (126) parameter -> . parameter_prefix VARIABLE ASSIGN expr
     (127) parameter_prefix -> . parameter_type AMPERSAND
     (128) parameter_prefix -> . AMPERSAND
     (129) parameter_prefix -> . parameter_type
@@ -7085,7 +7085,7 @@ state 176
 state 177
 
     (124) parameter -> parameter_prefix . VARIABLE
-    (126) parameter -> parameter_prefix . VARIABLE ASSIGN static_scalar
+    (126) parameter -> parameter_prefix . VARIABLE ASSIGN expr
 
     VARIABLE        shift and go to state 217
 
@@ -8216,7 +8216,7 @@ state 215
     (123) parameter -> . VARIABLE
     (124) parameter -> . parameter_prefix VARIABLE
     (125) parameter -> . VARIABLE ASSIGN static_scalar
-    (126) parameter -> . parameter_prefix VARIABLE ASSIGN static_scalar
+    (126) parameter -> . parameter_prefix VARIABLE ASSIGN expr
     (127) parameter_prefix -> . parameter_type AMPERSAND
     (128) parameter_prefix -> . AMPERSAND
     (129) parameter_prefix -> . parameter_type
@@ -8260,7 +8260,7 @@ state 216
 state 217
 
     (124) parameter -> parameter_prefix VARIABLE .
-    (126) parameter -> parameter_prefix VARIABLE . ASSIGN static_scalar
+    (126) parameter -> parameter_prefix VARIABLE . ASSIGN expr
 
     COLON           reduce using rule 124 (parameter -> parameter_prefix VARIABLE .)
     RPAREN          reduce using rule 124 (parameter -> parameter_prefix VARIABLE .)
@@ -8819,22 +8819,65 @@ state 244
 
 state 245
 
-    (126) parameter -> parameter_prefix VARIABLE ASSIGN . static_scalar
-    (135) static_scalar -> . common_scalar
-    (136) static_scalar -> . PLUS static_scalar
-    (137) static_scalar -> . MINUS static_scalar
-    (138) common_scalar -> . NUMBER_REAL
-    (139) common_scalar -> . NUMBER_INTEGER
-    (140) common_scalar -> . CONSTANT_ENCAPSED_STRING
+    (126) parameter -> parameter_prefix VARIABLE ASSIGN . expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . MINUS expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr PERCENT expr
+    (14) expr -> . expr TIMES expr
+    (15) expr -> . expr EQUALS expr
+    (16) expr -> . expr NOT_EQUAL expr
+    (17) expr -> . expr GREAT_THAN expr
+    (18) expr -> . expr GREAT_EQUAL expr
+    (19) expr -> . expr LESS_THAN expr
+    (20) expr -> . expr LESS_EQUAL expr
+    (21) expr -> . expr AND expr
+    (22) expr -> . expr OR expr
+    (23) expr -> . EXC_DOT expr
+    (24) expr -> . INCREMENT variable
+    (25) expr -> . variable INCREMENT
+    (26) expr -> . DECREMENT variable
+    (27) expr -> . variable DECREMENT
+    (28) expr -> . variable
+    (29) expr -> . LPAREN expr RPAREN
+    (30) expr -> . ARRAY_TYPE array_declaration
+    (31) expr -> . LPAREN typecast_operator RPAREN expr
+    (32) expr -> . function_call
+    (33) expr -> . expr INTE_DOT expr DDOT expr
+    (34) expr -> . variable ADD_ASSIGN expr
+    (35) expr -> . variable SUB_ASSIGN expr
+    (36) expr -> . variable MOD_ASSIGN expr
+    (37) expr -> . variable TIMES_ASSIGN expr
+    (38) expr -> . variable DIVIDE_ASSIGN expr
+    (39) expr -> . variable ASSIGN expr
+    (40) expr -> . NUMBER_INTEGER
+    (41) expr -> . NUMBER_REAL
+    (42) expr -> . CONSTANT_ENCAPSED_STRING
+    (43) expr -> . TRUE
+    (44) expr -> . FALSE
+    (110) variable -> . VARIABLE variable_array_selector
+    (111) variable -> . VARIABLE
+    (102) function_call -> . ID LPAREN function_call_parameter_list RPAREN
+    (103) function_call -> . ID LPAREN RPAREN
 
-    PLUS            shift and go to state 240
-    MINUS           shift and go to state 241
-    NUMBER_REAL     shift and go to state 242
-    NUMBER_INTEGER  shift and go to state 243
-    CONSTANT_ENCAPSED_STRING shift and go to state 244
+    MINUS           shift and go to state 21
+    EXC_DOT         shift and go to state 22
+    INCREMENT       shift and go to state 23
+    DECREMENT       shift and go to state 25
+    LPAREN          shift and go to state 26
+    ARRAY_TYPE      shift and go to state 27
+    NUMBER_INTEGER  shift and go to state 29
+    NUMBER_REAL     shift and go to state 30
+    CONSTANT_ENCAPSED_STRING shift and go to state 31
+    TRUE            shift and go to state 32
+    FALSE           shift and go to state 33
+    VARIABLE        shift and go to state 45
+    ID              shift and go to state 46
 
-    static_scalar                  shift and go to state 259
-    common_scalar                  shift and go to state 239
+    expr                           shift and go to state 259
+    variable                       shift and go to state 24
+    function_call                  shift and go to state 28
 
 state 246
 
@@ -9111,10 +9154,38 @@ state 258
 
 state 259
 
-    (126) parameter -> parameter_prefix VARIABLE ASSIGN static_scalar .
+    (126) parameter -> parameter_prefix VARIABLE ASSIGN expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . PERCENT expr
+    (14) expr -> expr . TIMES expr
+    (15) expr -> expr . EQUALS expr
+    (16) expr -> expr . NOT_EQUAL expr
+    (17) expr -> expr . GREAT_THAN expr
+    (18) expr -> expr . GREAT_EQUAL expr
+    (19) expr -> expr . LESS_THAN expr
+    (20) expr -> expr . LESS_EQUAL expr
+    (21) expr -> expr . AND expr
+    (22) expr -> expr . OR expr
+    (33) expr -> expr . INTE_DOT expr DDOT expr
 
-    COLON           reduce using rule 126 (parameter -> parameter_prefix VARIABLE ASSIGN static_scalar .)
-    RPAREN          reduce using rule 126 (parameter -> parameter_prefix VARIABLE ASSIGN static_scalar .)
+    COLON           reduce using rule 126 (parameter -> parameter_prefix VARIABLE ASSIGN expr .)
+    RPAREN          reduce using rule 126 (parameter -> parameter_prefix VARIABLE ASSIGN expr .)
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+    DIVIDE          shift and go to state 55
+    PERCENT         shift and go to state 56
+    TIMES           shift and go to state 57
+    EQUALS          shift and go to state 58
+    NOT_EQUAL       shift and go to state 59
+    GREAT_THAN      shift and go to state 60
+    GREAT_EQUAL     shift and go to state 61
+    LESS_THAN       shift and go to state 62
+    LESS_EQUAL      shift and go to state 63
+    AND             shift and go to state 64
+    OR              shift and go to state 65
+    INTE_DOT        shift and go to state 66
 
 
 state 260

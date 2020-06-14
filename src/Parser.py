@@ -534,7 +534,7 @@ def p_parameter(p):
   parameter : VARIABLE 
     | parameter_prefix VARIABLE
     | VARIABLE ASSIGN static_scalar
-    | parameter_prefix VARIABLE ASSIGN static_scalar
+    | parameter_prefix VARIABLE ASSIGN expr
   '''
   if len(p) == 5:
     p[0] = sa.Parameter_Full(p[1], p[2], p[4])
@@ -545,6 +545,7 @@ def p_parameter(p):
   else: 
     p[0] = sa.Parameter_Var(p[1])
   
+
 def p_parameter_prefix(p):
   '''
   parameter_prefix : parameter_type AMPERSAND
@@ -568,26 +569,6 @@ def p_parameter_type(p):
   '''
   p[0] = sa.ParameterType_Type(p[1])
 
-def p_static_scalar(p):
-  '''
-  static_scalar : common_scalar 
-    | PLUS static_scalar
-    | MINUS static_scalar
-  '''
-  if len(p) == 2:
-    p[0] = sa.StaticScalar_CommonScalar(p[1])
-  elif p[1] == '+':
-    p[0] = sa.StaticScalar_Plus_Static(p[2]) 
-  else:
-    p[0] = sa.StaticScalar_Minus_Static(p[2])
-
-def p_common_scalar(p): 
-  '''
-  common_scalar : NUMBER_REAL
-    | NUMBER_INTEGER
-    | CONSTANT_ENCAPSED_STRING
-  '''
-  p[0] = sa.CommonScalar_Token(p[1])
   
 def p_array_pair_list(p):
   '''
@@ -678,22 +659,27 @@ def p_error(p):
  
 lex.lex()
 arquivo = '''
-<?php
-<<<<<<< HEAD
+
+<?php 
+  $arr =  array(&$x,'luiz' => $nome, 'carlos'=>'sobrenome','soma'=>1+3);
+  $x = 10;
+  $y = '1';
+  $v = 1;
+  $v %= $x + $y;
+
+  function soma(int $x = 'luis' ){
+
+  }
+
   $valor = 10;
   $valor1= 11;
   $soma='0.0';
   $soma /= $valor*$valor1;
-=======
-  $valor += 1;
->>>>>>> parent of eb4c9d3... Renomear regras e adicionar regra de typecast
 ?>
 '''
-
 lex.input(arquivo)
 parser = yacc.yacc()
 result = parser.parse(debug=False)
 v = sv.SemanticVisitor()
 #v = vis.Visitor()
-#for r in result:
 result.accept(v)
