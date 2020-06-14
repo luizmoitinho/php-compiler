@@ -570,26 +570,6 @@ def p_parameter_type(p):
   '''
   p[0] = sa.ParameterType_Type(p[1])
 
-def p_static_scalar(p):
-  '''
-  static_scalar : common_scalar 
-    | PLUS static_scalar
-    | MINUS static_scalar
-  '''
-  if len(p) == 2:
-    p[0] = sa.StaticScalar_CommonScalar(p[1])
-  elif p[1] == '+':
-    p[0] = sa.StaticScalar_Plus_Static(p[2]) 
-  else:
-    p[0] = sa.StaticScalar_Minus_Static(p[2])
-
-def p_common_scalar(p): 
-  '''
-  common_scalar : NUMBER_REAL
-    | NUMBER_INTEGER
-    | CONSTANT_ENCAPSED_STRING
-  '''
-  p[0] = sa.CommonScalar_Token(p[1])
   
 def p_array_pair_list(p):
   '''

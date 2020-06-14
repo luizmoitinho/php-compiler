@@ -123,19 +123,7 @@ class Visitor(AbstractVisitor):
   def visitParameterType_Type(self, parameterType):
     print(parameterType.type, end=' ')
     
-  def visitStaticScalar_CommonScalar(self, staticScalar):
-    staticScalar.common_scalar.accept(self)
-  
-  def visitStaticScalar_Plus_Static(self, staticScalar):
-    print('+', end='')
-    staticScalar.static_scalar.accept(self)
-    
-  def visitStaticScalar_Minus_Static(self, staticScalar):
-    print('-', end='')
-    staticScalar.static_scalar.accept(self)
-    
-  def visitCommonScalar_Token(self, commonScalar):
-    print(commonScalar.token, end='')
+
   
   def visitStatement_Expr(self, statement):
     pp.printTab()
