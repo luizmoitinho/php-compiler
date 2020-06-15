@@ -51,6 +51,7 @@ tokens = [
     'MOD_ASSIGN',
     'TIMES_ASSIGN',
     'DIVIDE_ASSIGN',
+    'CONCAT_ASSIGN',
     'LPAREN',
     'RPAREN',
     'LKEY',
@@ -65,8 +66,6 @@ tokens = [
     'NOT_EQUAL',
     'COLON',    
     'SEMICOLON',
-    'LEFT_LOGICAL',
-    'RIGHT_LOGICAL',
     'IDENTATION',
     'NUMBER_REAL',
     'NUMBER_INTEGER',
@@ -94,6 +93,7 @@ t_SUB_ASSIGN = r'\-\='
 t_MOD_ASSIGN = r'\%\='
 t_TIMES_ASSIGN = r'\*\='
 t_DIVIDE_ASSIGN =  r'\/\='
+t_CONCAT_ASSIGN = r'\.\='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_LKEY = r'\{'
@@ -108,8 +108,6 @@ t_EQUALS = r'\=\='
 t_NOT_EQUAL = r'\!\='
 t_COLON = r'\,'
 t_SEMICOLON = r'\;'
-t_LEFT_LOGICAL = r'\<\<'
-t_RIGHT_LOGICAL = r'\>\>'
 t_AND = r'\&\&'
 t_OR = r'\|\|'
 t_AMPERSAND = r'\&'

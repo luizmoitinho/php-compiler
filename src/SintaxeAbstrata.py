@@ -9,15 +9,15 @@ class Main(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
   
-class Main_MainInner(Main):
+class Main_MainProgram(Main):
   def __init__(self, mainInner):
     self.mainInner = mainInner
   def accept(self, Visitor):
-    return Visitor.visitMain_MainInner(self)
+    return Visitor.visitMain_MainProgram(self)
     
-class Main_MainInner_Empty(Main):
+class Main_Empty(Main):
   def accept(self, Visitor):
-    return Visitor.visitMain_MainInner_Empty(self)
+    return Visitor.visitMain_Empty(self)
 
 #MAIN_INNER ABSTRATA E CONCRETAS  
 class MainInner(metaclass=ABCMeta):
@@ -25,18 +25,18 @@ class MainInner(metaclass=ABCMeta):
   def accept(self, Visitor):
     pass
 
-class MainInner_InnerStatement_MainInner(MainInner):
+class MainProgram_InnerStatement_Recursive(MainInner):
   def __init__(self, innerStatement, mainInner):
     self.innerStatement = innerStatement
     self.mainInner = mainInner
   def accept(self, Visitor):
-    return Visitor.visitMainInner_InnerStatement_MainInner(self)
+    return Visitor.visitMainProgram_InnerStatement_Recursive(self)
 
-class MainInner_InnerStatement(MainInner):
+class MainProgram_InnerStatement(MainInner):
   def __init__(self, innerStatement):
     self.innerStatement = innerStatement
   def accept(self, Visitor):
-    return Visitor.visitMainInner_InnerStatement(self)
+    return Visitor.visitMainProgram_InnerStatement(self)
 
 class InnerStatement(metaclass = ABCMeta):
     @abstractmethod
@@ -345,41 +345,6 @@ class ParameterType_Type(ParameterType):
     self.type = p_type
   def accept(self, Visitor):
     return Visitor.visitParameterType_Type(self)
-    
-class StaticScalar(metaclass = ABCMeta):
-    @abstractmethod
-    def accept(self, Visitor):
-      pass
-    
-class StaticScalar_CommonScalar(StaticScalar):
-  def __init__(self, common_scalar):
-    self.common_scalar = common_scalar
-  def accept(self, Visitor):
-    return Visitor.visitStaticScalar_CommonScalar(self)
-    
-class StaticScalar_Plus_Static(StaticScalar):
-  def __init__(self, static_scalar):
-    self.static_scalar = static_scalar
-  def accept(self, Visitor):
-    return Visitor.visitStaticScalar_Plus_Static(self)  
-  
-class StaticScalar_Minus_Static(StaticScalar):
-  def __init__(self, static_scalar):
-    self.static_scalar = static_scalar
-  def accept(self, Visitor):
-    return Visitor.visitStaticScalar_Minus_Static(self)  
-    
-class CommonScalar(metaclass = ABCMeta):
-  @abstractmethod
-  def accept(self, Visitor):
-    pass
-    
-class CommonScalar_Token(CommonScalar):
-  def __init__(self, token):
-    self.token = token
-  def accept(self, Visitor):
-    return Visitor.visitCommonScalar_Token(self)
-    
 
 class ArrayPairListArrPair(metaclass=ABCMeta):
   @abstractmethod
@@ -589,16 +554,11 @@ class Expr_AssignExpr(Expr):
   def accept(self, Visitor):
     return Visitor.visitExpr_AssignExpr(self)
 
-<<<<<<< HEAD
 class Expr_AddAssignExpr(Expr):
-=======
-class Expr_AssignAmpersandExpr(Expr):
->>>>>>> parent of eb4c9d3... Renomear regras e adicionar regra de typecast
   def __init__(self, variable,expr):
     self.variable = variable
     self.expr = expr
   def accept(self, Visitor):
-<<<<<<< HEAD
     return Visitor.visitExpr_AddAssignExpr(self)
 
 class Expr_SubAssignExpr(Expr):
@@ -628,10 +588,14 @@ class Expr_TimesAssignExpr(Expr):
     self.expr = expr
   def accept(self, Visitor):
     return Visitor.visitExpr_TimesAssignExpr(self)
-=======
-    return Visitor.visitExpr_AssignAmpersandExpr(self)
->>>>>>> parent of eb4c9d3... Renomear regras e adicionar regra de typecast
-
+  
+class Expr_ConcatAssignExpr(Expr):
+  def __init__(self, variable, expr):
+    self.variable = variable
+    self.expr = expr
+  def accept(self, Visitor):
+    return Visitor.visitExpr_ConcatAssignExpr(self)
+  
 class Expr_TypeCastOp(Expr):
   def __init__(self, typeCast,expr):
     self.typeCast = typeCast
@@ -1185,3 +1149,102 @@ class DoWhileStatementSingle(DoWhileStatement):
     self.exprparentheses = exprparentheses
   def accept(self, Visitor):
     return Visitor.visitDoWhileStatementSingle(self)
+
+class Statement_If(Statement):
+  def __init__(self,_if):
+    self._if = _if
+  def accept(self, Visitor):
+    return Visitor.visitStatement_If(self)
+
+class IfStatement(metaclass =  ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class IfStatement_statement_if(IfStatement):
+  def __init__(self, statement_if):
+    self.statement_if = statement_if
+  def accept(self, Visitor):
+    return Visitor.visitIfStatement_statement_if(self)
+
+class IfStatement_statement_if(IfStatement):
+  def __init__(self, statement_if):
+    self.statement_if = statement_if
+  def accept(self, Visitor):
+    return Visitor.visitIfStatement_statement_if(self)
+
+class IfStatement_statementIf_Else(IfStatement):
+  def __init__(self, statement_if, statement_else):
+    self.statement_if =  statement_if
+    self.statement_else =  statement_else
+  def accept(self, Visitor):
+    return Visitor.visitIfStatement_Else(self)
+
+class IfStatement_StatementIf_Elseif(IfStatement):
+  def __init__ (self,statement_if, statement_elseif):
+    self.statement_if = statement_if
+    self.statement_elseif = statement_elseif
+  def accept(self, Visitor):
+    return Visitor.visitIfStatement_StatementIf_Elseif(self)
+
+class IfStatement_StmIf_Elseif_Else(IfStatement):
+  def __init__(self,statement_if,statement_elseif,statement_else):
+    self.statement_if = statement_if 
+    self.statement_elseif = statement_elseif
+    self.statement_else =  statement_else
+  def accept(self, Visitor):
+    return Visitor.visitIfStatement_Stm_If_Elseif_Else(self)
+  
+class StatementIf_Mul(IfStatement):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT,statement_if):
+    self.expr_parentheses = expr_parentheses
+    self.statement_BLOCK_OPT=statement_BLOCK_OPT
+    self.statement_if = statement_if
+  def accept(self,Visitor):
+    return Visitor.visitStatementIf_Mul(self)
+
+class StatementIf_Single(IfStatement):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT):
+    self.expr_parentheses = expr_parentheses
+    self.statement_BLOCK_OPT=statement_BLOCK_OPT
+  def accept(self,Visitor):
+    Visitor.visitStatementIf_Single(self)
+
+class ElseIf_ifStatement(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    return Visitor.visitIfStatement_Single(self)
+
+class StatementElseIf(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class StatementElseIf_Mul(StatementElseIf):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT, statement_elseif):
+    self.expr_parentheses =  expr_parentheses
+    self.statement_BLOCK_OPT = statement_BLOCK_OPT
+    self.statement_elseif =  statement_elseif
+  def accept(self, Visitor):
+    return Visitor.visitStatementElseIf_Mul(self)
+
+class StatementElseIf_Single(StatementElseIf):
+  def __init__(self, expr_parentheses,statement_BLOCK_OPT):
+    self.expr_parentheses =  expr_parentheses
+    self.statement_BLOCK_OPT = statement_BLOCK_OPT
+
+  def accept(self, Visitor):
+    return Visitor.visitStatementElseIf_Single(self)
+
+
+class StatementElse(metaclass =  ABCMeta):
+  @abstractmethod
+  def accept(self, Visitor):
+    pass
+
+class StatementElse_Single(StatementElse):
+  def __init__(self, statement_BLOCK_OPT):
+    self.statement_BLOCK_OPT = statement_BLOCK_OPT
+
+  def accept(self,Visitor):
+    return Visitor.visitStatementElse_Single(self)

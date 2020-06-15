@@ -65,7 +65,7 @@ class SemanticVisitor(AbstractVisitor):
     innerStatement.statement.accept(self)
 
   def visitExprParentheses_Expr(self, exprParentheses):
-    exprParentheses.expr.accept(self)
+    return exprParentheses.expr.accept(self)
 
   def visitStatementBlockOpt_Statement(self, statementBlockOpt):
     statementBlockOpt.statement.accept(self)
@@ -97,8 +97,15 @@ class SemanticVisitor(AbstractVisitor):
 
   def visitWhileStatementSingle(self, whileStatement):
     st.beginScope('while')
+    
     exprBool = whileStatement.exprparentheses.accept(self)
     whileStatement.statement.accept(self)
+
+    exprType =  getTypeIfDict(exprBool)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
     st.endScope()
 
   def visitFuncDecStatement_Function(self, funcDecStatement):
@@ -141,6 +148,9 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitParameter_Var(self, parameter):
     return [parameter.variable, None]
+  
+  def visitParameter_Var_Sufix(self, parameter):
+    return [parameter.static_scalar.accept(self), None]
  
   def visitParameter_Full(self, parameter):
     typePrefix = parameter.prefix.accept(self)
@@ -157,7 +167,7 @@ class SemanticVisitor(AbstractVisitor):
   def visitParameter_Prefix_Var(self, parameter):
     parameterPrefix = parameter.prefix.accept(self)
     parameterVariable = parameter.variable
-    return [parameterVariable, parameterPrefix ]
+    return [parameterVariable, parameterPrefix]
   
   def visitParameterPrefix_PType(self, parameterPrefix):
     return parameterPrefix.parameter_type.accept(self)
@@ -381,7 +391,7 @@ class SemanticVisitor(AbstractVisitor):
      print('ERROR: Expected boolean expression, but got type: !%s'%typeExpr[st.NAME]) 
 
   def visitExpr_ParenExpr(self, parenExpr):
-    parenExpr.expr.accept(self)
+    return parenExpr.expr.accept(self)
 
   def visitExpr_TernaryOp(self, exprTernary):
     exprTernary.expr1.accept(self)
@@ -614,7 +624,7 @@ class SemanticVisitor(AbstractVisitor):
       
   def visitFunctionCall_WithParameter(self, functionCall):
     bindable = st.getBindable(functionCall.id)
-    st.updateParamsTypes(bindable[st.NAME], 'a')
+    st.updateParamsTypes(bindable[st.NAME])
     if bindable == None:
       print('ERROR: Function', functionCall.id, 'called but never defined.')
     
@@ -688,23 +698,29 @@ class SemanticVisitor(AbstractVisitor):
     return 
 
   def visitStatement_Do_While(self, statement):
-    statement.dowhilee.accept(self)
-  
-  def visitDoWhileStatementSingle(self, whilestatement):
     st.beginScope('dowhile')
+    statement.dowhilee.accept(self)
+    st.endScope()
+    
+  def visitDoWhileStatementSingle(self, whilestatement):
     whilestatement.statementblockopt.accept(self)
     exprBool = whilestatement.exprparentheses.accept(self)
+
+    exprType =  getTypeIfDict(exprBool)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
+    
+  def visitStatement_For(self, statement):
+    st.beginScope('for')
+    statement._for.accept(self)
     st.endScope()
 
-  def visitStatement_For(self, statement):
-    statement._for.accept(self)
-  
   def visitForStatement_For(self, forStatement):
-    st.beginScope('loopfor')
     forStatement.forParameters.accept(self)
     forStatement.statementBlock.accept(self)
-    st.endScope()
-  
+
   def visitForParameters_Empty(self):
     return
   
@@ -714,6 +730,12 @@ class SemanticVisitor(AbstractVisitor):
   def visitForParameters_Left_Mid(self, forParameters):
     Atribuicao = forParameters.forExprLeft.accept(self)
     Condicao = forParameters.forExprMid.accept(self)
+
+    exprType =  getTypeIfDict(self, Condicao)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
         
   def visitForParameters_Left_Right(self, forParameters):
     Atribuicao = forParameters.forExprLeft.accept(self)
@@ -721,10 +743,22 @@ class SemanticVisitor(AbstractVisitor):
   
   def visitForParameters_Mid(self, forParameters):
     Condicao = forParameters.forExprMid.accept(self)
+
+    exprType =  getTypeIfDict(self, Condicao)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
     
   def visitForParameters_Mid_Right(self, forParameters):
     Condicao = forParameters.forExprMid.accept(self)
     Incremento = forParameters.forExprRight.accept(self)
+
+    exprType =  getTypeIfDict(self, Condicao)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
     
   def visitForParameters_Right(self, forParameters):
     Incremento = forParameters.forExprRight.accept(self)
@@ -733,6 +767,12 @@ class SemanticVisitor(AbstractVisitor):
     Atribuicao = forParameters.forExprLeft.accept(self)
     Condicao = forParameters.forExprMid.accept(self)
     Incremento = forParameters.forExprRight.accept(self)
+
+    exprType =  getTypeIfDict(self, Condicao)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
     
   def visitForExprOpt_Mul(self, forExprOpt):
     forExprOpt.forExprOpt.accept(self)
@@ -749,7 +789,9 @@ class SemanticVisitor(AbstractVisitor):
     return forExprColonExpr.expr.accept(self)
 
   def visitStatement_Foreach(self, statement):
+    st.beginScope('foreach')
     statement.foreach.accept(self)
+    st.endScope()
   
   def visitForeachStatement_NoAssoc(self, foreachStatement):
     varArray = foreachStatement.expr.accept(self)
@@ -863,3 +905,81 @@ class SemanticVisitor(AbstractVisitor):
     
   def visitStatementBlockOpt_Empty(self, statementblockopt):
     return
+
+  def visitStatement_If(self, statementIf):
+    statementIf._if.accept(self)
+
+  def visitIfStatement_statement_if(self, ifStatement):
+    ifStatement.statement_if.accept(self)
+
+  def visitStatementIf_Mul(self, statementIfMul):
+    st.beginScope('if')
+    exprParen = statementIfMul.expr_parentheses.accept(self)
+    statementIfMul.statement_BLOCK_OPT.accept(self)
+    statementIfMul.statement_if.accept(self)
+    st.endScope()
+
+    exprType =  getTypeIfDict(self, exprParen)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
+
+  def visitStatementIf_Single(self, ifSingle):
+    st.beginScope('if')
+    exprParen = ifSingle.expr_parentheses.accept(self)
+    ifSingle.statement_BLOCK_OPT.accept(self)
+    st.endScope()
+
+    exprType =  getTypeIfDict(self, exprParen)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
+    
+  def visitIfStatement_Else(self, IfStatementElse):
+    IfStatementElse.statement_if.accept(self)
+    IfStatementElse.statement_else.accept(self)
+
+  def visitStatementElse_Single(self, statementElse):
+    st.beginScope('else')
+    statementElse.statement_BLOCK_OPT.accept(self)
+    st.endScope()
+
+  def visitIfStatement_StatementIf_Elseif(self,statementIfElseif):
+    statementIfElseif.statement_if.accept(self)
+    statementIfElseif.statement_elseif.accept(self)
+
+  def visitStatementElseIf_Mul(self, statementElseIf):
+    st.beginScope('elseif')
+    exprParen = statementElseIf.expr_parentheses.accept(self)
+    statementElseIf.statement_BLOCK_OPT.accept(self)
+    statementElseIf.statement_elseif.accept(self)
+    st.endScope()
+    
+    exprType =  getTypeIfDict(self, exprParen)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+    return exprType
+
+  def visitIfStatement_Stm_If_Elseif_Else(self, ifConditional):
+    ifConditional.statement_if.accept(self)
+    ifConditional.statement_elseif.accept(self)
+    ifConditional.statement_else.accept(self)
+
+  def visitStatementElseIf_Single(self, StatementElseIf):
+    st.beginScope('elseif')
+    exprParen = StatementElseIf.expr_parentheses.accept(self)
+    StatementElseIf.statement_BLOCK_OPT.accept(self)
+    st.endScope()
+
+    exprType =  getTypeIfDict(self, exprParen)
+    if(isTypePrimitive(exprType) == False):
+      print('ERROR: Expected boolean expression but got type', exprType)
+      return None
+
+    return exprType
+
+  def visitIfStatement_statement_if(self, ifStatement):
+    ifStatement.statement_if.accept(self)

@@ -9,7 +9,7 @@ import Visitor as vis
 # ESQUERDA PARA DIREITA => ASSOC. ESQUERDA
 
 precedence = (
-  ('right', 'ADD_ASSIGN', 'SUB_ASSIGN', 'MOD_ASSIGN', 'TIMES_ASSIGN', 'DIVIDE_ASSIGN', 'ASSIGN'),
+  ('right', 'ADD_ASSIGN', 'SUB_ASSIGN', 'MOD_ASSIGN', 'TIMES_ASSIGN', 'DIVIDE_ASSIGN', 'CONCAT_ASSIGN', 'ASSIGN'),
   ('left','INTE_DOT', 'DDOT'),
   ('left', 'AND', 'OR'),
   ('left', 'EQUALS','NOT_EQUAL', 'LESS_THAN', 'LESS_EQUAL', 'GREAT_THAN', 'GREAT_EQUAL'),
@@ -26,9 +26,9 @@ def p_main(p):
   | BEGIN_PROGRAM END_PROGRAM 
   '''
   if len(p) == 4:
-    p[0] = sa.Main_MainInner(p[2])
+    p[0] = sa.Main_MainProgram(p[2])
   else:
-    p[0] = sa.Main_MainInner_Empty()
+    p[0] = sa.Main_Empty()
     
 def p_main_program(p):
   '''
@@ -36,9 +36,9 @@ def p_main_program(p):
     | inner_statement
   '''
   if len(p) == 3:
-    p[0] = sa.MainInner_InnerStatement_MainInner(p[1], p[2])
+    p[0] = sa.MainProgram_InnerStatement_Recursive(p[1], p[2])
   else:
-    p[0] = sa.MainInner_InnerStatement(p[1])
+    p[0] = sa.MainProgram_InnerStatement(p[1])
 
 def p_inner_statement(p):
   '''
@@ -92,6 +92,7 @@ def p_expr(p):
     | variable MOD_ASSIGN expr
     | variable TIMES_ASSIGN expr
     | variable DIVIDE_ASSIGN expr
+    | variable CONCAT_ASSIGN expr
     | variable ASSIGN expr
     | NUMBER_INTEGER
     | NUMBER_REAL
@@ -157,6 +158,8 @@ def p_expr(p):
     p[0] = sa.Expr_DivideAssignExpr(p[1],p[3])
   elif len(p) == 4 and isinstance(p[1], sa.Variable) and p[2] =='*=' and isinstance(p[3], sa.Expr): 
     p[0] = sa.Expr_TimesAssignExpr(p[1],p[3])
+  elif len(p) == 4 and isinstance(p[1], sa.Variable) and p[2] == '.=' and isinstance(p[3], sa.Expr):
+    p[0] = sa.Expr_ConcatAssignExpr(p[1], p[3])
   elif p[1] == '(' and isinstance(p[2], sa.TypeCastOp) and p[3] ==')':
     p[0] = sa.Expr_TypeCastOp(p[2],p[4])
   elif isinstance(p[1], sa.Variable):
@@ -178,6 +181,7 @@ def p_typecast_operator(p):
     | STRING_TYPE
     | BOOL_TYPE
   '''
+  p[0] = sa.TypeCastOp_Token(p[1])
 
 def p_exit_statement(p):
   '''
@@ -246,8 +250,8 @@ def p_statement(p):
     p[0] = sa.Statement_Continue(p[1])
   elif isinstance(p[1], sa.Return):
     p[0] = sa.Statement_Return(p[1])
-  #elif isinstance(p[1], sa.IfStatement):
-  #  p[0] = sa.Statement_If(p[1])
+  elif isinstance(p[1], sa.IfStatement):
+    p[0] = sa.Statement_If(p[1])
   elif isinstance(p[1], sa.WhileStatement):
     p[0] = sa.Statement_While(p[1])
   elif isinstance(p[1], sa.DoWhileStatement):
@@ -258,18 +262,51 @@ def p_statement(p):
     p[0] = sa.Statement_Global(p[1])
   elif isinstance(p[1], sa.ForStatement):
     p[0] = sa.Statement_For(p[1])
-
+    
+    
 def p_if_statement(p):
   '''
-  if_statement : IF expr_parentheses statement_block_optional
+  if_statement : statement_if
+  | statement_if statement_else
+  | statement_if statement_elseif
+  | statement_if statement_elseif statement_else
   '''
-def p_if_statement1(p):
-  '''
+  if len(p)== 2:
+    p[0] = sa.IfStatement_statement_if(p[1])
+  elif len(p) == 3 and isinstance(p[2], sa.StatementElse):
+    p[0] = sa.IfStatement_statementIf_Else(p[1],p[2])
+  elif len(p)== 3 and isinstance(p[2], sa.StatementElseIf):
+    p[0] = sa.IfStatement_StatementIf_Elseif(p[1],p[2])
+  elif len(p)== 4:
+    p[0] = sa.IfStatement_StmIf_Elseif_Else(p[1],p[2],p[3])
   
+def p_statement_if(p):
   '''
-def p_if_statement1(p):
+  statement_if : IF expr_parentheses statement_block_optional statement_if
+    | IF expr_parentheses statement_block_optional
   '''
+  if len(p) ==5:
+    p[0] = sa.StatementIf_Mul(p[2],p[3],p[4])
+  elif len(p) ==4:
+    p[0] = sa.StatementIf_Single(p[2],p[3])
+
+def p_statement_elseif(p):
   '''
+  statement_elseif : ELSEIF expr_parentheses statement_block_optional statement_elseif
+   | ELSEIF expr_parentheses statement_block_optional
+  '''
+  if len(p) == 5:
+    p[0] = sa.StatementElseIf_Mul(p[2],p[3],p[4])
+  elif len(p) == 4:
+    p[0] = sa.StatementElseIf_Single(p[2],p[3])
+
+def p_statement_else(p):
+  '''
+  statement_else : ELSE statement_block_optional
+  '''
+  if len(p) == 3:
+    p[0] =  sa.StatementElse_Single(p[2])
+
 def p_global_statement(p):
   '''
   global_statement : GLOBAL global_var statement_COLON_GLOBAL 
@@ -533,7 +570,7 @@ def p_parameter(p):
   ''' 
   parameter : VARIABLE 
     | parameter_prefix VARIABLE
-    | VARIABLE ASSIGN static_scalar
+    | VARIABLE ASSIGN expr
     | parameter_prefix VARIABLE ASSIGN expr
   '''
   if len(p) == 5:
@@ -661,20 +698,56 @@ lex.lex()
 arquivo = '''
 
 <?php 
-  $arr =  array(&$x,'luiz' => $nome, 'carlos'=>'sobrenome','soma'=>1+3);
-  $x = 10;
-  $y = '1';
-  $v = 1;
-  $v %= $x + $y;
 
-  function soma(int $x = 'luis' ){
+ $imc = 0;
+ $peso = 70.5;
+ $alturaCm = 170;
+ $res;
 
-  }
+ function calcIMC(float $peso, int $alturaCm ){
+    global $imc;
+    $alturaM = $alturaCm / 100;
+    $imc = $peso/($alturaM*$alturaM); 
+ }
 
-  $valor = 10;
-  $valor1= 11;
-  $soma='0.0';
-  $soma /= $valor*$valor1;
+ //Calcular IMC
+ if($imc < 18){
+   $res = 'Você está muito abaixo do peso ideal!';
+ }
+ elseif($imc>18 && $imc < 25){
+   $res = "Você está no seu peso ideal. Parabéns!";
+ }
+ elseif($imc > 25  && $imc< 30){
+   $res = "Você está acima do peso ideal. Cuidado!";
+ }
+ else{
+   $res ="Você está muito acima do peso ideal. Procure tratamento!";
+ }
+ 
+ //Calculo da área da cincunferencia
+ $raio = 2;
+ $pi = 3.141592;
+ $area= 4* $pi *($raio* $raio);
+ $volume = 4/3*$pi*($raio* $raio* $raio);
+
+
+//Cálculo de fatorial
+$n=0;
+for($fat = 1; $n > 1; $n--)
+  $fat = $fat * $n;
+
+// Arrays
+
+$arrNome = array('luiz', 'erick', 'wedson','yuri');
+$res='';
+$total=0;
+
+foreach($arrNome as $nome){
+    $total++;
+    if($total==4)
+      $res = "Todos os integrantes do grupo.";
+}
+
 ?>
 '''
 lex.input(arquivo)

@@ -20,6 +20,8 @@ ARITH = 'arithOp'
 
 ISGLOBAL = 'isGlobal'
 
+Comands = ['for', 'if','elseif', 'else', 'while', 'dowhile', 'foreach']
+
 Number = [INT, FLOAT]
 
 def beginScope(nameScope):
@@ -71,8 +73,12 @@ def updateGlobalBindableType(name, type, value = None):
 
 def getBindable(name):
   global symbolTable
-  if len(symbolTable) > 1:  
+  if len(symbolTable) > 1 and symbolTable[1][SCOPE] not in Comands:  
     for i in reversed(range(1, len(symbolTable))):
+      if (name in symbolTable[i].keys()):
+        return symbolTable[i][name]
+  elif len(symbolTable) > 1 and symbolTable[1][SCOPE] in Comands:
+    for i in reversed(range(len(symbolTable))):
       if (name in symbolTable[i].keys()):
         return symbolTable[i][name]
   else:

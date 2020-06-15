@@ -141,7 +141,6 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitExpr_OrLogical(self, exprOrLogical):
     pass
   
-  
   @abstractmethod
   def visitExpr_NotLogical(self, exprOrLogical):
     pass
@@ -595,3 +594,46 @@ class AbstractVisitor(metaclass = ABCMeta):
   def visitArrayPair_Attr_AmpersandVariable(self, arrPair):
     pass
 
+  @abstractmethod
+  def visitParameter_Var_Sufix(self, parameter):
+    pass
+
+  @abstractmethod 
+  def visitStatement_If(self, statementIf):
+    pass
+
+  @abstractmethod
+  def visitIfStatement_statement_if(self, ifStatement):
+    pass
+
+  @abstractmethod
+  def visitStatementElseIf_Mul(self, statementElseIfMul):
+    pass
+
+  @abstractmethod
+  def visitStatementIf_Mul(self, statementIfMul):
+    pass
+
+  @abstractmethod
+  def visitStatementIf_Single(self, ifSingle):
+    pass
+
+  @abstractmethod
+  def visitIfStatement_Else(self, IfStatementElse):
+    pass
+
+  @abstractmethod
+  def visitStatementElse_Single(self, statementElse):
+    pass
+
+  @abstractmethod
+  def visitIfStatement_StatementIf_Elseif(self, statementIfElseif):
+    pass
+
+  @abstractmethod
+  def visitStatementElseIf_Single(self, StatementElseIf):
+    pass
+
+  @abstractmethod
+  def visitIfStatement_Stm_If_Elseif_Else(self, ifConditional):
+    pass
