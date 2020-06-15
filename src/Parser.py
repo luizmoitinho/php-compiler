@@ -736,18 +736,17 @@ $n=0;
 for($fat = 1; $n > 1; $n--)
   $fat = $fat * $n;
 
-// Arrays
-
+/* Arrays: A validação dos tipos deve ser feita em tempo de execução,
+*  pois podem ser qualquer valor [string, float, int,bool ou array]
+*/
 $arrNome = array('luiz', 'erick', 'wedson','yuri');
 $res='';
 $total=0;
-
 foreach($arrNome as $nome){
     $total++;
     if($total==4)
       $res = "Todos os integrantes do grupo.";
 }
-
 ?>
 '''
 lex.input(arquivo)
